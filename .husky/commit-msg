@@ -9,4 +9,4 @@ if ! echo "$commit_msg" | grep -Eq "$pattern"; then
   exit 1
 fi
 
-echo "✅ All checks passed. Ready to push."
+echo "✅ Commit name checks passed."
