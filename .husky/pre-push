@@ -1,1 +1,24 @@
+
+echo "🔍 Running TSC..."
+npm run tsc
+tsc_status=$?
+
+
+echo "🔍 Running ESLint..."
+npm run lint
+eslint_status=$?
+
+echo "🎨 Running Prettier..."
+npm run format
+prettier_status=$?
+
+echo "🎨 Running Build..."
 npm run build
+build_status=$?
+
+if [ $eslint_status -ne 0 ] || [ $prettier_status -ne 0 ]; then
+  echo "❌ Push aborted due to lint or format errors."
+  exit 1
+fi
+
+echo "✅ All checks passed. Ready to push."

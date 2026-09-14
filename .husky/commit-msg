@@ -1,0 +1,12 @@
+commit_msg=$(cat "$1")
+
+pattern="^(init|feat|fix|refactor|docs): .+"
+
+if ! echo "$commit_msg" | grep -Eq "$pattern"; then
+  echo "❌ Invalid commit message format."
+  echo "Commit must follow: <type>: <description>"
+  echo "Allowed types: init, feat, fix, refactor, docs"
+  exit 1
+fi
+
+echo "✅ All checks passed. Ready to push."
