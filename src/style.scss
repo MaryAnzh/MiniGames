@@ -1,6 +1,4 @@
-:root {
-  --white: #fff;
-}
+@use './styles/index.scss';
 
 * {
   box-sizing: border-box;
