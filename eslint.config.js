@@ -30,8 +30,6 @@ export default [
       "unicorn/no-null": "off",
       "unicorn/prefer-node-protocol": "warn",
       "unicorn/prefer-modern-dom-apis": "warn",
-
-      "@typescript-eslint/explicit-function-return-type": "off",
     },
   },
 ];
