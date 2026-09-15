@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@constants": ["src/constants"],
+      "@types": ["src/types"],
+      "@app": ["src/app"]
+    }
+  }
+}
