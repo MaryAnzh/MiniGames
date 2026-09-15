@@ -1,3 +1,5 @@
+import { Component } from '@/components/component';
+
 export class App {
   private root: HTMLElement;
 
@@ -6,11 +8,14 @@ export class App {
   }
 
   init() {
-    const appContainer = document.createElement('div');
-    appContainer.id = 'app';
-    appContainer.textContent = 'Mini Game';
+    const appContainer = new Component({
+      parentNode: this.root,
+      tagName: 'div',
+      attrs: [{ atr: 'id', value: 'app' }],
+      content: 'Mini Game',
+    });
 
-    this.root.append(appContainer);
+    this.root.append(appContainer.node);
 
     //  router.init(), pages, etc.
   }

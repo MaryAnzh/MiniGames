@@ -1,15 +1,9 @@
-import type { ComponentAttributesType } from '@types';
+import type { ComponentAttributesType, ComponentProps } from '@types';
 
 export class Component {
   public node: HTMLElement;
 
-  constructor(
-    parentNode: HTMLElement | null,
-    tagName: keyof HTMLElementTagNameMap,
-    className?: string | string[],
-    content?: string | HTMLElement | (HTMLElement | string)[],
-    attrs?: ComponentAttributesType[],
-  ) {
+  constructor({ parentNode, tagName, className, content, attrs }: ComponentProps) {
     const element = document.createElement(tagName);
 
     // Classes
@@ -36,8 +30,8 @@ export class Component {
 
     // Attributes
     if (attrs) {
-      attrs.forEach((attr) => {
-        element.setAttribute(attr.name, String(attr.value));
+      attrs.forEach(({ atr, value }) => {
+        element.setAttribute(atr, value);
       });
     }
 
@@ -50,8 +44,8 @@ export class Component {
   }
 
   setAttributes(attrs: ComponentAttributesType[]) {
-    attrs.forEach((attr) => {
-      this.node.setAttribute(attr.name, String(attr.value));
+    attrs.forEach(({ atr, value }) => {
+      this.node.setAttribute(atr, value);
     });
   }
 
