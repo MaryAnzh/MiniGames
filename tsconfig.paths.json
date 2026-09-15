@@ -5,7 +5,8 @@
     "paths": {
       "@/*": ["src/*"],
       "@constants": ["src/constants"],
-      "@types": ["src/types"]
+      "@types": ["src/types"],
+      "@app": ["src/app"]
     }
   }
 }
