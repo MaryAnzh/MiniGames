@@ -1,5 +1,6 @@
 import './style.scss';
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
+const app = document.querySelector<HTMLBRElement>('body');
+app!.innerHTML = `
 <h1>Hello world</h1>
 `;
