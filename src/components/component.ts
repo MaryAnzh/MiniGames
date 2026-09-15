@@ -4,7 +4,7 @@ export class Component {
   public node: HTMLElement;
 
   constructor({ parentNode, tagName, className, content, attrs }: ComponentProps) {
-    const element = document.createElement(tagName);
+    const element = document.createElement(tagName ?? 'div');
 
     // Classes
     if (Array.isArray(className)) {
@@ -30,8 +30,8 @@ export class Component {
 
     // Attributes
     if (attrs) {
-      attrs.forEach(({ atr, value }) => {
-        element.setAttribute(atr, value);
+      attrs.forEach(({ attr, value }) => {
+        element.setAttribute(attr, value);
       });
     }
 
@@ -44,8 +44,8 @@ export class Component {
   }
 
   setAttributes(attrs: ComponentAttributesType[]) {
-    attrs.forEach(({ atr, value }) => {
-      this.node.setAttribute(atr, value);
+    attrs.forEach(({ attr, value }) => {
+      this.node.setAttribute(attr, value);
     });
   }
 

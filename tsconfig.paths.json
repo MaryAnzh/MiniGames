@@ -3,10 +3,13 @@
     "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
       "@constants": ["src/constants"],
       "@types": ["src/types"],
-      "@app": ["src/app"]
+      "@components": ["src/components"],
+      "@ui": ["src/components/ui"],
+      "@app": ["src/app"],
+      "@state": ["src/state"],
+      "@pages": ["src/pages"]
     }
   }
 }

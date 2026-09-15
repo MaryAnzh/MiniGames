@@ -7,10 +7,13 @@ export default defineConfig({
   plugins: [tsconfigPaths()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
       '@constants': path.resolve(__dirname, './src/constants'),
       '@types': path.resolve(__dirname, './src/types'),
+      '@components': path.resolve(__dirname, './src/components'),
+      '@ui': path.resolve(__dirname, './src/components/ui'),
       '@app': path.resolve(__dirname, './src/app'),
+      '@state': path.resolve(__dirname, './src/state'),
+      '@pages': path.relative(__dirname, './src/pages'),
     },
   },
 });

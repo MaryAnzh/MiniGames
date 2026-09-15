@@ -1,2 +1,5 @@
-@use './styles/index.scss';
-@use './app/app.scss';
+@use './styles/index.scss' as *;
+
+@use './app/app.scss' as *;
+@use './components/styles.scss' as *;
+@use './pages/styles.scss' as *;

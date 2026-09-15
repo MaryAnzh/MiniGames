@@ -1,22 +1,24 @@
-import { Component } from '@/components/component';
+// src/app/app.ts
+import { Component } from '@components';
+import { Router } from './router';
 
 export class App {
   private root: HTMLElement;
+  private router: Router;
 
   constructor(root: HTMLElement) {
     this.root = root;
+    this.router = new Router(root);
   }
 
   init() {
     const appContainer = new Component({
       parentNode: this.root,
-      tagName: 'div',
-      attrs: [{ atr: 'id', value: 'app' }],
-      content: 'Mini Game',
+      attrs: [{ attr: 'id', value: 'app' }],
     });
 
     this.root.append(appContainer.node);
 
-    //  router.init(), pages, etc.
+    this.router.init();
   }
 }
