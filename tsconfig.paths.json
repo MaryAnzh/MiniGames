@@ -3,6 +3,7 @@
     "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
+      "@variable": ["src/styles/variable"],
       "@constants": ["src/constants"],
       "@types": ["src/types"],
       "@components": ["src/components"],

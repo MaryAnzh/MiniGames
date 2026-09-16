@@ -1,0 +1,26 @@
+@use '../../../styles/variable' as *;
+
+.header {
+  width: 100%;
+  display: inline-flex;
+  padding: var(--size-2);
+  background: var(--bg);
+  border-bottom: var(--size-025) var(--on-primary) solid;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--size-2);
+
+  .header_login_btn {
+    display: none;
+  }
+
+  @media (min-width: $min-tablet) {
+    padding: var(--size-2-1) var(--size-5);
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+
+    .header_login_btn {
+      display: flex;
+    }
+  }
+}

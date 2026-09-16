@@ -14,8 +14,7 @@ export class Router {
 
     this.routes = [
       { path: '/', view: HomePage },
-      // ToDo
-      //   { path: '/game', view: GamePage },
+      // ToDo { path: '/game', view: GamePage },
     ];
 
     window.addEventListener('popstate', () => this.handleRoute());
@@ -32,7 +31,6 @@ export class Router {
 
   private handleRoute() {
     const currentPath = window.location.pathname;
-
     const route = this.routes.find((r) => r.path === currentPath) || this.routes[0];
 
     this.root.innerHTML = '';

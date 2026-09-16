@@ -7,7 +7,8 @@ export default defineConfig({
   plugins: [tsconfigPaths()],
   resolve: {
     alias: {
-      '@constants': path.resolve(__dirname, './src/constants'),
+      '@styles': path.resolve(__dirname, './src/styles/_variable'),
+      '@variable': path.resolve(__dirname, './src/constants'),
       '@types': path.resolve(__dirname, './src/types'),
       '@components': path.resolve(__dirname, './src/components'),
       '@ui': path.resolve(__dirname, './src/components/ui'),

@@ -1,0 +1,18 @@
+.app_logo {
+  display: flex;
+  align-items: center;
+  gap: var(--size-1);
+
+  .logo_icon {
+    width: var(--size-4);
+    aspect-ratio: 1/1;
+  }
+
+  .logo_title {
+    font-family: var(--font-inter);
+    font-weight: var(--weight-bold);
+    font-size: var(--headline-small);
+    color: var(--on-primary);
+    word-wrap: break-word;
+  }
+}
