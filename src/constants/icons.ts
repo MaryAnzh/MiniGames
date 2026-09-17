@@ -1,0 +1,10 @@
+const BURGER = `<svg xmlns="http://www.w3.org/2000/svg"
+	 viewBox="0 0 16 10" enable-background="new 0 0 16 10" xml:space="preserve">
+<line fill="none" stroke="#242145" stroke-width="2" x1="0" y1="1" x2="16" y2="1"/>
+<line fill="none" stroke="#242145" stroke-width="2" x1="0" y1="5" x2="16" y2="5"/>
+<line fill="none" stroke="#242145" stroke-width="2" x1="0" y1="9" x2="16" y2="9"/>
+</svg>`;
+
+export const ICON_PICKER = {
+  BURGER,
+} as const;

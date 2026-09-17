@@ -8,7 +8,7 @@ export class Component {
 
     // Classes
     if (Array.isArray(className)) {
-      element.classList.add(...className);
+      element.classList.add(...className.filter((el) => el));
     } else if (typeof className === 'string') {
       element.className = className;
     }

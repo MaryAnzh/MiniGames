@@ -1,0 +1,47 @@
+@use '../../../styles/variable' as *;
+
+.header {
+  width: 100%;
+  display: inline-flex;
+  padding: var(--size-2);
+  background: var(--bg);
+  border-bottom: var(--size-025) var(--on-primary) solid;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--size-2);
+
+  .header_signup_btn,
+  .header_login_btn,
+  .header_nav {
+    display: none;
+  }
+
+  @media (min-width: $min-tablet) {
+    padding: var(--size-2-1) var(--size-5);
+    display: grid;
+    grid-template-columns: 1fr repeat(2, auto);
+
+    .header_signup_btn {
+      display: flex;
+    }
+  }
+
+  @media (min-width: $min-laptop) {
+    grid-template-columns: 1fr repeat(3, auto);
+    padding: var(--size-3) var(--size-10);
+    gap: var(--size-2);
+
+    .header_burger_btn {
+      display: none;
+    }
+
+    .header_login_btn,
+    .header_nav {
+      display: flex;
+    }
+
+    .header_nav {
+      padding-right: var(--size-2);
+    }
+  }
+}
