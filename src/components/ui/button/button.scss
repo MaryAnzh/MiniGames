@@ -32,10 +32,10 @@
 }
 
 .sm_btn {
-  padding: var(--btn-small-padding);
+  padding: var(--btn-medium-padding);
 
-  @media (min-width: $min-laptop) {
-    padding: var(--btn-medium-padding);
+  @media (max-width: $max-tablet) {
+    padding: var(--btn-small-padding);
   }
 }
 .md_btn {
