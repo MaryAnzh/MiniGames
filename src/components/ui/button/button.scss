@@ -18,6 +18,10 @@
   transition: 0.3s;
   cursor: pointer;
 
+  &:active {
+    transform: scale(0.97);
+  }
+
   .btn_img {
     width: 100%;
     height: 100%;
@@ -75,8 +79,10 @@
 
 .image_btn {
   overflow: hidden;
+  pointer-events: none;
 }
 
 .disabled_btn {
   pointer-events: none;
+  opacity: 0.8;
 }

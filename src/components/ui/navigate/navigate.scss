@@ -1,0 +1,22 @@
+.app_nav {
+  width: fit-content;
+
+  .app_nav_list {
+    display: flex;
+    gap: var(--size-5);
+
+    .app_nav_list_item {
+      font-family: var(--font-inter);
+      font-size: var(--body-medium);
+      font-weight: var(--weight-medium);
+
+      &::first-letter {
+        text-transform: uppercase;
+      }
+    }
+
+    .nav-highlight_item {
+      font-weight: var(--weight-bold);
+    }
+  }
+}

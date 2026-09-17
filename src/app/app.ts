@@ -1,8 +1,8 @@
 import { Component, Header } from '@components';
 import * as C from '@constants';
 
-import { Router } from './router';
-import appStore from 'src/state/state';
+import { Router } from '@route';
+import appStore from '@state';
 
 export class App {
   private root: HTMLElement;
@@ -20,18 +20,22 @@ export class App {
       attrs: [{ attr: 'id', value: C.APP_ID }],
     });
 
-    new Header({
-      parentNode: appContainer.node,
-      isAuth: this.store.isAuth,
-    });
-
-    const pageRoot = new Component({
-      parentNode: appContainer.node,
+    const main = new Component({
+      parentNode: null,
       tagName: 'main',
       attrs: [{ attr: 'id', value: 'page-root' }],
     });
 
-    this.router = new Router(pageRoot.node);
+    this.router = new Router(main.node);
     this.router.init();
+
+    const header = new Header({
+      parentNode: null,
+      isAuth: this.store.isAuth,
+      router: this.router,
+    });
+
+    appContainer.append(header.node);
+    appContainer.append(main.node);
   }
 }

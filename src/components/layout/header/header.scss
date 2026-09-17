@@ -10,16 +10,33 @@
   align-items: center;
   gap: var(--size-2);
 
-  .header_login_btn {
+  .header_signup_btn,
+  .header_login_btn,
+  .header_nav {
     display: none;
   }
 
   @media (min-width: $min-tablet) {
     padding: var(--size-2-1) var(--size-5);
     display: grid;
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: 1fr repeat(2, auto);
 
-    .header_login_btn {
+    .header_signup_btn {
+      display: flex;
+    }
+  }
+
+  @media (min-width: $min-laptop) {
+    grid-template-columns: 1fr repeat(3, auto);
+    padding: 24px 80px;
+    gap: 32px;
+
+    .header_burger_btn {
+      display: none;
+    }
+
+    .header_login_btn,
+    .header_nav {
       display: flex;
     }
   }

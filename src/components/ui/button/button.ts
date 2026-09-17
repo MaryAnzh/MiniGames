@@ -7,6 +7,7 @@ type ButtonProps = {
   colorVariant: 'dark' | 'light' | 'ghost' | 'primary';
   variant?: 'base' | 'icon' | 'image';
   text?: string;
+  className?: string;
   size?: ComponentSizesType;
   icon?: IconPickerType;
   image?: string;
@@ -23,17 +24,19 @@ export class Button extends Component {
     text,
     image,
     isDisabled,
+    className,
   }: ButtonProps) {
     super({
       parentNode,
       tagName: 'button',
       className: [
         'app_button',
+        className ?? '',
         `${variant}_btn`,
         `${colorVariant}_btn`,
         size ? `${size}_btn` : '',
         isDisabled ? 'disabled_btn' : '',
-      ],
+      ].filter((el) => el),
       content: text ?? '',
       attrs: isDisabled ? [{ attr: 'disabled', value: 'true' }] : undefined,
     });
