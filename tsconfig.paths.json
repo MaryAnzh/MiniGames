@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "baseUrl": ".",
+    "paths": {
+      "@constants": ["src/constants"],
+      "@types": ["src/types"],
+      "@utils": ["src/utils"],
+      "@components": ["src/components"],
+      "@ui": ["src/components/ui"],
+      "@route": ["src/route"],
+      "@app": ["src/app"],
+      "@state": ["src/state"],
+      "@pages": ["src/pages"]
+    }
+  }
+}

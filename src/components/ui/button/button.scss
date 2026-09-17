@@ -1,0 +1,94 @@
+@use '../../../styles/variable' as *;
+
+.app_button {
+  width: fit-content;
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--size-1);
+  color: var(--on-primary);
+  outline: 2px var(--black) solid;
+  outline-offset: -2px;
+
+  font-size: var(--body-small);
+  font-family: var(--font-inter);
+  font-weight: var(--weight-bold);
+  white-space: nowrap;
+
+  transition: 0.3s;
+  cursor: pointer;
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  .btn_img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.sm_btn {
+  padding: var(--btn-small-padding);
+
+  @media (min-width: $min-laptop) {
+    padding: var(--btn-medium-padding);
+  }
+}
+.md_btn {
+  padding: var(--btn-medium-padding);
+}
+.lg_btn {
+  padding: var(--btn-large-padding);
+}
+
+.light_btn {
+  background: var(--white);
+
+  &:hover {
+    background: var(--surface);
+  }
+}
+
+.ghost_btn {
+  background: rgba(0, 0, 0, 0);
+
+  &:hover {
+    background: var(--surface);
+  }
+}
+
+.primary_btn {
+  background: var(--primary);
+
+  &:hover {
+    background: var(--primary-low);
+  }
+}
+
+.icon_btn,
+.image_btn {
+  width: var(--size-4);
+  height: var(--size-4);
+
+  &:hover {
+    transform: scale(1.25);
+  }
+}
+
+.icon_btn {
+  padding: var(--btn-icon-padding);
+}
+
+.image_btn {
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.disabled_btn {
+  pointer-events: none;
+  opacity: 0.8;
+}
