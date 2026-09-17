@@ -48,11 +48,14 @@ export class Navigate extends Component {
   }
 
   highlight(path: string) {
-    this.items.forEach((item) => {
+    this.items.forEach((item, i) => {
       item.node.classList.remove(this.highlightClass);
 
       const text = item.node.textContent?.toLowerCase();
       item.node.classList.toggle(this.highlightClass, path.includes(text));
+      if (i === 0 && path === '/') {
+        item.node.classList.add(this.highlightClass);
+      }
     });
   }
 }

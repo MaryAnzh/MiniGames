@@ -1,3 +1,5 @@
+@use '../../../styles/variable' as *;
+
 .app_logo {
   display: flex;
   align-items: center;
@@ -14,5 +16,9 @@
     font-size: var(--headline-small);
     color: var(--on-primary);
     word-wrap: break-word;
+
+    @media (min-width: $min-laptop) {
+      font-size: var(--headline-medium);
+    }
   }
 }

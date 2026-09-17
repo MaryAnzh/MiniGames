@@ -34,7 +34,7 @@ export class Router {
   }
 
   navigate(path: string) {
-    // history.pushState({}, '', path);
+    history.pushState({}, '', path);
     this.store.currentRoute = path;
     this.handleRoute();
   }

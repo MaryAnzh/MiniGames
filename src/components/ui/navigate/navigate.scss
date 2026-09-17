@@ -9,6 +9,8 @@
       font-family: var(--font-inter);
       font-size: var(--body-medium);
       font-weight: var(--weight-medium);
+      color: var(--on-bg);
+      cursor: pointer;
 
       &::first-letter {
         text-transform: uppercase;
@@ -17,6 +19,7 @@
 
     .nav-highlight_item {
       font-weight: var(--weight-bold);
+      color: var(--on-primary);
     }
   }
 }

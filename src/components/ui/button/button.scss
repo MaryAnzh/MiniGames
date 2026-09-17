@@ -1,3 +1,5 @@
+@use '../../../styles/variable' as *;
+
 .app_button {
   width: fit-content;
   border: none;
@@ -31,6 +33,10 @@
 
 .sm_btn {
   padding: var(--btn-small-padding);
+
+  @media (min-width: $min-laptop) {
+    padding: var(--btn-medium-padding);
+  }
 }
 .md_btn {
   padding: var(--btn-medium-padding);

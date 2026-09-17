@@ -28,8 +28,8 @@
 
   @media (min-width: $min-laptop) {
     grid-template-columns: 1fr repeat(3, auto);
-    padding: 24px 80px;
-    gap: 32px;
+    padding: var(--size-3) var(--size-10);
+    gap: var(--size-2);
 
     .header_burger_btn {
       display: none;
@@ -38,6 +38,10 @@
     .header_login_btn,
     .header_nav {
       display: flex;
+    }
+
+    .header_nav {
+      padding-right: var(--size-2);
     }
   }
 }
