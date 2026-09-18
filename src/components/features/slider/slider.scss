@@ -60,13 +60,16 @@
         width: 100%;
         height: 54px;
         display: grid;
-        grid-template-columns: min-content min-content auto min-content;
+        grid-template-columns: repeat(2, 1fr);
         gap: 8px 2px;
         align-items: center;
+        overflow: hidden;
         z-index: 2;
 
         .app_slider_item_title {
-          grid-column: 1/5;
+          grid-column: 1/3;
+          width: 100%;
+          min-width: 0;
           color: var(--white);
           font-size: var(--body-large);
           white-space: nowrap;
@@ -74,14 +77,16 @@
           text-overflow: ellipsis;
         }
 
-        .app_slider_item_like {
-          justify-self: end;
-        }
-
-        span {
+        .app_slider_item_info_count {
+          display: flex;
+          align-items: center;
+          gap: 4px;
           color: var(--white);
           font-size: 12px;
           font-weight: var(--weight-bold);
+          &:nth-of-type(2) {
+            justify-self: end;
+          }
         }
       }
 

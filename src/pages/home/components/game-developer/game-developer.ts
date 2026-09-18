@@ -24,20 +24,8 @@ export class GameDeveloperSection extends Component {
       className: 'game-developer_info',
     });
 
-    const titleWrap = new Component({
+    new Component({
       parentNode: info.node,
-      tagName: 'div',
-      className: 'game-developer_info_title-wrap',
-    });
-
-    new Component({
-      parentNode: titleWrap.node,
-      tagName: 'span',
-      className: 'game-developer_info_tag',
-    });
-
-    new Component({
-      parentNode: titleWrap.node,
       tagName: 'h2',
       className: 'game-developer_info_title',
       content: `Are You a Game Developer?`,

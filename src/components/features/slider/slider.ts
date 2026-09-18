@@ -49,8 +49,14 @@ export class Slider extends Component {
           content: title,
         });
 
-        const star = new Component({
+        const starWrap = new Component({
           parentNode: infoWrap.node,
+          tagName: 'span',
+          className: 'app_slider_item_info_count',
+        });
+
+        const star = new Component({
+          parentNode: starWrap.node,
           tagName: 'span',
           className: 'app_slider_item_star',
         });
@@ -59,13 +65,19 @@ export class Slider extends Component {
 </svg>`;
 
         new Component({
-          parentNode: infoWrap.node,
+          parentNode: starWrap.node,
           tagName: 'span',
           content: stars,
         });
 
-        const like = new Component({
+        const likeWrap = new Component({
           parentNode: infoWrap.node,
+          tagName: 'span',
+          className: 'app_slider_item_info_count',
+        });
+
+        const like = new Component({
+          parentNode: likeWrap.node,
           tagName: 'span',
           className: 'app_slider_item_like',
         });
@@ -83,7 +95,7 @@ export class Slider extends Component {
                   </svg>`;
 
         new Component({
-          parentNode: infoWrap.node,
+          parentNode: likeWrap.node,
           tagName: 'span',
           content: likes,
         });
