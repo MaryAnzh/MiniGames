@@ -5,7 +5,7 @@ import { ICON_PICKER } from '@constants';
 type ButtonProps = {
   parentNode: HTMLElement;
   colorVariant: 'dark' | 'light' | 'ghost' | 'primary';
-  variant?: 'base' | 'icon' | 'image' | 'round';
+  variant?: 'base' | 'icon' | 'image' | 'round' | 'shadow';
   text?: string;
   className?: string;
   size?: ComponentSizesType;
@@ -13,6 +13,9 @@ type ButtonProps = {
   image?: string;
   isDisabled?: boolean;
   googleIcon?: 'arrow_back' | 'arrow_forward';
+  radius?: 'lg';
+  isRoboto?: boolean;
+  leftIcon?: IconPickerType;
 };
 
 export class Button extends Component {
@@ -27,6 +30,9 @@ export class Button extends Component {
     isDisabled,
     className,
     googleIcon,
+    radius,
+    leftIcon,
+    isRoboto,
   }: ButtonProps) {
     super({
       parentNode,
@@ -37,7 +43,9 @@ export class Button extends Component {
         `${variant}_btn`,
         `${colorVariant}_btn`,
         size ? `${size}_btn` : '',
+        radius ? `radius_${radius}` : '',
         isDisabled ? 'disabled_btn' : '',
+        isRoboto ? 'roboto_btn' : '',
       ].filter((el) => el),
       content: text ?? '',
       attrs: isDisabled ? [{ attr: 'disabled', value: 'true' }] : undefined,
@@ -67,6 +75,16 @@ export class Button extends Component {
         className: 'material-symbols-outlined',
         content: googleIcon,
       });
+    }
+
+    if (leftIcon) {
+      const wrap = new Component({
+        parentNode: null,
+        tagName: 'span',
+      });
+      wrap.node.insertAdjacentHTML('beforeend', ICON_PICKER[leftIcon]);
+
+      this.node.prepend(wrap.node);
     }
   }
 }
