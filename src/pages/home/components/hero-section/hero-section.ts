@@ -16,12 +16,6 @@ export class HeroSection extends Component {
 
     new Component({
       parentNode: textWrap.node,
-      tagName: 'span',
-      className: 'hero_accent',
-    });
-
-    new Component({
-      parentNode: textWrap.node,
       tagName: 'h2',
       className: 'hero_title',
       content: 'Take a Short Break & Have Fun',
@@ -30,8 +24,16 @@ export class HeroSection extends Component {
     new Component({
       parentNode: textWrap.node,
       tagName: 'p',
-      className: 'hero_text',
+      className: 'hero_text_mobile',
       content: 'Discover hundreds of curated casual mini-games right in your browser.',
+    });
+
+    new Component({
+      parentNode: textWrap.node,
+      tagName: 'p',
+      className: 'hero_text',
+      content: `Discover hundreds of curated casual mini-games. Play instantly in your
+      browser — puzzle, match 3, farm, and board classics.`,
     });
 
     new Button({
