@@ -103,6 +103,32 @@
   pointer-events: none;
 }
 
+.round_btn {
+  width: var(--size-5);
+  height: var(--size-5);
+  border-radius: var(--corner-full);
+
+  span {
+    font-size: 18px;
+    font-family: 'Material Symbols Outlined';
+    font-weight: 400;
+    font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24;
+  }
+
+  @media (min-width: $min-laptop) {
+    width: var(--size-6);
+    height: var(--size-6);
+
+    span {
+      font-size: 24px;
+    }
+  }
+}
+
 .disabled_btn {
   pointer-events: none;
   opacity: 0.8;

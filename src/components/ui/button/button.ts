@@ -5,13 +5,14 @@ import { ICON_PICKER } from '@constants';
 type ButtonProps = {
   parentNode: HTMLElement;
   colorVariant: 'dark' | 'light' | 'ghost' | 'primary';
-  variant?: 'base' | 'icon' | 'image';
+  variant?: 'base' | 'icon' | 'image' | 'round';
   text?: string;
   className?: string;
   size?: ComponentSizesType;
   icon?: IconPickerType;
   image?: string;
   isDisabled?: boolean;
+  googleIcon?: 'arrow_back' | 'arrow_forward';
 };
 
 export class Button extends Component {
@@ -25,6 +26,7 @@ export class Button extends Component {
     image,
     isDisabled,
     className,
+    googleIcon,
   }: ButtonProps) {
     super({
       parentNode,
@@ -55,6 +57,15 @@ export class Button extends Component {
           { attr: 'src', value: image },
           { attr: 'alt', value: 'logo' },
         ],
+      });
+    }
+
+    if (googleIcon) {
+      new Component({
+        parentNode: this.node,
+        tagName: 'span',
+        className: 'material-symbols-outlined',
+        content: googleIcon,
       });
     }
   }
