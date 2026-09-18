@@ -99,7 +99,7 @@
         .app_slider_item_info {
           display: none;
           @media (min-width: $min-laptop) {
-            display: grid;
+            display: flex;
           }
         }
       }
@@ -113,9 +113,12 @@
           display: none;
 
           @media (min-width: $min-laptop) {
-            display: grid;
+            display: flex;
           }
         }
+      }
+      &:nth-of-type(5) {
+        background-image: url('/img/slide_5.webp');
       }
     }
   }
