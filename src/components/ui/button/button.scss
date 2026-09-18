@@ -33,14 +33,29 @@
 
 .sm_btn {
   padding: var(--btn-small-padding);
+  font-size: 12px;
+
+  @media (min-width: $min-tablet) {
+    padding: var(--btn-medium-padding);
+    font-size: 14px;
+  }
+
+  @media (min-width: $min-laptop) {
+    padding: var(--btn-large-padding);
+    font-size: 18px;
+  }
+}
+
+.md_btn {
+  padding: var(--btn-small-padding);
+  font-size: 14px;
 
   @media (min-width: $min-laptop) {
     padding: var(--btn-medium-padding);
+    font-size: 14px;
   }
 }
-.md_btn {
-  padding: var(--btn-medium-padding);
-}
+
 .lg_btn {
   padding: var(--btn-large-padding);
 }

@@ -2,23 +2,23 @@
 
 .header {
   width: 100%;
-  display: inline-flex;
-  padding: var(--size-2);
   background: var(--bg);
-  border-bottom: var(--size-025) var(--on-primary) solid;
+  display: flex;
   justify-content: space-between;
-  align-items: center;
+  padding: var(--size-2);
   gap: var(--size-2);
+  align-items: center;
+  border-bottom: var(--size-025) var(--on-primary) solid;
 
-  .header_signup_btn,
+  .header_nav,
   .header_login_btn,
-  .header_nav {
+  .header_signup_btn {
     display: none;
   }
 
   @media (min-width: $min-tablet) {
-    padding: var(--size-2-1) var(--size-5);
     display: grid;
+    padding: var(--size-2-1) var(--size-5);
     grid-template-columns: 1fr repeat(2, auto);
 
     .header_signup_btn {
@@ -27,7 +27,8 @@
   }
 
   @media (min-width: $min-laptop) {
-    grid-template-columns: 1fr repeat(3, auto);
+    display: grid;
+    grid-template-columns: 1fr repeat(2, auto);
     padding: var(--size-3) var(--size-10);
     gap: var(--size-2);
 
@@ -35,13 +36,25 @@
       display: none;
     }
 
-    .header_login_btn,
     .header_nav {
       display: flex;
+      grid-row: 2;
+      grid-column: 1/4;
+      justify-self: flex-start;
+      padding-right: var(--size-2);
     }
 
+    .header_login_btn {
+      display: flex;
+    }
+  }
+
+  @media (min-width: $min-desktop) {
+    grid-template-columns: 1fr repeat(3, auto);
+
     .header_nav {
-      padding-right: var(--size-2);
+      grid-row: 1;
+      grid-column: 2;
     }
   }
 }

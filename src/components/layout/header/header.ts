@@ -30,7 +30,7 @@ export class Header extends Component {
       parentNode: this.node,
       className: 'header_login_btn',
       text: 'Log In',
-      size: 'sm',
+      size: 'md',
       colorVariant: 'light',
     });
 
@@ -38,7 +38,7 @@ export class Header extends Component {
       parentNode: this.node,
       className: 'header_signup_btn',
       text: 'Sign Up',
-      size: 'sm',
+      size: 'md',
       colorVariant: 'primary',
     });
 
