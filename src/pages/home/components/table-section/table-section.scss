@@ -8,7 +8,16 @@
   padding: var(--size-2);
   gap: var(--size-2);
 
-  // Title
+  @media (min-width: $tablet) {
+    padding: var(--size-3) var(--size-5);
+    gap: var(--size-3);
+  }
+
+  @media (min-width: $laptop) {
+    padding: var(--size-5) 120px;
+    gap: var(--size-5);
+  }
+
   &_title-wrap {
     width: 100%;
     display: flex;
@@ -23,10 +32,13 @@
       color: var(--on-primary);
       font-size: var(--headline-medium);
       font-weight: var(--weight-bold);
+
+      @media (min-width: $laptop) {
+        font-size: var(--headline-large);
+      }
     }
   }
 
-  // Table wrapper
   &_table {
     width: 100%;
     background: var(--white);
@@ -37,24 +49,33 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+
+    @media (min-width: $tablet) {
+      box-shadow: var(--level-2);
+    }
+
+    @media (min-width: $laptop) {
+      box-shadow: var(--level-3);
+    }
   }
 
-  // Row
   &_row {
     width: 100%;
     display: grid;
     align-items: center;
     padding: var(--size-2);
-    gap: var(--size-1) 0;
+    gap: var(--size-1);
     border-bottom: 1.5px var(--outline) solid;
-    overflow: hidden;
-    justify-content: center;
 
-    grid-template-columns: 40px 39% 80px 75px;
+    grid-template-columns: 40px 1fr 80px 70px;
 
     font-size: var(--label-large);
     font-weight: var(--weight-bold);
     color: var(--on-primary);
+
+    &:nth-child(even) {
+      background: var(--bg);
+    }
 
     &--header {
       background: var(--tertiary);
@@ -66,24 +87,34 @@
 
       .header-col {
         color: var(--white);
-        display: flex;
-        justify-self: center;
+        width: 100%;
+        text-align: center;
       }
     }
 
-    @media (min-width: $min-tablet) {
-      grid-template-columns: 80px 160px 110px 110px 110px;
+    @media (min-width: $tablet) {
+      grid-template-columns: 80px 160px 17.5% 15.5% 17.5%;
+      gap: 12px;
+      padding: 14px 16px;
+
+      &--header {
+        font-size: var(--body-small);
+        .header-col {
+          padding: 0 16px;
+        }
+      }
+    }
+
+    @media (min-width: $laptop) {
+      padding: 24px;
+      gap: 0;
+      grid-template-columns: 80px repeat(5, 1fr);
     }
   }
 
-  &_row:nth-of-type {
-    background: var(--bg-footer);
-  }
-
-  // Columns
   .col-rank {
-    font-weight: var(--weight-extra-bold);
     justify-self: center;
+    font-weight: var(--weight-extra-bold);
 
     &:first-child {
       color: var(--tertiary);
@@ -91,11 +122,9 @@
   }
 
   .col-player {
-    width: 100%;
     display: flex;
-    padding-left: var(--size-05);
     align-items: center;
-    justify-content: start;
+    justify-content: flex-start;
     gap: var(--size-05);
     overflow: hidden;
   }
@@ -112,7 +141,12 @@
     font-size: var(--label-small);
     font-weight: var(--weight-bold);
 
-    @media (min-width: $min-tablet) {
+    @media (min-width: $tablet) {
+      width: 28px;
+      height: 28px;
+    }
+
+    @media (min-width: $laptop) {
       width: 40px;
       height: 40px;
       font-size: var(--label-medium);
@@ -126,12 +160,77 @@
   }
 
   .col-score,
-  .col-streak {
-    justify-self: center;
-
-    text-align: right;
+  .col-streak,
+  .col-games,
+  .col-favorite {
+    width: 100%;
+    text-align: center;
     font-size: var(--label-large);
     font-weight: var(--weight-bold);
     color: var(--on-primary);
+  }
+
+  .col-favorite,
+  .header_favorite,
+  .col-games,
+  .header_games {
+    display: none;
+  }
+
+  .col-games,
+  .header_games {
+    @media (min-width: $tablet) {
+      display: block;
+    }
+  }
+
+  .col-favorite,
+  .header_favorite {
+    @media (min-width: $laptop) {
+      display: block;
+    }
+  }
+
+  .header_games {
+    width: 100%;
+    &::after {
+      content: 'Game';
+    }
+    @media (min-width: $laptop) {
+      &::after {
+        content: 'Games Played';
+      }
+    }
+  }
+
+  .header-score {
+    width: 100%;
+
+    &::after {
+      content: 'Store';
+    }
+    @media (min-width: $laptop) {
+      &::after {
+        content: 'Total score';
+      }
+    }
+  }
+
+  .header_favorite {
+    width: 100%;
+
+    &::after {
+      content: 'Favorite';
+    }
+    @media (min-width: $laptop) {
+      &::after {
+        content: 'Favorite Game';
+      }
+    }
+  }
+  .col-favorite {
+    @include tag;
+    width: fit-content;
+    justify-self: center;
   }
 }

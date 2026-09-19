@@ -11,3 +11,20 @@
     height: var(--size-4);
   }
 }
+
+@mixin tag {
+  padding: 4px 12px;
+  background: var(--bg);
+  border-radius: 20px;
+  outline: 1.5px solid var(--on-primary);
+  outline-offset: -1.5px;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  font-family: var(--font-roboto);
+  font-size: 12px;
+  font-weight: var(--weight-bold);
+  color: var(--on-primary);
+}

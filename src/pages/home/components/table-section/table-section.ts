@@ -2,11 +2,22 @@ import { Component } from '@components';
 import type { ComponentProps } from '@types';
 
 type TableSectionProps = Pick<ComponentProps, 'parentNode'>;
+
+type AddCellType = {
+  parentNode: HTMLElement;
+  content?: string;
+  isHeader?: boolean;
+  className: string;
+  additionalClass?: string;
+};
+
 type RowType = {
   rank: string;
   player?: string;
+  games?: string;
   score: string;
   streak: string;
+  favorite?: string;
   isHeader?: boolean;
   avatar?: string;
   avatarColor?: string;
@@ -18,8 +29,10 @@ export class TableSection extends Component {
     {
       rank: 'Rank',
       player: 'Player',
-      score: 'Score',
+      games: 'Games Played',
+      score: 'Total Score',
       streak: 'Streak',
+      favorite: 'Favorite Game',
       isHeader: true,
     },
     {
@@ -27,24 +40,30 @@ export class TableSection extends Component {
       avatar: 'AP',
       avatarColor: 'var(--primary)',
       name: 'Alex_Pro99',
-      score: '94.2K',
+      games: '142',
+      score: '94,250',
       streak: '🔥 12d',
+      favorite: 'Heartopia',
     },
     {
       rank: '#2',
       avatar: 'CG',
       avatarColor: 'var(--avatar-random-2)',
-      name: 'CozyGamer',
-      score: '81.4K',
+      name: 'CozyGamer_x',
+      games: '118',
+      score: '81,400',
       streak: '🔥 8d',
+      favorite: 'Cat Mail Co.',
     },
     {
       rank: '#3',
       avatar: 'MM',
       avatarColor: 'var(--avatar-random-3)',
       name: 'MatchMaster',
-      score: '72.1K',
+      games: '98',
+      score: '72,110',
       streak: '🔥 5d',
+      favorite: 'Tiny Glade',
     },
   ];
 
@@ -60,23 +79,23 @@ export class TableSection extends Component {
   }
 
   private renderTitle() {
-    const titleWrap = new Component({
+    const wrap = new Component({
       parentNode: this.node,
       tagName: 'div',
       className: 'table-section_title-wrap',
     });
 
     new Component({
-      parentNode: titleWrap.node,
+      parentNode: wrap.node,
       tagName: 'span',
       className: 'table-section_title-wrap_tag',
     });
 
     new Component({
-      parentNode: titleWrap.node,
+      parentNode: wrap.node,
       tagName: 'h2',
       className: 'table-section_title-wrap_title',
-      content: 'Top Players',
+      content: 'Top Players This Week',
     });
   }
 
@@ -98,29 +117,28 @@ export class TableSection extends Component {
     });
 
     // Rank
-    new Component({
+    this.addCell({
       parentNode: rowEl.node,
-      tagName: 'span',
-      className: `${row.isHeader ? 'header-col' : 'col-rank'}`,
       content: row.rank,
+      isHeader: row.isHeader,
+      className: 'col-rank',
     });
 
     // Player
     if (row.isHeader) {
-      new Component({
+      this.addCell({
         parentNode: rowEl.node,
-        tagName: 'span',
-        className: `header-col`,
         content: row.player,
+        isHeader: true,
+        className: 'header-col',
       });
     } else {
       const playerCell = new Component({
         parentNode: rowEl.node,
         tagName: 'div',
-        className: 'col-player player-cell',
+        className: 'col-player',
       });
 
-      // avatar
       new Component({
         parentNode: playerCell.node,
         tagName: 'div',
@@ -129,7 +147,6 @@ export class TableSection extends Component {
         attrs: [{ attr: 'style', value: `background:${row.avatarColor}` }],
       });
 
-      //player name
       new Component({
         parentNode: playerCell.node,
         tagName: 'span',
@@ -138,20 +155,48 @@ export class TableSection extends Component {
       });
     }
 
-    // Score
-    new Component({
+    // Games
+    this.addCell({
       parentNode: rowEl.node,
-      tagName: 'span',
-      className: `${row.isHeader ? 'header-col' : 'col-score'}`,
-      content: row.score,
+      content: row.isHeader ? '' : row.games,
+      isHeader: row.isHeader,
+      className: 'col-games',
+      additionalClass: row.isHeader ? 'header_games' : '',
+    });
+
+    // Score
+    this.addCell({
+      parentNode: rowEl.node,
+      content: row.isHeader ? '' : row.score,
+      isHeader: row.isHeader,
+      className: 'col-score',
+      additionalClass: row.isHeader ? 'header-score' : '',
     });
 
     // Streak
-    new Component({
+    this.addCell({
       parentNode: rowEl.node,
-      tagName: 'span',
-      className: `${row.isHeader ? 'header-col' : 'col-streak'}`,
       content: row.streak,
+      isHeader: row.isHeader,
+      className: 'col-streak',
+    });
+
+    // Favorite
+    this.addCell({
+      parentNode: rowEl.node,
+      content: row.isHeader ? '' : row.favorite,
+      isHeader: row.isHeader,
+      className: 'col-favorite',
+      additionalClass: row.isHeader ? 'header_favorite' : '',
+    });
+  }
+
+  private addCell({ parentNode, content, isHeader, className, additionalClass }: AddCellType) {
+    new Component({
+      parentNode,
+      tagName: 'span',
+      className: `${isHeader ? 'header-col' : className} ${additionalClass ?? ''}`,
+      content: content ?? '',
     });
   }
 }
