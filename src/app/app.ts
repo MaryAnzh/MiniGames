@@ -1,4 +1,4 @@
-import { Component, Header } from '@components';
+import { Component, Header, Footer } from '@components';
 import * as C from '@constants';
 
 import { Router } from '@route';
@@ -34,8 +34,12 @@ export class App {
       isAuth: this.store.isAuth,
       router: this.router,
     });
+    const footer = new Footer({
+      parentNode: null,
+    });
 
     appContainer.append(header.node);
     appContainer.append(main.node);
+    appContainer.append(footer.node);
   }
 }
