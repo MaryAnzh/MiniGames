@@ -8,19 +8,45 @@
   flex-direction: column;
   gap: 28px;
 
+  @media (min-width: $tablet) {
+    padding: var(--size-5);
+    gap: 52px;
+  }
+
+  @media (min-width: $laptop) {
+    padding: 40px 120px;
+    gap: 88px;
+  }
+
   &_top {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
+    align-items: start;
     flex-wrap: wrap;
     gap: var(--size-3);
+
+    @media (min-width: $tablet) {
+      display: grid;
+      grid-template-columns: min-content auto;
+      gap: var(--size-3) var(--size-5);
+    }
+
+    @media (min-width: $laptop) {
+      gap: 36px var(--size-5);
+      grid-template-columns: 1fr auto auto;
+    }
   }
 
   &_brand {
+    grid-column: 1/2;
     display: grid;
     grid-template-columns: 32px auto;
+    align-items: center;
     gap: var(--size-3) var(--size-1);
+
+    @media (min-width: $laptop) {
+      width: 400px;
+    }
 
     &-logo {
       grid-column: 1;
@@ -37,6 +63,9 @@
       @media (max-width: $tablet) {
         font-size: 20px;
       }
+      @media (min-width: $laptop) {
+        font-size: 24px;
+      }
     }
 
     &-desc {
@@ -49,9 +78,18 @@
   }
 
   &_links {
+    grid-column: 1/2;
     display: flex;
     gap: 104px;
-    flex-wrap: wrap;
+
+    @media (min-width: $tablet) {
+      gap: 40px;
+    }
+
+    @media (min-width: $laptop) {
+      grid-column: 2/3;
+      grid-row: 1;
+    }
 
     &-col {
       display: flex;
@@ -71,6 +109,7 @@
       color: var(--on-bg-footer);
       font-size: 14px;
       cursor: pointer;
+      white-space: nowrap;
       transition: 0.3s;
 
       &::after {
@@ -103,9 +142,16 @@
   }
 
   &_community {
+    grid-column: 2/3;
+    grid-row: 2;
     display: flex;
     flex-direction: column;
     gap: 16px;
+
+    @media (min-width: $laptop) {
+      grid-column: 3/4;
+      grid-row: 1;
+    }
 
     &-title {
       color: var(--white);
@@ -152,11 +198,18 @@
   &_bottom {
     display: grid;
     grid-template-columns: min-content 1fr;
-    justify-content: space-between;
     align-items: center;
     gap: var(--size-1) var(--size-2);
-
     border-top: 1px solid var(--bg-footer-low);
+
+    @media (min-width: $tablet) {
+      display: flex;
+      gap: 16px;
+    }
+
+    @media (min-width: $laptop) {
+      justify-content: space-between;
+    }
 
     &-copy {
       grid-row: 1;
@@ -164,6 +217,9 @@
       color: var(--on-bg-footer);
       font-size: var(--label-medium);
       font-weight: var(--weight-regular);
+      @media (min-width: $tablet) {
+        font-size: var(--body-small);
+      }
     }
 
     &-rs {
@@ -210,6 +266,10 @@
         font-size: var(--label-medium);
         font-weight: var(--weight-regular);
         white-space: nowrap;
+
+        @media (min-width: $tablet) {
+          font-size: var(--body-small);
+        }
       }
     }
 
@@ -217,6 +277,10 @@
       color: var(--on-bg-footer);
       font-size: 14px;
       display: none;
+
+      @media (min-width: $tablet) {
+        display: block;
+      }
     }
   }
 }
