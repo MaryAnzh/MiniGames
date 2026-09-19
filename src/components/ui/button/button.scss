@@ -11,6 +11,7 @@
   color: var(--on-primary);
   outline: 2px var(--black) solid;
   outline-offset: -2px;
+  gap: 4px;
 
   font-size: var(--body-small);
   font-family: var(--font-inter);
@@ -101,6 +102,43 @@
 .image_btn {
   overflow: hidden;
   pointer-events: none;
+}
+
+.round_btn {
+  width: var(--size-5);
+  height: var(--size-5);
+  border-radius: var(--corner-full);
+
+  span {
+    font-size: 18px;
+    font-weight: 400;
+    font-family: 'Material Symbols Outlined';
+    font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24;
+  }
+
+  @media (min-width: $min-laptop) {
+    width: var(--size-6);
+    height: var(--size-6);
+
+    span {
+      font-size: 24px;
+    }
+  }
+}
+
+.shadow_btn {
+  box-shadow: 0px 10px 20px -10px rgba(0, 0, 0, 0.1);
+}
+
+.radius_lg {
+  border-radius: 12px;
+}
+.roboto_btn {
+  font-family: var(--font-roboto);
 }
 
 .disabled_btn {
