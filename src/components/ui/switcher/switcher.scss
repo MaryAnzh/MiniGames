@@ -1,0 +1,33 @@
+.app_switcher {
+  width: 100%;
+  height: 48px;
+  background: var(--white, white);
+  display: flex;
+  border-radius: var(--corner-medium);
+  outline: 2.5px var(--on-primary) solid;
+  outline-offset: -2.5px;
+  overflow: hidden;
+  transition: 0.3s;
+
+  &_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    padding: var(--size-3) var(--size-2);
+    border-radius: var(--corner-small);
+    font-size: var(--body-medium);
+    font-weight: var(--weight-bold);
+    color: var(--on-bg, #5f5d75);
+
+    &.is-active {
+      background: var(--bg-footer-low, #2a264f);
+      color: var(--white, white);
+      pointer-events: none;
+    }
+
+    &:hover {
+      color: var(--primary);
+    }
+  }
+}
