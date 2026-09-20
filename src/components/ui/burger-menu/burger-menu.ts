@@ -1,24 +1,27 @@
 import { Component } from '@components';
 import { GoogleIcon, Button } from '@ui';
 import { ICON_PICKER } from '@constants';
+import type { AuthFormType, ComponentProps } from '@types';
 
-type BurgerMenuProps = {
-  parentNode: HTMLElement;
+type BurgerMenuProps = Pick<ComponentProps, 'parentNode'> & {
   isAuth: boolean;
   onClose: () => void;
+  onOpenAuth: (tab: AuthFormType) => void;
 };
 
 export class BurgerMenu extends Component {
   closeBtn: Component | null = null;
   onClose: () => void;
+  onOpenAuth: (tab: AuthFormType) => void;
 
-  constructor({ parentNode, isAuth, onClose }: BurgerMenuProps) {
+  constructor({ parentNode, isAuth, onClose, onOpenAuth }: BurgerMenuProps) {
     super({
       parentNode,
       tagName: 'div',
       className: 'burger',
     });
     this.onClose = onClose;
+    this.onOpenAuth = onOpenAuth;
 
     this.render(isAuth);
   }
@@ -97,7 +100,7 @@ export class BurgerMenu extends Component {
         colorVariant: 'ghost-light',
         className: 'burger_login_btn',
         width: 'full',
-      });
+      }).node.addEventListener('click', () => this.onOpenAuth('Login'));
 
       new Button({
         parentNode: bottom.node,
@@ -106,7 +109,7 @@ export class BurgerMenu extends Component {
         colorVariant: 'primary',
         className: 'burger_signup_btn',
         width: 'full',
-      });
+      }).node.addEventListener('click', () => this.onOpenAuth('Register'));
     }
   }
 

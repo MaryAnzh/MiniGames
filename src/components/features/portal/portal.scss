@@ -5,8 +5,8 @@
   inset: 0;
   width: 100%;
   height: 100%;
+  padding-top: 16px;
   display: flex;
-  align-items: center;
   justify-content: center;
   z-index: 999;
   background: rgba($color: #000000, $alpha: 0.3);
@@ -14,6 +14,8 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.3s ease;
+  overflow: hidden;
+  align-items: flex-start;
 
   &_open {
     opacity: 1;

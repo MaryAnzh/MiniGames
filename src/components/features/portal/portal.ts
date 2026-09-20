@@ -2,24 +2,37 @@ import { Component } from '@components';
 
 type PortalProps = {
   className?: string;
+  position?: 'top';
 };
 
 export class Portal extends Component {
-  timeout: number | null = null;
+  private timeout: number | null = null;
 
-  constructor({ className }: PortalProps = {}) {
+  constructor({ className, position }: PortalProps = {}) {
     super({
-      parentNode: null, // НЕ монтируем сразу
+      parentNode: null,
       tagName: 'div',
-      className: ['app_portal', className ?? ''].filter(Boolean),
+      className: ['app_portal', className ?? '', `portal_${position ?? 'center'}`].filter(Boolean),
+      attrs: [{ attr: 'id', value: 'appPortal' }],
     });
+
+    this.node.addEventListener('click', this.handleOutsideClick);
   }
+
+  handleOutsideClick = (event: Event) => {
+    const target = event.target as HTMLElement;
+
+    if (target.id === 'appPortal') {
+      this.unmount();
+    }
+  };
 
   mount(content: HTMLElement) {
     if (this.timeout) {
       clearTimeout(this.timeout);
       this.timeout = null;
     }
+    this.node.innerHTML = '';
 
     document.body.appendChild(this.node);
 
@@ -29,22 +42,24 @@ export class Portal extends Component {
   }
 
   unmount() {
-    console.log(this.node);
     this.node.classList.remove('app_portal_open');
 
-    this.timeout = setTimeout(() => {
+    this.timeout = window.setTimeout(() => {
+      this.node.innerHTML = '';
       if (this.node.parentNode) {
         this.node.parentNode.removeChild(this.node);
       }
-
-      this.node.innerHTML = '';
     }, 300);
   }
 
   destroy() {
+    this.node.innerHTML = '';
+
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
+    this.node.removeEventListener('click', this.handleOutsideClick);
+
     super.destroy();
   }
 }

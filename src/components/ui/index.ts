@@ -4,3 +4,5 @@ export { Button } from './button/button';
 
 export { Navigate } from './navigate/navigate';
 export { BurgerMenu } from './burger-menu/burger-menu';
+export { Switcher } from './switcher/switcher';
+export { Input } from './input/input';
