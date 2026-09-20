@@ -67,7 +67,6 @@ export class Header extends Component {
     });
 
     this.handleOpen = () => this.portal.mount(this.burgerMenu.node);
-    this.handleOpen();
     this.burgerBtn.node.addEventListener('click', this.handleOpen);
   }
 
