@@ -174,13 +174,13 @@
       align-items: center;
       color: var(--white);
       font-size: var(--body-medium);
-      outline: 0.5px transparent solid;
-      outline-offset: -1px;
-      transition: 0.3;
+      outline: 2px transparent solid;
+      outline-offset: -2px;
+      transition: 0.3s;
 
       &:hover {
         outline-color: var(--primary);
-        background: var(--on-primary);
+        background: var(--bg-footer-lowest);
       }
 
       &:active {

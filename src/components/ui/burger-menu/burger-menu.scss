@@ -1,0 +1,85 @@
+@use '../../../styles/variable' as *;
+@use '../../../styles/mixims/common.scss' as *;
+
+.burger {
+  width: 320px;
+  max-width: 100%;
+  height: 587px;
+  padding: var(--size-3);
+  background: var(--bg-footer);
+  border-left: 2px solid var(--on-primary);
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-4);
+
+  &_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &_brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &-title {
+      color: var(--white);
+      font-size: 20px;
+      font-weight: 700;
+      font-family: var(--font-inter);
+    }
+  }
+
+  &_close_btn {
+    width: 32px;
+    height: 32px;
+    border: navajowhite;
+
+    background: var(--bg-footer-low);
+    border-radius: var(--corner-small);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: 2px transparent solid;
+    outline-offset: -2px;
+    transition: 0.3s;
+
+    .google-icons {
+      font-size: 20px;
+      color: var(--white);
+    }
+
+    &:hover {
+      background: var(--bg-footer-lowest);
+      border-radius: 6px;
+      outline-color: var(--primary);
+    }
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+
+  &_links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-3);
+  }
+
+  &_link {
+    background: none;
+    border: none;
+
+    @include nav-item;
+
+    text-align: left;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  &_bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}

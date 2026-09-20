@@ -1,6 +1,7 @@
 import type { ComponentSizesType, IconPickerType } from '@types';
 import { Component } from '../../component';
 import { ICON_PICKER } from '@constants';
+import { GoogleIcon } from '../google-icon/google-icon';
 
 type ButtonProps = {
   parentNode: HTMLElement;
@@ -69,12 +70,7 @@ export class Button extends Component {
     }
 
     if (googleIcon) {
-      new Component({
-        parentNode: this.node,
-        tagName: 'span',
-        className: 'material-symbols-outlined',
-        content: googleIcon,
-      });
+      new GoogleIcon({ parentNode: this.node, iconName: googleIcon });
     }
 
     if (leftIcon) {
