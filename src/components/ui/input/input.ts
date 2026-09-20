@@ -1,16 +1,18 @@
 import { Component } from '@components';
 import { GoogleIcon } from '../google-icon/google-icon';
+import type { GoogleIconsType } from '@types';
 
 type InputProps = {
   parentNode: HTMLElement;
   label: string;
   placeholder: string;
   type?: string;
-  icon?: 'mail';
+  icon?: GoogleIconsType;
+  rightIcon?: GoogleIconsType;
 };
 
 export class Input extends Component {
-  constructor({ parentNode, label, placeholder, type = 'text', icon }: InputProps) {
+  constructor({ parentNode, label, placeholder, type = 'text', icon, rightIcon }: InputProps) {
     super({
       parentNode,
       tagName: 'div',
@@ -33,7 +35,11 @@ export class Input extends Component {
     new Component({
       parentNode: wrap.node,
       tagName: 'input',
-      className: ['app_input_field', icon ? 'input-with-icon' : ''],
+      className: [
+        'app_input_field',
+        icon ? 'input-with-icon' : '',
+        rightIcon ? 'input-right-icon' : '',
+      ],
       attrs: [
         { attr: 'type', value: type },
         { attr: 'placeholder', value: placeholder },
@@ -45,6 +51,14 @@ export class Input extends Component {
         parentNode: wrap.node,
         iconName: icon,
         iconClass: 'app_input_icon',
+      });
+    }
+
+    if (rightIcon) {
+      new GoogleIcon({
+        parentNode: wrap.node,
+        iconName: rightIcon,
+        iconClass: 'app_input_right-icon',
       });
     }
   }

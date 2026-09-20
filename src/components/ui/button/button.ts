@@ -13,7 +13,7 @@ type ButtonProps = {
   icon?: IconPickerType;
   image?: string;
   isDisabled?: boolean;
-  googleIcon?: 'arrow_back' | 'arrow_forward';
+  googleIcon?: 'arrow_back' | 'arrow_forward' | 'google';
   radius?: 'lg';
   isRoboto?: boolean;
   width?: 'full';

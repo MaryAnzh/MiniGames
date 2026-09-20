@@ -10,24 +10,29 @@
   transition: 0.3s;
 
   &_btn {
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: none;
+    background: transparent;
+    color: var(--on-bg);
     padding: var(--size-3) var(--size-2);
     border-radius: var(--corner-small);
     font-size: var(--body-medium);
     font-weight: var(--weight-bold);
     color: var(--on-bg, #5f5d75);
+    transition: 0.3s;
+    border: none;
+    outline: none;
 
     &.is-active {
-      background: var(--bg-footer-low, #2a264f);
-      color: var(--white, white);
+      background: var(--bg-footer-low);
+      color: var(--white);
       pointer-events: none;
     }
 
     &:hover {
-      color: var(--primary);
+      background: var(--primary);
     }
   }
 }
