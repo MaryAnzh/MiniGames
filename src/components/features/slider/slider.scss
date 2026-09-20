@@ -35,7 +35,7 @@
       display: inline-flex;
       padding: 16px;
 
-      @media (min-width: $min-laptop) {
+      @media (min-width: $laptop) {
         border-radius: 24px;
       }
 
@@ -94,7 +94,7 @@
       &:nth-of-type(5) {
         display: none;
 
-        @media (min-width: $min-laptop) {
+        @media (min-width: $laptop) {
           display: grid;
         }
       }
@@ -103,8 +103,8 @@
         background-image: url('/img/slide_2.webp');
         .app_slider_item_info {
           display: none;
-          @media (min-width: $min-laptop) {
-            display: flex;
+          @media (min-width: $pc) {
+            display: grid;
           }
         }
       }
@@ -117,8 +117,8 @@
         .app_slider_item_info {
           display: none;
 
-          @media (min-width: $min-laptop) {
-            display: flex;
+          @media (min-width: $pc) {
+            display: grid;
           }
         }
       }
@@ -128,11 +128,11 @@
     }
   }
 
-  @media (min-width: $min-tablet) {
+  @media (min-width: $tablet) {
     height: 280px;
   }
 
-  @media (min-width: $min-laptop) {
+  @media (min-width: $laptop) {
     height: 388px;
 
     .app_slider_body {

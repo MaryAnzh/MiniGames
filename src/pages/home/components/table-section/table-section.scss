@@ -245,5 +245,9 @@
     justify-self: center;
 
     display: none;
+
+    @media (min-width: $laptop) {
+      display: flex;
+    }
   }
 }
