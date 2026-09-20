@@ -7,12 +7,25 @@
   padding: var(--size-2);
   gap: var(--size-2);
 
+  @media (min-width: $tablet) {
+    padding: var(--size-5) 120px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    gap: var(--size-5);
+  }
+
   .game-developer_img {
     width: 100%;
     height: 227px;
     border-radius: var(--corner-extra-large);
     object-fit: cover;
     overflow: hidden;
+
+    @media (min-width: $laptop) {
+      width: 600px;
+      height: 480px;
+    }
   }
 
   .game-developer_info {
@@ -27,12 +40,27 @@
     outline: 2px var(--on-primary, #242145) solid;
     outline-offset: -2px;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--size-2);
 
+    @media (min-width: $tablet) {
+      padding: var(--size-5);
+      box-shadow:
+        0px 14px 30px -10px rgba(0, 0, 0, 0.08),
+        0px 2px 8px -4px rgba(0, 0, 0, 0.04);
+      border-radius: var(--corner-extra-large);
+      outline: 2px var(--on-primary) solid;
+      outline-offset: -2px;
+      gap: var(--size-3);
+    }
     .game-developer_info_title {
       color: var(--on-primary);
       font-size: 24px;
       line-height: 28.8px;
+
+      @media (min-width: $tablet) {
+        font-size: 32px;
+        line-height: 38.4px;
+      }
     }
 
     .game-developer_info_text {
@@ -45,7 +73,17 @@
         font-size: var(--label-medium);
         font-weight: var(--weight-regular);
         line-height: 18px;
-        letter-spacing: 9.5%;
+
+        @media (min-width: $tablet) {
+          font-size: 18px;
+          line-height: 27px;
+        }
+      }
+    }
+
+    .game-developer_button {
+      @media (min-width: $tablet) {
+        gap: 20px;
       }
     }
 
@@ -53,6 +91,9 @@
       color: var(--on-bg-low);
       font-size: 12px;
       font-weight: 400;
+      @media (min-width: $tablet) {
+        font-size: 14px;
+      }
     }
   }
 }

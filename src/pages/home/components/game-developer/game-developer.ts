@@ -58,6 +58,7 @@ engaging mini games to add to our platform. Submit your game`,
       radius: 'lg',
       text: 'Submit Form',
       isRoboto: true,
+      className: 'game-developer_button',
     });
 
     new Component({
