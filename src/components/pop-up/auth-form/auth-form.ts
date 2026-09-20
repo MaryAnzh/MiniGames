@@ -34,7 +34,7 @@ const REGISTER_FIELDS: FieldType[] = [
     label: 'Confirm Password',
     placeholder: 'Repeat your password',
     type: 'password',
-    iconName: 'visibility',
+    iconName: 'lock',
   },
 ];
 
@@ -55,9 +55,7 @@ export class AuthPopup extends Component {
 
     this.activeTab = tab;
 
-    this.portal = new Portal({
-      onClose: () => this.close(),
-    });
+    this.portal = new Portal({});
 
     this.render();
   }
@@ -190,7 +188,8 @@ export class AuthPopup extends Component {
     });
 
     bottomLink.node.addEventListener('click', () => {
-      isLogin ? 'Register' : 'Login';
+      this.activeTab = isLogin ? 'Register' : 'Login';
+      this.render();
     });
   }
 }

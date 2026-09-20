@@ -2,22 +2,19 @@ import { Component } from '@components';
 
 type PortalProps = {
   className?: string;
-  onClose?: () => void;
   position?: 'top';
 };
 
 export class Portal extends Component {
   private timeout: number | null = null;
-  private onClose?: () => void;
 
-  constructor({ className, onClose, position }: PortalProps = {}) {
+  constructor({ className, position }: PortalProps = {}) {
     super({
       parentNode: null,
       tagName: 'div',
       className: ['app_portal', className ?? '', `portal_${position ?? 'center'}`].filter(Boolean),
       attrs: [{ attr: 'id', value: 'appPortal' }],
     });
-    this.onClose = onClose;
 
     this.node.addEventListener('click', this.handleOutsideClick);
   }
@@ -26,7 +23,7 @@ export class Portal extends Component {
     const target = event.target as HTMLElement;
 
     if (target.id === 'appPortal') {
-      if (this.onClose) this.onClose();
+      this.unmount();
     }
   };
 

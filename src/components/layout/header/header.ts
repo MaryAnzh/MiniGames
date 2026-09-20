@@ -39,9 +39,7 @@ export class Header extends Component {
     });
 
     /** PORTAL */
-    this.portal = new Portal({
-      onClose: () => this.portal.unmount(),
-    });
+    this.portal = new Portal({});
 
     this.authPopup = new AuthPopup({
       parentNode: this.portal.node,
@@ -62,13 +60,6 @@ export class Header extends Component {
       this.authPopup.render();
       this.portal.mount(this.authPopup.node);
     });
-    const a = () => {
-      this.authPopup.activeTab = 'Login';
-      this.authPopup.render();
-      this.portal.node.innerHTML = '';
-      this.portal.mount(this.authPopup.node);
-    };
-    a();
 
     /** SIGNUP BUTTON */
     const signinButton = new Button({
