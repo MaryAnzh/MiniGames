@@ -77,9 +77,10 @@
     font-weight: 500;
     color: var(--on-bg-footer);
 
-    &:nth-of-type() {
+    &:nth-of-type(1) {
       color: var(--primary);
       font-weight: var(--weight-bold);
+      pointer-events: none;
     }
   }
 
