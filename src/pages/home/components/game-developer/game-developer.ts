@@ -43,11 +43,11 @@ export class GameDeveloperSection extends Component {
       content: `Want to see your game on MiniGames? We're always looking for fun,
 engaging mini games to add to our platform. Submit your game`,
     });
+
     new Component({
       parentNode: text.node,
       tagName: 'span',
-      content: `and reach
-        thousands of players!`,
+      content: `and reach thousands of players!`,
     });
 
     new Button({

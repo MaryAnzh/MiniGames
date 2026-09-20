@@ -33,6 +33,17 @@
       font-size: var(--headline-medium);
       font-weight: var(--weight-bold);
 
+      &::after {
+        content: 'Top Players';
+        color: var(--on-primary);
+        font-size: var(--headline-medium);
+        font-weight: var(--weight-bold);
+
+        @media (min-width: $tablet) {
+          content: 'Top Players This Week';
+        }
+      }
+
       @media (min-width: $laptop) {
         font-size: var(--headline-large);
       }
@@ -64,7 +75,7 @@
     display: grid;
     align-items: center;
     padding: var(--size-2);
-    gap: var(--size-1);
+    gap: var(--size-1) 0;
     border-bottom: 1.5px var(--outline) solid;
 
     grid-template-columns: 40px 1fr 80px 70px;
@@ -232,5 +243,7 @@
     @include tag;
     width: fit-content;
     justify-self: center;
+
+    display: none;
   }
 }
