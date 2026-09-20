@@ -38,10 +38,15 @@
     .game-developer_info_text {
       display: flex;
       flex-direction: column;
-      color: var(--on-bg);
-      font-size: var(--label-medium);
-      font-weight: var(--weight-regular);
-      line-height: 18px;
+
+      span {
+        flex-direction: column;
+        color: var(--on-bg);
+        font-size: var(--label-medium);
+        font-weight: var(--weight-regular);
+        line-height: 18px;
+        letter-spacing: 9.5%;
+      }
     }
 
     .game-developer_info_ps-text {

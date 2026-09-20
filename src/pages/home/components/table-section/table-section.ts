@@ -95,7 +95,7 @@ export class TableSection extends Component {
       parentNode: wrap.node,
       tagName: 'h2',
       className: 'table-section_title-wrap_title',
-      content: 'Top Players This Week',
+      content: '',
     });
   }
 

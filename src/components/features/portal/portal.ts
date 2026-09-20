@@ -17,6 +17,7 @@ export class Portal extends Component {
     });
 
     this.node.addEventListener('click', this.handleOutsideClick);
+    document.addEventListener('keydown', this.handleEsc);
   }
 
   handleOutsideClick = (event: Event) => {
@@ -26,6 +27,13 @@ export class Portal extends Component {
       this.unmount();
     }
   };
+
+  handleEsc(event: KeyboardEvent) {
+    console.log(event.key);
+    if (event.key === 'Escape') {
+      this.unmount();
+    }
+  }
 
   mount(content: HTMLElement) {
     if (this.timeout) {
@@ -59,6 +67,9 @@ export class Portal extends Component {
       clearTimeout(this.timeout);
     }
     this.node.removeEventListener('click', this.handleOutsideClick);
+
+    this.node.removeEventListener('click', this.handleOutsideClick);
+    document.removeEventListener('keydown', this.handleEsc);
 
     super.destroy();
   }
