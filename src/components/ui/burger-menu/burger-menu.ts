@@ -24,6 +24,9 @@ export class BurgerMenu extends Component {
   }
 
   private render(isAuth: boolean) {
+    // for check isAuth = true
+    //isAuth = true;
+
     const header = new Component({
       parentNode: this.node,
       tagName: 'div',
@@ -81,25 +84,28 @@ export class BurgerMenu extends Component {
       new Button({
         parentNode: bottom.node,
         text: 'Log Out',
-        size: 'md',
-        colorVariant: 'ghost',
+        size: 'pop-up',
+        colorVariant: 'ghost-light',
         className: 'burger_logout_btn',
+        width: 'full',
       });
     } else {
       new Button({
         parentNode: bottom.node,
         text: 'Log In',
-        size: 'md',
-        colorVariant: 'ghost',
+        size: 'pop-up',
+        colorVariant: 'ghost-light',
         className: 'burger_login_btn',
+        width: 'full',
       });
 
       new Button({
         parentNode: bottom.node,
         text: 'Sign Up',
-        size: 'md',
+        size: 'pop-up',
         colorVariant: 'primary',
         className: 'burger_signup_btn',
+        width: 'full',
       });
     }
   }

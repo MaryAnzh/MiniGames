@@ -61,6 +61,11 @@
   padding: var(--btn-large-padding);
 }
 
+.pop-up_btn {
+  padding: var(--btn-medium-padding);
+  font-size: var(--body-small);
+}
+
 .light_btn {
   background: var(--white);
 
@@ -74,6 +79,18 @@
 
   &:hover {
     background: var(--surface);
+  }
+}
+
+.ghost-light_btn {
+  background: transparent;
+  outline-color: var(--white);
+  color: var(--white);
+
+  &:hover {
+    color: var(--primary);
+    outline-color: var(--primary);
+    background: var(--bg-footer-lowest);
   }
 }
 
@@ -128,6 +145,9 @@
       font-size: 24px;
     }
   }
+}
+.full_btn {
+  width: 100%;
 }
 
 .shadow_btn {

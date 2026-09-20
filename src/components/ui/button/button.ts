@@ -5,17 +5,18 @@ import { GoogleIcon } from '../google-icon/google-icon';
 
 type ButtonProps = {
   parentNode: HTMLElement;
-  colorVariant: 'dark' | 'light' | 'ghost' | 'primary';
+  colorVariant: 'dark' | 'light' | 'ghost' | 'ghost-light' | 'primary';
   variant?: 'base' | 'icon' | 'image' | 'round' | 'shadow';
   text?: string;
   className?: string;
-  size?: ComponentSizesType;
+  size?: ComponentSizesType | 'pop-up';
   icon?: IconPickerType;
   image?: string;
   isDisabled?: boolean;
   googleIcon?: 'arrow_back' | 'arrow_forward';
   radius?: 'lg';
   isRoboto?: boolean;
+  width?: 'full';
   leftIcon?: IconPickerType;
 };
 
@@ -34,6 +35,7 @@ export class Button extends Component {
     radius,
     leftIcon,
     isRoboto,
+    width,
   }: ButtonProps) {
     super({
       parentNode,
@@ -47,6 +49,7 @@ export class Button extends Component {
         radius ? `radius_${radius}` : '',
         isDisabled ? 'disabled_btn' : '',
         isRoboto ? 'roboto_btn' : '',
+        width ? `${width}_btn` : '',
       ].filter((el) => el),
       content: text ?? '',
       attrs: isDisabled ? [{ attr: 'disabled', value: 'true' }] : undefined,

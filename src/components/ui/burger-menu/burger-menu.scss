@@ -8,8 +8,8 @@
   padding: var(--size-3);
   background: var(--bg-footer);
   border-left: 2px solid var(--on-primary);
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr;
   gap: var(--size-4);
 
   &_header {
@@ -75,9 +75,18 @@
     text-align: left;
     font-size: 18px;
     font-weight: 500;
+    color: var(--on-bg-footer);
+
+    &:nth-of-type() {
+      color: var(--primary);
+      font-weight: var(--weight-bold);
+    }
   }
 
   &_bottom {
+    align-self: flex-end;
+    width: 100%;
+    height: fit-content;
     display: flex;
     flex-direction: column;
     gap: 16px;
