@@ -1,6 +1,7 @@
-import { Component } from '@components';
 import type { Router } from '@route';
-import { Button, Logo, Navigate } from '@ui';
+
+import { Component, Portal } from '@components';
+import { BurgerMenu, Button, Logo, Navigate } from '@ui';
 
 type HeaderProps = {
   parentNode: HTMLElement | null;
@@ -9,7 +10,12 @@ type HeaderProps = {
 };
 
 export class Header extends Component {
+  private portal: Portal;
+  private burgerMenu: BurgerMenu;
+  private burgerBtn: Component;
+
   public isAuth: boolean = false;
+  private handleOpen: () => void;
 
   constructor({ parentNode, isAuth, router }: HeaderProps) {
     super({ parentNode, tagName: 'header', className: 'header' });
@@ -20,6 +26,7 @@ export class Header extends Component {
       withText: true,
       isTitle: true,
     });
+
     new Navigate({
       parentNode: this.node,
       className: 'header_nav',
@@ -42,15 +49,30 @@ export class Header extends Component {
       colorVariant: 'primary',
     });
 
-    new Button({
+    /** BURGER */
+    this.portal = new Portal({});
+
+    this.burgerMenu = new BurgerMenu({
+      parentNode: this.portal.node,
+      isAuth: this.isAuth,
+      onClose: () => this.portal.unmount(),
+    });
+
+    this.burgerBtn = new Button({
       parentNode: this.node,
       colorVariant: 'light',
       variant: 'icon',
       icon: 'BURGER',
-    }).node.classList.add('header_burger_btn');
+      className: 'header_burger_btn',
+    });
+
+    this.handleOpen = () => this.portal.mount(this.burgerMenu.node);
+    this.burgerBtn.node.addEventListener('click', this.handleOpen);
   }
 
   destroy(): void {
+    this.burgerBtn.node.removeEventListener('click', this.handleOpen);
+
     super.destroy();
   }
 }
