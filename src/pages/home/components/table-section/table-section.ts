@@ -42,7 +42,7 @@ export class TableSection extends Component {
       name: 'Alex_Pro99',
       games: '142',
       score: '94,250',
-      streak: '🔥 12d',
+      streak: '🔥 12 days',
       favorite: 'Heartopia',
     },
     {
@@ -52,7 +52,7 @@ export class TableSection extends Component {
       name: 'CozyGamer_x',
       games: '118',
       score: '81,400',
-      streak: '🔥 8d',
+      streak: '🔥 8 days',
       favorite: 'Cat Mail Co.',
     },
     {
@@ -62,8 +62,28 @@ export class TableSection extends Component {
       name: 'MatchMaster',
       games: '98',
       score: '72,110',
-      streak: '🔥 5d',
+      streak: '🔥 5 days',
       favorite: 'Tiny Glade',
+    },
+    {
+      rank: '#4',
+      avatar: 'BP',
+      avatarColor: 'var(--avatar-random-4)',
+      name: 'BubblePop',
+      games: '87',
+      score: '65,900',
+      streak: '🔥 3 days',
+      favorite: 'Whisper of the House',
+    },
+    {
+      rank: '#5',
+      avatar: 'SG',
+      avatarColor: 'var(--avatar-random-5)',
+      name: 'SudokuGod',
+      games: '74',
+      score: '59,320',
+      streak: '🔥 2 days',
+      favorite: 'Cat Chess',
     },
   ];
 

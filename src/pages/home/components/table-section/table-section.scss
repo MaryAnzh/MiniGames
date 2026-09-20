@@ -87,6 +87,14 @@
     &:nth-child(even) {
       background: var(--bg);
     }
+    &:nth-child(5),
+    &:nth-child(6) {
+      display: none;
+
+      @media (min-width: $laptop) {
+        display: grid;
+      }
+    }
 
     &--header {
       background: var(--tertiary);
@@ -118,6 +126,8 @@
 
     @media (min-width: $laptop) {
       padding: 24px;
+      height: 72px;
+      outline: 1px solid black;
       gap: 0;
       grid-template-columns: 80px repeat(5, 1fr);
     }
@@ -138,6 +148,9 @@
     justify-content: flex-start;
     gap: var(--size-05);
     overflow: hidden;
+    @media (min-width: $tablet) {
+      padding-left: 16px;
+    }
   }
 
   .player-avatar {
@@ -179,6 +192,9 @@
     font-size: var(--label-large);
     font-weight: var(--weight-bold);
     color: var(--on-primary);
+    @media (min-width: $tablet) {
+      padding-left: 16px;
+    }
   }
 
   .col-favorite,
