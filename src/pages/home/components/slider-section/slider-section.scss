@@ -34,7 +34,7 @@
     }
   }
 
-  @media (min-width: tablet) {
+  @media (min-width: $tablet) {
     padding: var(--size-3) var(--size-5);
     gap: var(--size-3);
     button {
