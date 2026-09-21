@@ -9,7 +9,7 @@
   display: flex;
   justify-content: center;
   z-index: 999;
-  background: rgba($color: var(--black), $alpha: 0.3);
+  background: var(--pop-up-bg);
   backdrop-filter: blur(2px);
   pointer-events: none;
   opacity: 0;

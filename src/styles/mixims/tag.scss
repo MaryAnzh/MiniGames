@@ -15,7 +15,7 @@
 @mixin tag {
   padding: var(--size-05) var(--size-1-5);
   background: var(--bg);
-  border-radius: 20px;
+  border-radius: var(--corner-extra-large);
   outline: 1.5px solid var(--on-primary);
   outline-offset: -1.5px;
 

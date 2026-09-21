@@ -5,7 +5,7 @@
   display: flex;
   padding: var(--size-4);
   background: var(--bg);
-  box-shadow: 8px 8px 0px #111111;
+  box-shadow: 8px 8px 0px var(--black);
   border-radius: var(--corner-extra-large);
   outline: 3px var(--on-primary) solid;
   outline-offset: -3px;
@@ -66,7 +66,7 @@
 }
 
 .auth_main_btn {
-  box-shadow: 0px 4px 0px #242145;
+  box-shadow: 0px 4px 0px var(--on-primary);
 }
 
 .auth_divider {
@@ -78,10 +78,10 @@
 }
 
 .auth_google_btn {
-  height: 50px;
+  height: var(--icon-size-x-lg);
   padding: var(--size-2) var(--size-3);
   border-radius: var(--corner-medium);
-  outline: 2px var(--on-primary, #242145) solid;
+  outline: 2px var(--on-primary) solid;
   outline-offset: -2px;
   gap: var(--size-2);
   font-size: var(--body-medium);

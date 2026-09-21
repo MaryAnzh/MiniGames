@@ -6,7 +6,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  background: rgba(30, 27, 58, 0.65);
+  background: var(--hero-bg);
   padding: var(--size-8) var(--size-2);
   overflow: hidden;
 
@@ -54,9 +54,8 @@
 
   .hero_text_mobile {
     align-self: stretch;
-    color: var(--on-bg, #5f5d75);
+    color: var(--on-bg);
     font-size: var(--label-medium);
-    font-family: Inter;
     font-weight: var(--weight-medium);
     line-height: 16.8px;
     word-wrap: break-word;

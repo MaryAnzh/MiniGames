@@ -51,8 +51,8 @@
 
     &-logo {
       grid-column: 1;
-      width: 32px;
-      height: 32px;
+      width: var(--icon-size-lg);
+      height: var(--icon-size-lg);
     }
 
     &-title {
@@ -172,8 +172,8 @@
     }
 
     &-icon {
-      width: 32px;
-      height: 32px;
+      width: var(--icon-size-lg);
+      height: var(--icon-size-lg);
       background: var(--bg-footer-low);
       border-radius: var(--corner-full);
       display: flex;
@@ -181,7 +181,8 @@
       align-items: center;
       color: var(--white);
       font-size: var(--body-medium);
-      outline: 2px transparent solid;
+      outline: 2px solid;
+      outline-color: var(--transparent);
       outline-offset: -2px;
       transition: 0.3s;
 
@@ -195,8 +196,8 @@
       }
 
       @media (max-width: $tablet) {
-        width: 32px;
-        height: 32px;
+        width: var(--size-3);
+        height: var(--size-3);
         font-size: var(--body-medium);
       }
     }
@@ -252,8 +253,8 @@
       cursor: pointer;
 
       &-icon {
-        width: 20px;
-        height: 20px;
+        width: var(--icon-size-sm);
+        height: var(--icon-size-sm);
         border-radius: var(--corner-medium);
         display: flex;
         justify-content: center;

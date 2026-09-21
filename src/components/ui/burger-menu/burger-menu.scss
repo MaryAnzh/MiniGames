@@ -32,16 +32,17 @@
   }
 
   &_close_btn {
-    width: 32px;
-    height: 32px;
-    border: navajowhite;
+    border: none;
+    width: var(--icon-size-lg);
+    height: var(--icon-size-lg);
 
     background: var(--bg-footer-low);
     border-radius: var(--corner-small);
     display: flex;
     justify-content: center;
     align-items: center;
-    outline: 2px transparent solid;
+    outline: 2px solid;
+    outline-color: var(--transparent);
     outline-offset: -2px;
     transition: 0.3s;
 
@@ -52,7 +53,7 @@
 
     &:hover {
       background: var(--bg-footer-lowest);
-      border-radius: 6px;
+      border-radius: var(--corner-small);
       outline-color: var(--primary);
     }
     &:active {
