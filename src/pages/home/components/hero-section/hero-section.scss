@@ -57,7 +57,7 @@
     color: var(--on-bg, #5f5d75);
     font-size: var(--label-medium);
     font-family: Inter;
-    font-weight: 500;
+    font-weight: var(--weight-medium);
     line-height: 16.8px;
     word-wrap: break-word;
   }
@@ -85,7 +85,7 @@
     }
 
     .hero_title {
-      font-size: 36px;
+      font-size: var(--display-medium);
       line-height: 41.4px;
     }
 
@@ -100,7 +100,7 @@
   }
 
   @media (min-width: $min-laptop) {
-    padding: 112px 120px;
+    padding: var(--size-14) var(--size-15);
 
     .hero_text-wrap {
       width: 640px;
@@ -121,7 +121,7 @@
 
     .hero_text {
       line-height: 27px;
-      font-size: 20px;
+      font-size: var(--headline-small);
     }
   }
 }

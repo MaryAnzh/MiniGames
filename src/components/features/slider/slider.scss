@@ -13,7 +13,7 @@
     height: 100%;
     display: grid;
     grid-template-columns: auto 65% auto;
-    gap: 6px;
+    gap: var(--size-1);
 
     .app_slider_item {
       position: relative;
@@ -21,7 +21,7 @@
       height: 100%;
       background: var(--white);
       box-shadow: var(--level-1);
-      border-radius: 16px;
+      border-radius: var(--corner-large);
       outline: 2.5px var(--on-primary, #242145) solid;
       outline-offset: -2.5px;
       overflow: hidden;
@@ -31,19 +31,19 @@
       flex-direction: column;
       justify-content: flex-end;
       align-items: flex-start;
-      gap: 8px;
+      gap: var(--size-1);
       display: inline-flex;
-      padding: 16px;
+      padding: var(--size-1);
 
       @media (min-width: $laptop) {
-        border-radius: 24px;
+        border-radius: var(--corner-extra-large);
       }
 
       &::after {
         content: '';
         width: 100%;
         height: 114px;
-        left: 0px;
+        left: 0;
         bottom: 0;
         position: absolute;
         background: linear-gradient(
@@ -61,7 +61,7 @@
         height: 54px;
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 8px 2px;
+        gap: var(--size-1) var(--size-025);
         align-items: center;
         overflow: hidden;
         z-index: 2;
@@ -80,9 +80,9 @@
         .app_slider_item_info_count {
           display: flex;
           align-items: center;
-          gap: 4px;
+          gap: var(--size-05);
           color: var(--white);
-          font-size: 12px;
+          font-size: var(--label-medium);
           font-weight: var(--weight-bold);
           &:nth-of-type(2) {
             justify-self: end;
@@ -137,7 +137,7 @@
 
     .app_slider_body {
       grid-template-columns: 7.5% 17% auto 17% 7.5%;
-      gap: 12px;
+      gap: var(--size-1-5);
     }
   }
 }

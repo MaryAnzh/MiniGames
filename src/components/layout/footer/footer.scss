@@ -3,19 +3,19 @@
 .footer {
   width: 100%;
   background: var(--bg-footer);
-  padding: 32px 16px;
+  padding: var(--size-4) var(--size-2);
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: var(--size-3-1);
 
   @media (min-width: $tablet) {
     padding: var(--size-5);
-    gap: 52px;
+    gap: var(--size-7);
   }
 
   @media (min-width: $laptop) {
-    padding: 40px 120px;
-    gap: 88px;
+    padding: var(--size-5) var(--size-15);
+    gap: var(--size-11);
   }
 
   &_top {
@@ -32,7 +32,7 @@
     }
 
     @media (min-width: $laptop) {
-      gap: 36px var(--size-5);
+      gap: var(--size-4) var(--size-5);
       grid-template-columns: 1fr auto auto;
     }
   }
@@ -58,13 +58,13 @@
       grid-column: 2;
       color: var(--white);
       font-size: var(--headline-small);
-      font-weight: 700;
+      font-weight: var(--weight-bold);
 
       @media (max-width: $tablet) {
-        font-size: 20px;
+        font-size: var(--headline-small);
       }
       @media (min-width: $laptop) {
-        font-size: 24px;
+        font-size: var(--display-small);
       }
     }
 
@@ -98,13 +98,13 @@
 
     &-title {
       color: var(--white);
-      font-size: 16px;
-      font-weight: 700;
+      font-size: var(--body-medium);
+      font-weight: var(--weight-bold);
     }
     &_list {
       display: flex;
       flex-direction: column;
-      gap: 13px;
+      gap: var(--size-1-5);
 
       &_item {
         a {
@@ -152,7 +152,7 @@
     grid-row: 2;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--size-2);
 
     @media (min-width: $laptop) {
       grid-column: 3/4;
@@ -161,13 +161,13 @@
 
     &-title {
       color: var(--white);
-      font-size: 16px;
-      font-weight: 700;
+      font-size: var(--body-medium);
+      font-weight: var(--weight-bold);
     }
 
     &-icons {
       display: flex;
-      gap: 16px;
+      gap: var(--size-2);
     }
 
     &-icon {
@@ -196,7 +196,7 @@
       @media (max-width: $tablet) {
         width: 32px;
         height: 32px;
-        font-size: 16px;
+        font-size: var(--body-medium);
       }
     }
   }
@@ -210,7 +210,7 @@
 
     @media (min-width: $tablet) {
       display: flex;
-      gap: 16px;
+      gap: var(--size-2);
     }
 
     @media (min-width: $laptop) {
@@ -247,13 +247,13 @@
     &-code {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: var(--size-1);
       cursor: pointer;
 
       &-icon {
         width: 20px;
         height: 20px;
-        border-radius: 12px;
+        border-radius: var(--corner-medium);
         display: flex;
         justify-content: center;
         align-items: center;

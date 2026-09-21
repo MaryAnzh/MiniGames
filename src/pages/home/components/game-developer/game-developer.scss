@@ -8,13 +8,13 @@
   gap: var(--size-2);
 
   @media (min-width: $tablet) {
-    padding: 24px 40px;
-    padding-bottom: 24px;
-    gap: 24px;
+    padding: var(--size-3) var(--size-5);
+    padding-bottom: var(--size-3);
+    gap: var(--size-3);
   }
 
   @media (min-width: $laptop) {
-    padding: var(--size-5) 120px;
+    padding: var(--size-5) var(--size-15);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     align-items: center;
@@ -29,7 +29,7 @@
     overflow: hidden;
 
     @media (min-width: $tablet) {
-      height: 283px;
+      height: 284px;
     }
 
     @media (min-width: $laptop) {
@@ -59,13 +59,13 @@
       box-shadow:
         0px 14px 30px -10px rgba(0, 0, 0, 0.08),
         0px 2px 8px -4px rgba(0, 0, 0, 0.04);
-      border-radius: 24px;
+      border-radius: var(--corner-extra-large);
       outline: 2px var(--on-primary, #242145) solid;
       outline-offset: -2px;
       flex-direction: column;
       justify-content: flex-start;
       align-items: flex-start;
-      gap: 16px;
+      gap: var(--size-2);
       display: flex;
     }
 
@@ -82,11 +82,11 @@
 
     .game-developer_info_title {
       color: var(--on-primary);
-      font-size: 24px;
+      font-size: var(--display-small);
       line-height: 28.8px;
 
       @media (min-width: $laptop) {
-        font-size: 32px;
+        font-size: var(--headline-large);
         line-height: 38.4px;
       }
     }
@@ -94,6 +94,7 @@
     .game-developer_info_text {
       display: flex;
       flex-direction: column;
+      gap: var(--size-025);
 
       span {
         flex-direction: column;
@@ -101,12 +102,13 @@
         font-size: var(--label-medium);
         font-weight: var(--weight-regular);
         line-height: 18px;
+
         @media (min-width: $tablet) {
-          font: 14px;
+          font-size: var(--body-small);
         }
 
         @media (min-width: $laptop) {
-          font-size: 18px;
+          font-size: var(--body-large);
           line-height: 27px;
         }
       }
@@ -114,19 +116,15 @@
 
     .game-developer_button {
       @media (min-width: $tablet) {
-        gap: 20px;
-      }
-    }
-    button {
-      @media (min-width: $tablet) {
-        margin-top: 8px;
+        gap: var(--size-1);
+        font-size: var(--body-medium);
       }
     }
 
     .game-developer_info_ps-text {
       color: var(--on-bg-low);
-      font-size: 12px;
-      font-weight: 400;
+      font-size: var(--label-medium);
+      font-weight: var(--weight-regular);
       @media (min-width: $tablet) {
         font-size: var(--body-small);
       }

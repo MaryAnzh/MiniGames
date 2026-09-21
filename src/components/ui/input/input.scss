@@ -2,7 +2,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--size-1);
 
   &_label {
     font-size: var(--body-small);
@@ -33,15 +33,15 @@
     &::placeholder {
       color: var(--on-bg);
       font-size: var(--label-large);
-      font-weight: 500;
+      font-weight: var(--weight-medium);
     }
   }
 
   .input-with-icon {
-    padding-left: 50px;
+    padding-left: var(--size-6);
   }
   .input-right-icon {
-    padding-right: 50px;
+    padding-right: var(--size-6);
   }
 
   &_icon,
@@ -51,8 +51,8 @@
     transform: translateY(-50%);
     cursor: pointer;
     color: var(--on-bg);
-    font-size: 20px;
-    font-weight: 400;
+    font-size: var(--headline-small);
+    font-weight: var(--weight-regular);
   }
 
   &_icon {

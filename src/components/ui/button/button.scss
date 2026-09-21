@@ -11,7 +11,7 @@
   color: var(--on-primary);
   outline: 2px var(--black) solid;
   outline-offset: -2px;
-  gap: 4px;
+  gap: var(--size-05);
 
   font-size: var(--body-small);
   font-family: var(--font-inter);
@@ -34,7 +34,7 @@
 
 .sm_btn {
   padding: var(--btn-small-padding);
-  font-size: 12px;
+  font-size: var(--label-medium);
 
   @media (min-width: $min-tablet) {
     padding: var(--btn-medium-padding);
@@ -43,7 +43,7 @@
 
   @media (min-width: $min-laptop) {
     padding: var(--btn-large-padding);
-    font-size: 18px;
+    font-size: var(--body-large);
   }
 }
 
@@ -60,7 +60,7 @@
 .lg_btn {
   padding: var(--btn-large-padding);
   font-size: var(--body-medium);
-  border-radius: 12px;
+  border-radius: var(--corner-medium);
 }
 
 .pop-up_btn {
@@ -129,8 +129,8 @@
   border-radius: var(--corner-full);
 
   span {
-    font-size: 18px;
-    font-weight: 400;
+    font-size: var(--body-large);
+    font-weight: var(--weight-regular);
     font-family: 'Material Symbols Outlined';
     font-variation-settings:
       'FILL' 0,
@@ -144,7 +144,7 @@
     height: var(--size-6);
 
     span {
-      font-size: 24px;
+      font-size: var(--display-small);
     }
   }
 }
@@ -157,7 +157,7 @@
 }
 
 .radius_lg {
-  border-radius: 12px;
+  border-radius: var(--corner-medium);
 }
 .roboto_btn {
   font-family: var(--font-roboto);
