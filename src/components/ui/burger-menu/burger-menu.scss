@@ -2,9 +2,9 @@
 @use '../../../styles/mixims/common.scss' as *;
 
 .burger {
-  width: 320px;
+  width: var(--layout-burger-width);
   max-width: 100%;
-  height: 587px;
+  height: var(--layout-burger-height);
   padding: var(--size-3);
   background: var(--bg-footer);
   border-left: 2px solid var(--on-primary);

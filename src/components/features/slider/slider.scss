@@ -2,7 +2,7 @@
 
 .app_slider {
   width: 100%;
-  height: 200px;
+  height: var(--layout-slider-sm);
   display: flex;
   padding: 0 var(--size-05);
   align-items: center;
@@ -42,7 +42,7 @@
       &::after {
         content: '';
         width: 100%;
-        height: 114px;
+        height: var(--layout-slider-gradient-height);
         left: 0;
         bottom: 0;
         position: absolute;
@@ -124,11 +124,11 @@
   }
 
   @media (min-width: $tablet) {
-    height: 285px;
+    height: var(--layout-slider-md);
   }
 
   @media (min-width: $laptop) {
-    height: 388px;
+    height: var(--layout-slider-lg);
 
     .app_slider_body {
       grid-template-columns: 7.5% 17% auto 17% 7.5%;
