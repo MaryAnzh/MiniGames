@@ -37,7 +37,6 @@ export class Button extends Component {
     leftIcon,
     isRoboto,
     width,
-    ariaLabel,
   }: ButtonProps) {
     super({
       parentNode,
@@ -54,10 +53,7 @@ export class Button extends Component {
         width ? `${width}_btn` : '',
       ].filter((el) => el),
       content: text ?? '',
-      attrs: [
-        { attr: 'disabled', value: isDisabled ? 'true' : 'false' },
-        { attr: 'aria-label', value: ariaLabel ?? '' },
-      ],
+      attrs: isDisabled ? [{ attr: 'disabled', value: 'true' }] : undefined,
     });
 
     if (icon && variant === 'icon') {
