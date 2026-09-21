@@ -43,6 +43,7 @@
 
   /* CUSTOM */
   --button-shadow: 0px 10px 20px -10px rgba(0, 0, 0, 0.1);
+  --card-shadow: 0px 14px 30px -10px rgba(0, 0, 0, 0.08), 0px 2px 8px -4px rgba(0, 0, 0, 0.04);
 
   --card-gradient: linear-gradient(
     180deg,
@@ -50,4 +51,8 @@
     rgba(0, 0, 0, 0.4) 17%,
     rgba(0, 0, 0, 0.85) 46%
   );
+
+  --hero-bg: rgba(30, 27, 58, 0.65);
+  --transparent: #0000;
+  --pop-up-bg: rgba(0, 0, 0, 0.3);
 }
