@@ -38,7 +38,7 @@
 
   @media (min-width: $min-tablet) {
     padding: var(--btn-medium-padding);
-    font-size: 14px;
+    font-size: var(--body-small);
   }
 
   @media (min-width: $min-laptop) {
@@ -49,11 +49,11 @@
 
 .md_btn {
   padding: var(--btn-small-padding);
-  font-size: 14px;
+  font-size: var(--body-small);
 
   @media (min-width: $min-laptop) {
     padding: var(--btn-medium-padding);
-    font-size: 14px;
+    font-size: var(--body-small);
   }
 }
 

@@ -91,7 +91,7 @@
 
     .hero_text {
       display: block;
-      font-size: 14px;
+      font-size: var(--body-small);
       line-height: 19.6px;
     }
     .hero_text_mobile {

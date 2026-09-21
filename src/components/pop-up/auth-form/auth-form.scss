@@ -40,7 +40,7 @@
 
   &_forgot {
     color: var(--on-primary);
-    font-size: 14px;
+    font-size: var(--body-small);
     font-weight: 700;
     text-align: right;
     text-decoration: underline;
