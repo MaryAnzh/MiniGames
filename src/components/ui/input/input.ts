@@ -1,5 +1,5 @@
 import { Component } from '@components';
-import { GoogleIcon } from '../google-icon/google-icon';
+import { GoogleIcon } from '@ui';
 import type { GoogleIconsType } from '@types';
 
 type InputProps = {
@@ -7,12 +7,25 @@ type InputProps = {
   label: string;
   placeholder: string;
   type?: string;
-  icon?: GoogleIconsType;
+  leftIcon?: GoogleIconsType;
   rightIcon?: GoogleIconsType;
+  id: string;
+  name: string;
+  autocomplete?: string;
 };
 
 export class Input extends Component {
-  constructor({ parentNode, label, placeholder, type = 'text', icon, rightIcon }: InputProps) {
+  constructor({
+    parentNode,
+    label,
+    placeholder,
+    type = 'text',
+    leftIcon,
+    rightIcon,
+    id,
+    name,
+    autocomplete,
+  }: InputProps) {
     super({
       parentNode,
       tagName: 'div',
@@ -23,6 +36,7 @@ export class Input extends Component {
       parentNode: this.node,
       tagName: 'label',
       className: 'app_input_label',
+      attrs: [{ attr: 'for', value: id }],
       content: label,
     });
 
@@ -37,19 +51,22 @@ export class Input extends Component {
       tagName: 'input',
       className: [
         'app_input_field',
-        icon ? 'input-with-icon' : '',
+        leftIcon ? 'input-with-icon' : '',
         rightIcon ? 'input-right-icon' : '',
       ],
       attrs: [
+        { attr: 'id', value: id },
+        { attr: 'name', value: name },
         { attr: 'type', value: type },
         { attr: 'placeholder', value: placeholder },
+        { attr: 'autocomplete', value: autocomplete ?? 'off' },
       ],
     });
 
-    if (icon) {
+    if (leftIcon) {
       new GoogleIcon({
         parentNode: wrap.node,
-        iconName: icon,
+        iconName: leftIcon,
         iconClass: 'app_input_icon',
       });
     }

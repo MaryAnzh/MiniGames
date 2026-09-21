@@ -28,12 +28,11 @@ export class Portal extends Component {
     }
   };
 
-  handleEsc(event: KeyboardEvent) {
-    console.log(event.key);
+  handleEsc = (event: KeyboardEvent) => {
     if (event.key === 'Escape') {
       this.unmount();
     }
-  }
+  };
 
   mount(content: HTMLElement) {
     if (this.timeout) {
