@@ -51,8 +51,8 @@
 
     &-logo {
       grid-column: 1;
-      width: var(--icon-size-lg);
-      height: var(--icon-size-lg);
+      width: var(--size-4);
+      height: var(--size-4);
     }
 
     &-title {
@@ -81,7 +81,7 @@
   &_links {
     grid-column: 1/2;
     display: flex;
-    gap: 104px;
+    gap: var(--size-13);
 
     @media (min-width: $tablet) {
       gap: var(--size-5);
@@ -172,16 +172,17 @@
     }
 
     &-icon {
-      width: var(--icon-size-lg);
-      height: var(--icon-size-lg);
+      width: var(--size-4);
+      height: var(--size-4);
       background: var(--bg-footer-low);
       border-radius: var(--corner-full);
       display: flex;
       justify-content: center;
       align-items: center;
       color: var(--white);
-      font-size: var(--body-medium);
+      font-size: var(--body-small);
       outline: 2px solid;
+      font-weight: var(--weight-regular);
       outline-color: var(--transparent);
       outline-offset: -2px;
       transition: 0.3s;
@@ -195,10 +196,10 @@
         transform: scale(0.97);
       }
 
-      @media (max-width: $tablet) {
-        width: var(--size-3);
-        height: var(--size-3);
-        font-size: var(--body-medium);
+      @media (max-width: $laptop) {
+        width: var(--size-5);
+        height: var(--size-5);
+        font-size: var(--headline-small);
       }
     }
   }
