@@ -13,7 +13,7 @@ export class GameDeveloperSection extends Component {
       tagName: 'img',
       className: 'game-developer_img',
       attrs: [
-        { attr: 'src', value: '/img/game-developer.webp' },
+        { attr: 'src', value: 'img/game-developer.webp' },
         { attr: 'alt', value: 'game developer img' },
       ],
     });
@@ -40,8 +40,13 @@ export class GameDeveloperSection extends Component {
     new Component({
       parentNode: text.node,
       tagName: 'span',
-      content: `Want to see your game on MiniGames? We're always looking for fun,
-engaging mini games to add to our platform. Submit your game`,
+      content: `Want to see your game on MiniGames? We're always looking for fun,`,
+    });
+
+    new Component({
+      parentNode: text.node,
+      tagName: 'span',
+      content: `engaging mini games to add to our platform. Submit your game`,
     });
 
     new Component({

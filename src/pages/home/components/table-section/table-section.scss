@@ -9,12 +9,12 @@
   gap: var(--size-2);
 
   @media (min-width: $tablet) {
-    padding: var(--size-4) var(--size-5);
+    padding: var(--size-3) var(--size-5);
     gap: var(--size-3);
   }
 
   @media (min-width: $laptop) {
-    padding: var(--size-5) 120px;
+    padding: var(--size-5) var(--size-15);
     gap: var(--size-5);
   }
 
@@ -63,7 +63,7 @@
 
     @media (min-width: $tablet) {
       box-shadow: var(--level-2);
-      gap: 2px;
+      gap: var(--size-2);
     }
 
     @media (min-width: $laptop) {
@@ -114,19 +114,19 @@
 
     @media (min-width: $tablet) {
       grid-template-columns: 80px 160px 17.5% 15.5% 17.5%;
-      gap: 12px;
-      padding: 14px 16px;
+      gap: var(--size-1-5);
+      padding: var(--size-2);
 
       &--header {
         font-size: var(--body-small);
         .header-col {
-          padding: 0 16px;
+          padding: 0 var(--size-2);
         }
       }
     }
 
     @media (min-width: $laptop) {
-      padding: 24px;
+      padding: var(--size-3);
       height: 72px;
       outline: 1px solid black;
       gap: 0;
@@ -151,7 +151,7 @@
     overflow: hidden;
 
     @media (min-width: $laptop) {
-      padding-left: 16px;
+      padding-left: var(--size-2);
     }
   }
 
@@ -196,7 +196,7 @@
     color: var(--on-primary);
 
     @media (min-width: $tablet) {
-      padding-left: 8px;
+      padding-left: var(--size-1);
     }
   }
 

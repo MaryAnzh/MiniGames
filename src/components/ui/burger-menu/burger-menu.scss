@@ -21,12 +21,12 @@
   &_brand {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--size-1);
 
     &-title {
       color: var(--white);
-      font-size: 20px;
-      font-weight: 700;
+      font-size: var(--headline-small);
+      font-weight: var(--weight-bold);
       font-family: var(--font-inter);
     }
   }
@@ -46,7 +46,7 @@
     transition: 0.3s;
 
     .google-icons {
-      font-size: 20px;
+      font-size: var(--headline-small);
       color: var(--white);
     }
 
@@ -73,8 +73,8 @@
     @include nav-item;
 
     text-align: left;
-    font-size: 18px;
-    font-weight: 500;
+    font-size: var(--body-large);
+    font-weight: var(--weight-medium);
     color: var(--on-bg-footer);
 
     &:nth-of-type(1) {
@@ -90,6 +90,6 @@
     height: fit-content;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--size-2);
   }
 }
