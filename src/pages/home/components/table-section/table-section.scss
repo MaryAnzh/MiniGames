@@ -127,7 +127,7 @@
 
     @media (min-width: $laptop) {
       padding: var(--size-3);
-      height: 72px;
+      height: var(--layout-table-height-lg);
       gap: 0;
       grid-template-columns: 80px repeat(5, 1fr);
     }

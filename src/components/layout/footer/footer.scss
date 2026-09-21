@@ -81,7 +81,7 @@
   &_links {
     grid-column: 1/2;
     display: flex;
-    gap: 104px;
+    gap: var(--size-13);
 
     @media (min-width: $tablet) {
       gap: var(--size-5);
