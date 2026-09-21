@@ -46,12 +46,7 @@
         left: 0;
         bottom: 0;
         position: absolute;
-        background: linear-gradient(
-          180deg,
-          rgba(0, 0, 0, 0) 0%,
-          rgba(0, 0, 0, 0.4) 17%,
-          rgba(0, 0, 0, 0.85) 46%
-        );
+        background: var(--card-gradient);
 
         z-index: 1;
       }
