@@ -5,9 +5,11 @@ import { Input, Button, Switcher } from '@ui';
 type FieldType = {
   label: string;
   placeholder: string;
-  iconName: GoogleIconsType;
+  leftIcon: GoogleIconsType;
   rightIcon?: GoogleIconsType;
   type?: string;
+  id: string;
+  name: string;
 };
 
 const LOGIN_FIELDS: FieldType[] = [
@@ -15,26 +17,52 @@ const LOGIN_FIELDS: FieldType[] = [
     label: 'Email Address',
     placeholder: 'e.g. alex@minigames.com',
     type: 'email',
-    iconName: 'mail',
+    leftIcon: 'mail',
+    id: 'loginEmail',
+    name: 'login-email',
   },
   {
     label: 'Password',
     placeholder: '••••••••',
     type: 'password',
-    iconName: 'lock',
+    leftIcon: 'lock',
     rightIcon: 'visibility',
+    id: 'loginEPass',
+    name: 'login-pass',
   },
 ];
 
 const REGISTER_FIELDS: FieldType[] = [
-  { label: 'Username', placeholder: 'e.g. CozyGamer_99', iconName: 'person' },
-  { label: 'Email Address', placeholder: 'your.email@domain.com', type: 'email', iconName: 'mail' },
-  { label: 'Password', placeholder: 'Min. 8 characters', type: 'password', iconName: 'lock' },
+  {
+    label: 'Username',
+    placeholder: 'e.g. CozyGamer_99',
+    leftIcon: 'person',
+    id: 'registerUserName',
+    name: 'register-user-name',
+  },
+  {
+    label: 'Email Address',
+    placeholder: 'your.email@domain.com',
+    type: 'email',
+    leftIcon: 'mail',
+    id: 'registerEmail',
+    name: 'register-email',
+  },
+  {
+    label: 'Password',
+    placeholder: 'Min. 8 characters',
+    type: 'password',
+    leftIcon: 'lock',
+    id: 'registerPass',
+    name: 'register-pass',
+  },
   {
     label: 'Confirm Password',
     placeholder: 'Repeat your password',
     type: 'password',
-    iconName: 'lock',
+    leftIcon: 'lock',
+    id: 'registerPassRepeat',
+    name: 'register-pass-repeat',
   },
 ];
 
@@ -65,6 +93,7 @@ export class AuthPopup extends Component {
   }
 
   close() {
+    this.node.innerHTML = '';
     this.portal.unmount();
   }
 
@@ -86,10 +115,11 @@ export class AuthPopup extends Component {
     });
 
     const title = this.activeTab === 'Login' ? 'Welcome Back!' : 'Create Account';
-    const subtitle =
-      this.activeTab === 'Login'
-        ? 'Sign in to resume your games and progress.'
-        : 'Join MiniGames to track your score & streak.';
+    const subtitle = isLogin
+      ? 'Sign in to resume your games and progress.'
+      : 'Join MiniGames to track your score & streak.';
+
+    //Heading
     const heading = new Component({
       parentNode: this.node,
       tagName: 'div',
@@ -101,7 +131,6 @@ export class AuthPopup extends Component {
       className: 'auth_heading_title',
       content: title,
     });
-
     new Component({
       parentNode: heading.node,
       tagName: 'p',
@@ -109,34 +138,42 @@ export class AuthPopup extends Component {
       content: subtitle,
     });
 
-    const fields = this.activeTab === 'Login' ? LOGIN_FIELDS : REGISTER_FIELDS;
-    const fieldset = new Component({
+    // FORM
+    const authForm = new Component({
       parentNode: this.node,
-      tagName: 'div',
-      className: 'auth_fieldset',
+      tagName: 'form',
+      className: 'auth_form',
+      attrs: [
+        { attr: 'novalidate', value: '' },
+        { attr: 'id', value: isLogin ? 'loginForm' : 'registerForm' },
+      ],
     });
 
-    fields.forEach((field) => {
+    const fields = isLogin ? LOGIN_FIELDS : REGISTER_FIELDS;
+
+    fields.forEach(({ label, placeholder, type, leftIcon, rightIcon, id, name }) => {
       new Input({
-        parentNode: fieldset.node,
-        label: field.label,
-        placeholder: field.placeholder,
-        type: field.type,
-        icon: field.iconName,
-        rightIcon: field.rightIcon,
+        parentNode: authForm.node,
+        label,
+        placeholder,
+        type,
+        leftIcon,
+        rightIcon,
+        id,
+        name,
       });
     });
 
     if (isLogin) {
       new Component({
-        parentNode: fieldset.node,
+        parentNode: authForm.node,
         tagName: 'span',
         content: 'Forgot Password?',
-        className: 'auth_fieldset_forgot',
+        className: 'auth_form_forgot',
       });
     }
     const buttonWrap = new Component({
-      parentNode: this.node,
+      parentNode: authForm.node,
       tagName: 'div',
       className: 'auth_button-wrap',
     });

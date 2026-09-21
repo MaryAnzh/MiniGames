@@ -1,13 +1,12 @@
 import { Component } from '@components';
 import type { ComponentProps } from '@types';
 import { ICON_PICKER } from '@constants';
+import * as C from '@constants';
 
-const FOOTER_LINKS = {
-  explore: ['Home', 'Library', 'Categories', 'Tournaments'],
-  company: ['About Us', 'Contact', 'Privacy Policy', 'Terms of Service'],
-};
-
-const COMMUNITY_ICONS = ['share', 'chat', 'rss_feed'] as const;
+const FOOTER_LINKS = [
+  { title: C.EXPLORE, list: C.FOOTER_NAV },
+  { title: C.COMPANY, list: C.APP_COMPANY },
+];
 
 export class Footer extends Component {
   constructor({ parentNode }: Pick<ComponentProps, 'parentNode'>) {
@@ -21,6 +20,7 @@ export class Footer extends Component {
     this.renderBottom();
   }
 
+  // FOOTER TOP
   private renderTop() {
     const top = new Component({
       parentNode: this.node,
@@ -71,7 +71,7 @@ export class Footer extends Component {
       className: 'footer_links',
     });
 
-    Object.entries(FOOTER_LINKS).forEach(([section, items]) => {
+    FOOTER_LINKS.forEach(({ title, list }) => {
       const col = new Component({
         parentNode: wrap.node,
         tagName: 'div',
@@ -82,15 +82,28 @@ export class Footer extends Component {
         parentNode: col.node,
         tagName: 'h4',
         className: 'footer_links-title',
-        content: section.charAt(0).toUpperCase() + section.slice(1),
+        content: title,
       });
 
-      items.forEach((item) => {
+      const listNode = new Component({
+        parentNode: col.node,
+        tagName: 'ul',
+        className: 'footer_links_list',
+      });
+
+      list.forEach(({ name, path }) => {
+        const item = new Component({
+          parentNode: listNode.node,
+          tagName: 'li',
+          className: 'footer_links_list_item',
+        });
+
         new Component({
-          parentNode: col.node,
-          tagName: 'span',
-          className: 'footer_links-item',
-          content: item,
+          parentNode: item.node,
+          tagName: 'a',
+          className: 'footer_links_list_item_link',
+          content: name,
+          attrs: [{ attr: 'href', value: path }],
         });
       });
     });
@@ -107,21 +120,22 @@ export class Footer extends Component {
       parentNode: col.node,
       tagName: 'h4',
       className: 'footer_community-title',
-      content: 'Community',
+      content: C.COMMUNITY,
     });
 
     const iconsWrap = new Component({
       parentNode: col.node,
-      tagName: 'div',
+      tagName: 'ul',
       className: 'footer_community-icons',
     });
 
-    COMMUNITY_ICONS.forEach((icon) => {
+    C.COMMUNITY_ICONS.forEach((icon) => {
       new Component({
         parentNode: iconsWrap.node,
         tagName: 'span',
         className: ['footer_community-icon', 'material-symbols-rounded', 'google-icons'],
         content: icon,
+        attrs: [{ attr: 'title', value: `Go to ${icon}` }],
       });
     });
   }

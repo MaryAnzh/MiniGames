@@ -5,7 +5,7 @@
   gap: 8px;
 
   &_label {
-    font-size: 14px;
+    font-size: var(--body-small);
     color: var(--on-primary);
     font-weight: var(--weight-bold);
   }
@@ -28,7 +28,7 @@
     outline-offset: -2px;
     gap: var(--size-2);
     color: var(--on-primary);
-    font-size: 14px;
+    font-size: var(--body-small);
 
     &::placeholder {
       color: var(--on-bg);

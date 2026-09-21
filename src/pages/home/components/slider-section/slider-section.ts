@@ -32,12 +32,14 @@ export class SliderSection extends Component {
       variant: 'round',
       colorVariant: 'light',
       googleIcon: 'arrow_back',
+      ariaLabel: 'back slider',
     });
     new Button({
       parentNode: titleWrap.node,
       variant: 'round',
       colorVariant: 'primary',
       googleIcon: 'arrow_forward',
+      ariaLabel: 'forward slider',
     });
 
     new Slider({
