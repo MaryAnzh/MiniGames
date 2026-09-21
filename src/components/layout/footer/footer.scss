@@ -46,6 +46,7 @@
 
     @media (min-width: $laptop) {
       width: 400px;
+      grid-column: 1;
     }
 
     &-logo {
