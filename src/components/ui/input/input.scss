@@ -1,0 +1,65 @@
+.app_input {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-1);
+
+  &_label {
+    font-size: var(--body-small);
+    color: var(--on-primary);
+    font-weight: var(--weight-bold);
+  }
+
+  &_wrap {
+    position: relative;
+    width: 100%;
+    height: var(--input-height-md);
+    overflow: hidden;
+  }
+
+  &_field {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding: 0 var(--size-2);
+    background: var(--white);
+    border-radius: var(--corner-small);
+    outline: 2px var(--on-primary) solid;
+    outline-offset: -2px;
+    gap: var(--size-2);
+    color: var(--on-primary);
+    font-size: var(--body-small);
+
+    &::placeholder {
+      color: var(--on-bg);
+      font-size: var(--label-large);
+      font-weight: var(--weight-medium);
+    }
+  }
+
+  .input-with-icon {
+    padding-left: var(--size-6);
+  }
+  .input-right-icon {
+    padding-right: var(--size-6);
+  }
+
+  &_icon,
+  &_right-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--on-bg);
+    font-size: var(--headline-small);
+    font-weight: var(--weight-regular);
+  }
+
+  &_icon {
+    left: 16px;
+  }
+
+  &_right-icon {
+    right: 16px;
+  }
+}

@@ -1,0 +1,36 @@
+@mixin nav-item {
+  position: relative;
+  width: fit-content;
+  color: var(--on-bg-footer);
+  font-size: var(--body-small);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.3s;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    bottom: -2px;
+    width: calc(100% - 8px);
+    height: 1px;
+    background: transparent;
+    transition: background 0.3s;
+  }
+
+  &:hover {
+    color: var(--primary);
+
+    &::after {
+      background: var(--primary);
+    }
+  }
+
+  &:active {
+    color: var(--primary);
+    font-weight: var(--weight-bold);
+    &::after {
+      background: transparent;
+    }
+  }
+}

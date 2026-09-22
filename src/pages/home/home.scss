@@ -1,0 +1,10 @@
+@use '../../styles/variable' as *;
+@use './components/styles.scss' as *;
+
+.home-page {
+  width: 100%;
+  max-width: $max-desktop;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}

@@ -1,0 +1,295 @@
+@use '../../../styles/variable' as *;
+
+.footer {
+  width: 100%;
+  background: var(--bg-footer);
+  padding: var(--size-4) var(--size-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-3-1);
+
+  @media (min-width: $tablet) {
+    padding: var(--size-5);
+    gap: var(--size-7);
+  }
+
+  @media (min-width: $laptop) {
+    padding: var(--size-5) var(--size-15);
+    gap: var(--size-11);
+  }
+
+  &_top {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    flex-wrap: wrap;
+    gap: var(--size-3);
+
+    @media (min-width: $tablet) {
+      display: grid;
+      grid-template-columns: min-content auto;
+      gap: var(--size-3) var(--size-5);
+    }
+
+    @media (min-width: $laptop) {
+      gap: var(--size-4) var(--size-5);
+      grid-template-columns: 1fr auto auto;
+    }
+  }
+
+  &_brand {
+    grid-column: 1/3;
+    display: grid;
+    grid-template-columns: 32px auto;
+    align-items: center;
+    gap: var(--size-3) var(--size-1);
+
+    @media (min-width: $laptop) {
+      width: 400px;
+      grid-column: 1;
+    }
+
+    &-logo {
+      grid-column: 1;
+      width: var(--size-4);
+      height: var(--size-4);
+    }
+
+    &-title {
+      grid-column: 2;
+      color: var(--white);
+      font-size: var(--headline-small);
+      font-weight: var(--weight-bold);
+
+      @media (max-width: $tablet) {
+        font-size: var(--headline-small);
+      }
+      @media (min-width: $laptop) {
+        font-size: var(--display-small);
+      }
+    }
+
+    &-desc {
+      grid-row: 2;
+      grid-column: 1/3;
+      color: var(--on-bg-footer);
+      font-size: var(--body-small);
+      line-height: 21px;
+    }
+  }
+
+  &_links {
+    grid-column: 1/2;
+    display: flex;
+    gap: var(--size-13);
+
+    @media (min-width: $tablet) {
+      gap: var(--size-5);
+    }
+    @media (min-width: $laptop) {
+      grid-column: 2/3;
+      grid-row: 1;
+    }
+
+    &-col {
+      display: flex;
+      flex-direction: column;
+      gap: var(--size-2);
+    }
+
+    &-title {
+      color: var(--white);
+      font-size: var(--body-medium);
+      font-weight: var(--weight-bold);
+    }
+    &_list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--size-1-5);
+
+      &_item {
+        a {
+          position: relative;
+          width: fit-content;
+          color: var(--on-bg-footer);
+          font-size: var(--body-small);
+          cursor: pointer;
+          white-space: nowrap;
+          transition: 0.3s;
+
+          &::after {
+            content: '';
+            position: absolute;
+            left: 4px;
+            bottom: -2px;
+            width: calc(100% - 8px);
+            height: 1px;
+            background: transparent;
+            transition: background 0.3s;
+          }
+
+          &:hover {
+            color: var(--primary);
+
+            &::after {
+              background: var(--primary);
+            }
+          }
+
+          &:active {
+            color: var(--primary);
+            font-weight: var(--weight-bold);
+            &::after {
+              background: transparent;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &_community {
+    grid-column: 2/3;
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-2);
+
+    @media (min-width: $laptop) {
+      grid-column: 3/4;
+      grid-row: 1;
+    }
+
+    &-title {
+      color: var(--white);
+      font-size: var(--body-medium);
+      font-weight: var(--weight-bold);
+    }
+
+    &-icons {
+      display: flex;
+      gap: var(--size-2);
+    }
+
+    &-icon {
+      width: var(--size-4);
+      height: var(--size-4);
+      background: var(--bg-footer-low);
+      border-radius: var(--corner-full);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--white);
+      font-size: var(--body-small);
+      outline: 2px solid;
+      font-weight: var(--weight-regular);
+      outline-color: var(--transparent);
+      outline-offset: -2px;
+      transition: 0.3s;
+
+      &:hover {
+        outline-color: var(--primary);
+        background: var(--bg-footer-lowest);
+      }
+
+      &:active {
+        transform: scale(0.97);
+      }
+
+      @media (max-width: $laptop) {
+        width: var(--size-5);
+        height: var(--size-5);
+        font-size: var(--headline-small);
+      }
+    }
+  }
+
+  &_bottom {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    align-items: center;
+    gap: var(--size-1) var(--size-2);
+    border-top: 1px solid var(--bg-footer-low);
+
+    @media (min-width: $tablet) {
+      display: flex;
+      gap: var(--size-2);
+    }
+
+    @media (min-width: $laptop) {
+      justify-content: space-between;
+    }
+
+    &-copy {
+      grid-row: 1;
+      grid-column: 1/3;
+      color: var(--on-bg-footer);
+      font-size: var(--label-medium);
+      font-weight: var(--weight-regular);
+      @media (min-width: $tablet) {
+        font-size: var(--body-small);
+      }
+    }
+
+    &-rs {
+      grid-column: 1;
+    }
+
+    &-code {
+      grid-column: 2;
+      align-self: start;
+
+      &-icon {
+        background: var(--white);
+        color: var(--on-primary);
+        font-size: var(--body-small);
+      }
+    }
+
+    &-rs,
+    &-code {
+      display: flex;
+      align-items: center;
+      gap: var(--size-1);
+      cursor: pointer;
+
+      &-icon {
+        width: var(--icon-size-sm);
+        height: var(--icon-size-sm);
+        border-radius: var(--corner-medium);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: 0.3s;
+
+        &:hover {
+          transform: scale(1.2);
+        }
+        &:active {
+          transform: scale(0.9);
+        }
+      }
+
+      &-text {
+        color: var(--on-bg-footer);
+        font-size: var(--label-medium);
+        font-weight: var(--weight-regular);
+        white-space: nowrap;
+
+        @media (min-width: $tablet) {
+          font-size: var(--body-small);
+        }
+      }
+    }
+
+    &-love {
+      color: var(--on-bg-footer);
+      font-size: var(--body-small);
+      display: none;
+
+      @media (min-width: $tablet) {
+        display: block;
+      }
+    }
+  }
+}

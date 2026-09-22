@@ -1,0 +1,30 @@
+@use '../variable' as *;
+
+@mixin heading-tag {
+  width: var(--size-1);
+  height: var(--size-3);
+  border-radius: var(--corner-medium);
+  background: var(--primary);
+  border: 1.5px solid var(--on-primary);
+
+  @media (min-width: $min-tablet) {
+    height: var(--size-4);
+  }
+}
+
+@mixin tag {
+  padding: var(--size-05) var(--size-1-5);
+  background: var(--bg);
+  border-radius: var(--corner-extra-large);
+  outline: 1.5px solid var(--on-primary);
+  outline-offset: -1.5px;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  font-family: var(--font-roboto);
+  font-size: var(--label-medium);
+  font-weight: var(--weight-bold);
+  color: var(--on-primary);
+}

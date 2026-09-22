@@ -1,0 +1,280 @@
+@use '../../../../styles/variable' as *;
+@use '../../../../styles/mixims/tag.scss' as *;
+
+.table-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: var(--size-2);
+  gap: var(--size-2);
+
+  @media (min-width: $tablet) {
+    padding: var(--size-3) var(--size-5);
+    gap: var(--size-3);
+  }
+
+  @media (min-width: $laptop) {
+    padding: var(--size-5) var(--size-15);
+    gap: var(--size-5);
+  }
+
+  &_title-wrap {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--size-1);
+
+    &_tag {
+      @include heading-tag;
+    }
+
+    &_title {
+      color: var(--on-primary);
+      font-size: var(--headline-medium);
+      font-weight: var(--weight-bold);
+
+      &::after {
+        content: 'Top Players';
+        color: var(--on-primary);
+        font-size: var(--headline-medium);
+        font-weight: var(--weight-bold);
+
+        @media (min-width: $tablet) {
+          content: 'Top Players This Week';
+        }
+      }
+
+      @media (min-width: $laptop) {
+        font-size: var(--headline-large);
+      }
+    }
+  }
+
+  &_table {
+    width: 100%;
+    background: var(--white);
+    border-radius: var(--corner-large);
+    outline: 2.5px var(--on-primary) solid;
+    outline-offset: -2.5px;
+    box-shadow: var(--level-1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    @media (min-width: $tablet) {
+      box-shadow: var(--level-2);
+      gap: var(--size-2);
+    }
+
+    @media (min-width: $laptop) {
+      box-shadow: var(--level-3);
+    }
+  }
+
+  &_row {
+    width: 100%;
+    display: grid;
+    align-items: center;
+    padding: var(--size-2);
+    gap: var(--size-1) 0;
+    border-bottom: 1.5px var(--outline) solid;
+
+    grid-template-columns: 40px 1fr 80px 70px;
+
+    font-size: var(--label-large);
+    font-weight: var(--weight-bold);
+    color: var(--on-primary);
+
+    &:nth-child(even) {
+      background: var(--bg);
+    }
+    &:nth-child(5),
+    &:nth-child(6) {
+      display: none;
+
+      @media (min-width: $laptop) {
+        display: grid;
+      }
+    }
+
+    &--header {
+      background: var(--tertiary);
+      border-bottom: 1.5px solid var(--on-primary);
+      font-family: var(--font-roboto);
+      font-size: var(--label-medium);
+      font-weight: var(--weight-extra-bold);
+      text-transform: uppercase;
+
+      .header-col {
+        color: var(--white);
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    @media (min-width: $tablet) {
+      grid-template-columns: 80px 160px 17.5% 15.5% 17.5%;
+      gap: var(--size-1-5);
+      padding: var(--size-2);
+
+      &--header {
+        font-size: var(--body-small);
+        .header-col {
+          padding: 0 var(--size-2);
+        }
+      }
+    }
+
+    @media (min-width: $laptop) {
+      padding: var(--size-3);
+      height: var(--layout-table-height-lg);
+      gap: 0;
+      grid-template-columns: 80px repeat(5, 1fr);
+    }
+  }
+
+  .col-rank {
+    justify-self: center;
+    font-weight: var(--weight-extra-bold);
+
+    &:first-child {
+      color: var(--tertiary);
+    }
+  }
+
+  .col-player {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--size-05);
+    overflow: hidden;
+
+    @media (min-width: $laptop) {
+      padding-left: var(--size-2);
+    }
+  }
+
+  .player-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: var(--corner-full);
+    outline: 1px solid var(--on-primary);
+    outline-offset: -1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--label-small);
+    font-weight: var(--weight-bold);
+
+    @media (min-width: $tablet) {
+      width: 28px;
+      height: 28px;
+    }
+
+    @media (min-width: $laptop) {
+      width: 40px;
+      height: 40px;
+      font-size: var(--label-medium);
+    }
+  }
+
+  .player-name {
+    font-size: var(--label-large);
+    font-weight: var(--weight-bold);
+    color: var(--on-primary);
+  }
+
+  .col-score,
+  .col-streak,
+  .col-games,
+  .col-favorite {
+    width: 100%;
+    text-align: center;
+    font-size: var(--label-large);
+    font-weight: var(--weight-bold);
+    color: var(--on-primary);
+
+    @media (min-width: $tablet) {
+      padding-left: var(--size-1);
+    }
+  }
+
+  .col-favorite,
+  .header_favorite,
+  .col-games,
+  .header_games {
+    display: none;
+  }
+
+  .col-games,
+  .header_games {
+    @media (min-width: $tablet) {
+      display: block;
+    }
+  }
+
+  .col-favorite,
+  .header_favorite {
+    @media (min-width: $laptop) {
+      display: block;
+    }
+  }
+
+  .header_games {
+    width: 100%;
+    &::after {
+      content: 'Game';
+    }
+    @media (min-width: $laptop) {
+      &::after {
+        content: 'Games Played';
+      }
+    }
+  }
+
+  .header-score {
+    width: 100%;
+
+    &::after {
+      content: 'Store';
+    }
+    @media (min-width: $laptop) {
+      &::after {
+        content: 'Total score';
+      }
+    }
+  }
+
+  .header_favorite {
+    width: 100%;
+
+    &::after {
+      content: 'Favorite';
+    }
+    @media (min-width: $laptop) {
+      &::after {
+        content: 'Favorite Game';
+      }
+    }
+  }
+  .col-favorite {
+    @include tag;
+    width: fit-content;
+    justify-self: center;
+
+    display: none;
+
+    @media (min-width: $laptop) {
+      display: flex;
+    }
+  }
+  .col-streak {
+    &::after {
+      content: 'd';
+
+      @media (min-width: $laptop) {
+        content: 'days';
+      }
+    }
+  }
+}

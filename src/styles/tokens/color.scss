@@ -1,0 +1,58 @@
+:root {
+  /* FROM Figma*/
+  /* Base */
+  --white: #fff;
+  --black: #111;
+
+  /* General */
+  --bg: #f9f8f3;
+  --on-bg: #5f5d75;
+  --on-bg-low: #737380;
+  --bg-footer: #1e1b3a;
+  --bg-footer-low: #2a264f;
+  --bg-footer-lowest: #3c376e;
+  --on-bg-footer: #b9b5c9;
+  --surface: #ffffe5;
+  --surface-low: #ffffc5;
+  --primary: #ffdd2b;
+  --primary-low: #fde047;
+  --primary-high: #e5bb00;
+  --on-primary: #242145;
+  --secondary: #f0eeff;
+  --tertiary: #3a2ebf;
+  --like: #ff4b4b;
+  --error: #b3261e;
+  --price-free: #0b8a8f;
+  --accent: #d9d9d9;
+
+  /* Outlines */
+  --outline: #e5e7eb;
+  --outline-variant: #d2d2d2;
+
+  /* Additional */
+  --avatar-random-1: #e9e9f6;
+  --avatar-random-2: #a3e2c9;
+  --avatar-random-3: #bce3ff;
+  --avatar-random-4: #ffc6ff;
+  --avatar-random-5: #e8dff5;
+
+  /* Shadows */
+  --level-1: 4px 4px 0 var(--on-primary);
+  --level-2: 6px 6px 0 var(--on-primary);
+  --level-3: 8px 8px 0 var(--on-primary);
+
+  /* CUSTOM */
+  --button-shadow: 0px 10px 20px -10px rgba(0, 0, 0, 0.1);
+  --card-shadow: 0px 14px 30px -10px rgba(0, 0, 0, 0.08), 0px 2px 8px -4px rgba(0, 0, 0, 0.04);
+
+  --card-gradient: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.4) 17%,
+    rgba(0, 0, 0, 0.85) 46%
+  );
+
+  --hero-bg: rgba(30, 27, 58, 0.65);
+  --transparent: #0000;
+  --pop-up-bg: rgba(0, 0, 0, 0.3);
+}

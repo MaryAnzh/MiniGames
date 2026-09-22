@@ -1,0 +1,126 @@
+@use '../../../../styles/variable' as *;
+
+.home-page_hero {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background: var(--hero-bg);
+  padding: var(--size-8) var(--size-2);
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-image: url('/img/hero_section.webp');
+    background-position-x: center;
+    background-position-y: bottom;
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0.2;
+    z-index: 0;
+  }
+
+  .hero_text-wrap {
+    width: 100%;
+    display: flex;
+    padding: var(--size-3);
+    background: var(--bg);
+    box-shadow: var(--level-1);
+    border-radius: var(--corner-medium);
+    outline: 2px var(--on-primary) solid;
+    outline-offset: -2px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: var(--size-2);
+    z-index: 1;
+  }
+
+  .hero_title {
+    align-self: stretch;
+    color: var(--on-primary);
+    font-size: var(--headline-medium);
+    font-family: var(--font-inter);
+    font-weight: var(--weight-bold);
+    line-height: 28.8px;
+    word-wrap: break-word;
+  }
+
+  .hero_text_mobile {
+    align-self: stretch;
+    color: var(--on-bg);
+    font-size: var(--label-medium);
+    font-weight: var(--weight-medium);
+    line-height: 16.8px;
+    word-wrap: break-word;
+  }
+  .hero_text {
+    display: none;
+  }
+
+  .hero_accent {
+    display: none;
+  }
+
+  @media (min-width: $min-tablet) {
+    padding: var(--size-9) var(--size-5);
+
+    .hero_text-wrap {
+      padding: var(--size-3);
+      box-shadow: var(--level-2);
+      width: var(--layout-hero-width-md);
+      border-radius: var(--corner-large);
+      outline: 2.5px var(--on-primary) solid;
+      outline-offset: -2.5px;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: var(--size-2);
+    }
+
+    .hero_title {
+      font-size: var(--display-medium);
+      line-height: 41.4px;
+    }
+
+    .hero_text {
+      display: block;
+      font-size: var(--body-small);
+      line-height: 19.6px;
+    }
+    .hero_text_mobile {
+      display: none;
+    }
+  }
+
+  @media (min-width: $min-laptop) {
+    padding: var(--size-14) var(--size-15);
+
+    .hero_text-wrap {
+      width: var(--layout-hero-width-lg);
+      max-width: 100%;
+
+      padding: var(--size-6);
+      box-shadow: var(--level-3);
+      border-radius: var(--corner-extra-large);
+      outline: 3px var(--on-primary) solid;
+      outline-offset: -3px;
+      gap: var(--size-3);
+    }
+
+    .hero_title {
+      font-size: var(--display-large);
+      line-height: 61.6px;
+    }
+
+    .hero_text {
+      line-height: 27px;
+      font-size: var(--headline-small);
+    }
+  }
+}
