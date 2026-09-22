@@ -16,6 +16,12 @@
     display: none;
   }
 
+  .header_burger_btn {
+    &:hover {
+      transform: scale(1.25);
+    }
+  }
+
   @media (min-width: $min-tablet) {
     display: grid;
     padding: var(--size-2-1) var(--size-5);

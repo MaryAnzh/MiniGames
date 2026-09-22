@@ -57,10 +57,9 @@ export class GameDeveloperSection extends Component {
 
     new Button({
       parentNode: info.node,
-      colorVariant: 'primary',
+      color: 'primary',
       leftIcon: 'DOWNLOAD',
-      size: 'sm',
-      radius: 'lg',
+      response: 'sm',
       text: 'Submit Form',
       isRoboto: true,
       className: 'game-developer_button',

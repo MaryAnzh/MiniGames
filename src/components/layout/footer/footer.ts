@@ -2,6 +2,7 @@ import { Component } from '@components';
 import type { ComponentProps } from '@types';
 import { ICON_PICKER } from '@constants';
 import * as C from '@constants';
+import { Button } from '@ui';
 
 const FOOTER_LINKS = [
   { title: C.EXPLORE, list: C.FOOTER_NAV },
@@ -126,16 +127,18 @@ export class Footer extends Component {
     const iconsWrap = new Component({
       parentNode: col.node,
       tagName: 'ul',
-      className: 'footer_community-icons',
+      className: 'footer_community_icons',
     });
 
-    C.COMMUNITY_ICONS.forEach((icon) => {
-      new Component({
+    C.COMMUNITY_ICONS.forEach(({ googleIcon, ariaLabel }) => {
+      new Button({
         parentNode: iconsWrap.node,
-        tagName: 'span',
-        className: ['footer_community-icon', 'material-symbols-rounded', 'google-icons'],
-        content: icon,
-        attrs: [{ attr: 'title', value: `Go to ${icon}` }],
+        className: 'footer_community_icons_icon',
+        color: 'dark',
+        size: 'icon-md',
+        corner: 'circle',
+        googleIcon,
+        ariaLabel,
       });
     });
   }

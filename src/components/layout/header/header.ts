@@ -51,8 +51,8 @@ export class Header extends Component {
       parentNode: this.node,
       className: 'header_login_btn',
       text: 'Log In',
-      size: 'md',
-      colorVariant: 'light',
+      response: 'md',
+      color: 'light',
     });
 
     loginButton.node.addEventListener('click', () => {
@@ -66,8 +66,8 @@ export class Header extends Component {
       parentNode: this.node,
       className: 'header_signup_btn',
       text: 'Sign Up',
-      size: 'md',
-      colorVariant: 'primary',
+      response: 'md',
+      color: 'primary',
     });
 
     signinButton.node.addEventListener('click', () => {
@@ -90,9 +90,9 @@ export class Header extends Component {
 
     this.burgerBtn = new Button({
       parentNode: this.node,
-      colorVariant: 'light',
-      variant: 'icon',
-      icon: 'BURGER',
+      color: 'light',
+      leftIcon: 'BURGER',
+      size: 'icon-md',
       className: 'header_burger_btn',
     });
 

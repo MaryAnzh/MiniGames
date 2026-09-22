@@ -62,26 +62,31 @@
   }
 
   &_links {
-    display: flex;
-    flex-direction: column;
-    gap: var(--size-3);
-  }
+    height: 100%;
 
-  &_link {
-    background: none;
-    border: none;
+    &_list {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: var(--size-3);
 
-    @include nav-item;
+      &_link {
+        background: none;
+        border: none;
 
-    text-align: left;
-    font-size: var(--body-large);
-    font-weight: var(--weight-medium);
-    color: var(--on-bg-footer);
+        @include nav-item;
 
-    &:nth-of-type(1) {
-      color: var(--primary);
-      font-weight: var(--weight-bold);
-      pointer-events: none;
+        text-align: left;
+        font-size: var(--body-large);
+        font-weight: var(--weight-medium);
+        color: var(--on-bg-footer);
+
+        &:nth-of-type(1) {
+          color: var(--primary);
+          font-weight: var(--weight-bold);
+          pointer-events: none;
+        }
+      }
     }
   }
 

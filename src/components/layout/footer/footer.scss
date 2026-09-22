@@ -166,40 +166,15 @@
       font-weight: var(--weight-bold);
     }
 
-    &-icons {
+    &_icons {
       display: flex;
       gap: var(--size-2);
-    }
 
-    &-icon {
-      width: var(--size-4);
-      height: var(--size-4);
-      background: var(--bg-footer-low);
-      border-radius: var(--corner-full);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: var(--white);
-      font-size: var(--body-small);
-      outline: 2px solid;
-      font-weight: var(--weight-regular);
-      outline-color: var(--transparent);
-      outline-offset: -2px;
-      transition: 0.3s;
-
-      &:hover {
-        outline-color: var(--primary);
-        background: var(--bg-footer-lowest);
-      }
-
-      &:active {
-        transform: scale(0.97);
-      }
-
-      @media (max-width: $laptop) {
-        width: var(--size-5);
-        height: var(--size-5);
-        font-size: var(--headline-small);
+      &_icon {
+        font-size: var(--body-medium);
+        @media (min-width: $laptop) {
+          font-size: var(--headline-small);
+        }
       }
     }
   }

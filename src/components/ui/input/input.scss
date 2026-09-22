@@ -15,6 +15,16 @@
     width: 100%;
     height: var(--input-height-md);
     overflow: hidden;
+
+    &:focus-within {
+      background: var(--surface-low);
+      outline-color: var(--on-primary);
+
+      .app_input_icon,
+      .app_input_right-icon {
+        color: var(--on-primary);
+      }
+    }
   }
 
   &_field {
@@ -24,11 +34,16 @@
     padding: 0 var(--size-2);
     background: var(--white);
     border-radius: var(--corner-small);
-    outline: 2px var(--on-primary) solid;
+    outline: 2px var(--black) solid;
     outline-offset: -2px;
     gap: var(--size-2);
     color: var(--on-primary);
     font-size: var(--body-small);
+    // если на импуте ффокус то меняется бордер и цвет иконки на гнпраймери
+    &:focus {
+      background: var(--surface-low);
+      outline-color: var(--on-primary);
+    }
 
     &::placeholder {
       color: var(--on-bg);

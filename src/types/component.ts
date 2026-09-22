@@ -16,5 +16,17 @@ export type ComponentProps = {
 
 export type IconPickerType = keyof typeof ICON_PICKER;
 export type ComponentSizesType = KeysTemplateType<typeof COMPONENT_SIZES>;
-export type GoogleIconsType = 'mail' | 'lock' | 'visibility' | 'person';
 export type AuthFormType = 'Login' | 'Register';
+
+export type GoogleIconsType =
+  | 'mail'
+  | 'lock'
+  | 'visibility'
+  | 'person'
+  | 'arrow_back'
+  | 'arrow_forward'
+  | 'google'
+  | 'share'
+  | 'chat'
+  | 'rss_feed'
+  | 'close';
