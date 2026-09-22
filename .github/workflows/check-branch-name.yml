@@ -1,0 +1,36 @@
+name: Check Branch Name
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate branch name
+        run: |
+          BRANCH="${{ github.head_ref }}"
+          PATTERN='^(feature|bugfix|hotfix|refactor|docs)/story-(0[1-9]|[1-9][0-9])_[a-z0-9][a-z0-9\-]*$'
+
+          echo "Branch name: $BRANCH"
+
+          if [ "$BRANCH" = "develop" ]; then
+            echo "✅ Branch '$BRANCH' is exempt from naming rules."
+            exit 0
+          fi
+
+          if [[ ! "$BRANCH" =~ $PATTERN ]]; then
+            echo "::error::❌ Branch name '$BRANCH' doesn't match the required pattern."
+            echo ""
+            echo "Branch name must follow the convention:"
+            echo "  feature/story-XX_name"
+            echo ""
+            echo "Rules:"
+            echo "  - XX = two digits (01–99)"
+            echo "  - name = lowercase letters, numbers, hyphens"
+            echo "  - underscore required between number and name"
+            exit 1
+          fi
+
+          echo "✅ Branch name '$BRANCH' is valid!"
