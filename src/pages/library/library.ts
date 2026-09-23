@@ -1,15 +1,21 @@
 import { Component } from '@components';
 import type { ComponentProps } from '@types';
+// import { LibraryIntro } from './library-intro';
+// import { LibraryFilters } from './library-filters';
+// import { LibraryCards } from './library-cards';
+// import { LibraryPagination } from './library-pagination';
 
-type LibraryPageProps = Pick<ComponentProps, 'parentNode'>;
-
-export class LibraryPage {
-  constructor({ parentNode }: LibraryPageProps) {
-    new Component({
+export class LibraryPage extends Component {
+  constructor({ parentNode }: Pick<ComponentProps, 'parentNode'>) {
+    super({
       parentNode,
-      tagName: 'section',
-      className: 'library_page',
-      content: 'Library Page',
+      tagName: 'div',
+      className: 'library',
     });
+
+    // new LibraryIntro({ parentNode: this.node });
+    // new LibraryFilters({ parentNode: this.node });
+    // new LibraryCards({ parentNode: this.node });
+    // new LibraryPagination({ parentNode: this.node });
   }
 }
