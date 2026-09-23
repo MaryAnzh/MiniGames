@@ -3,6 +3,8 @@ import type { ComponentProps } from '@types';
 import { Button } from '@ui';
 
 export class LibraryFilters extends Component {
+  private tagList: HTMLElement[] = [];
+
   constructor({ parentNode }: Pick<ComponentProps, 'parentNode'>) {
     super({
       parentNode,
@@ -25,17 +27,24 @@ export class LibraryFilters extends Component {
         className: 'library_filters_categories_item',
       });
 
-      new Button({
+      const tagButton = new Button({
         parentNode: li.node,
         text: cat,
         color: index === 0 ? 'primary' : 'light',
         size: 'sm',
         corner: 'lg',
+        ariaLabel: `Category: ${cat}`,
       });
+
+      tagButton.setAttributes([
+        { attr: 'role', value: 'tab' },
+        { attr: 'aria-selected', value: index === 0 ? 'true' : 'false' },
+      ]);
+
+      this.tagList.push(tagButton.node);
     });
 
-    //const sortButton =
-    new Button({
+    const sortTrigger = new Button({
       parentNode: this.node,
       rightIcon: 'ARROW_DOWN',
       text: 'Sort by: Rating ↓',
@@ -43,6 +52,13 @@ export class LibraryFilters extends Component {
       corner: 'lg',
       className: 'library_filters_sort',
       size: 'sm',
+      ariaLabel: `Sort Games`,
     });
+    sortTrigger.setAttributes([
+      { attr: 'role', value: 'button' },
+      { attr: 'aria-haspopup', value: 'listbox' },
+      { attr: 'aria-expanded', value: 'false' },
+      { attr: 'aria-controls', value: 'sort-menu' },
+    ]);
   }
 }
