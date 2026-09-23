@@ -1,9 +1,6 @@
 import { Component } from '@components';
 import type { ComponentProps } from '@types';
-// import { LibraryIntro } from './library-intro';
-// import { LibraryFilters } from './library-filters';
-// import { LibraryCards } from './library-cards';
-// import { LibraryPagination } from './library-pagination';
+import { LibraryIntro, LibraryFilters } from './sections';
 
 export class LibraryPage extends Component {
   constructor({ parentNode }: Pick<ComponentProps, 'parentNode'>) {
@@ -13,8 +10,8 @@ export class LibraryPage extends Component {
       className: 'library',
     });
 
-    // new LibraryIntro({ parentNode: this.node });
-    // new LibraryFilters({ parentNode: this.node });
+    new LibraryIntro({ parentNode: this.node });
+    new LibraryFilters({ parentNode: this.node });
     // new LibraryCards({ parentNode: this.node });
     // new LibraryPagination({ parentNode: this.node });
   }

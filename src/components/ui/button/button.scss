@@ -95,9 +95,9 @@
 }
 
 /* SIZES */
-/* Category buttons */
+
 .app_button[data-size='sm'] {
-  padding: var(--btn-medium-padding);
+  padding: var(--btn-small-padding);
   gap: var(--size-1);
   border-radius: var(--corner-medium);
   font-size: var(--label-medium);
@@ -105,7 +105,7 @@
 
 /* game-section */
 .app_button[data-response='sm'] {
-  padding: var(--btn-medium-padding);
+  padding: var(--btn-small-padding);
   gap: var(--size-1);
   border-radius: var(--corner-medium);
   font-size: var(--label-medium);
@@ -223,4 +223,8 @@
 
 .app_button[data-font] {
   font-family: var(--font-roboto);
+}
+
+.app_button[data-dropdown] {
+  justify-content: space-between;
 }

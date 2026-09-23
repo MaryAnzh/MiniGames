@@ -59,6 +59,7 @@ export class Button extends Component {
         disabled ? { attr: 'disabled', value: 'true' } : null,
         ariaLabel ? { attr: 'aria-label', value: ariaLabel } : null,
         isRoboto ? { attr: 'aria-font', value: 'true' } : null,
+        rightIcon === 'ARROW_DOWN' ? { attr: 'data-dropdown', value: 'true' } : null,
       ].filter((el) => el !== null),
     });
 
