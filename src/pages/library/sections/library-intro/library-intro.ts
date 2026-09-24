@@ -22,4 +22,8 @@ export class LibraryIntro extends Component {
       content: 'Browse our collection of casual mini-games',
     });
   }
+
+  destroy() {
+    super.destroy();
+  }
 }

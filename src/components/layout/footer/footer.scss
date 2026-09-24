@@ -120,10 +120,10 @@
           &::after {
             content: '';
             position: absolute;
-            left: 4px;
-            bottom: -2px;
+            left: var(--size-05);
+            bottom: var(--border-2-neg);
             width: calc(100% - 8px);
-            height: 1px;
+            height: var(--border-1);
             background: transparent;
             transition: background 0.3s;
           }
@@ -184,7 +184,7 @@
     grid-template-columns: min-content 1fr;
     align-items: center;
     gap: var(--size-1) var(--size-2);
-    border-top: 1px solid var(--bg-footer-low);
+    border-top: var(--border-1) solid var(--bg-footer-low);
 
     @media (min-width: $tablet) {
       display: flex;

@@ -10,10 +10,10 @@
   &::after {
     content: '';
     position: absolute;
-    left: 4px;
-    bottom: -2px;
-    width: calc(100% - 8px);
-    height: 1px;
+    left: var(--size-05);
+    bottom: var(--border-2-neg);
+    width: calc(100% - var(--size-1));
+    height: var(--border-1);
     background: transparent;
     transition: background 0.3s;
   }

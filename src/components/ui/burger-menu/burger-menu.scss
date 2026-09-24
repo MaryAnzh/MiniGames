@@ -43,7 +43,7 @@
     align-items: center;
     outline: 2px solid;
     outline-color: var(--transparent);
-    outline-offset: -2px;
+    outline-offset: var(--border-2-neg);
     transition: 0.3s;
 
     .google-icons {

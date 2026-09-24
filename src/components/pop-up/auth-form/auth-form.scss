@@ -77,8 +77,8 @@
   height: var(--icon-size-x-lg);
   padding: var(--size-2) var(--size-3);
   border-radius: var(--corner-medium);
-  outline: 2px var(--on-primary) solid;
-  outline-offset: -2px;
+  outline: var(--border-2) var(--on-primary) solid;
+  outline-offset: var(--border-2-neg);
   gap: var(--size-2);
   font-size: var(--body-medium);
 }

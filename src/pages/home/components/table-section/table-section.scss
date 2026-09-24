@@ -155,11 +155,11 @@
   }
 
   .player-avatar {
-    width: 24px;
-    height: 24px;
+    width: var(--size-3);
+    height: var(--size-3);
     border-radius: var(--corner-full);
-    outline: 1px solid var(--on-primary);
-    outline-offset: -1px;
+    outline: var(--border-1-5) solid var(--on-primary);
+    outline-offset: var(--border-1-neg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -167,13 +167,13 @@
     font-weight: var(--weight-bold);
 
     @media (min-width: $tablet) {
-      width: 28px;
-      height: 28px;
+      width: var(--table-icon);
+      height: var(--table-icon);
     }
 
     @media (min-width: $laptop) {
-      width: 40px;
-      height: 40px;
+      width: var(--size-5);
+      height: var(--size-5);
       font-size: var(--label-medium);
     }
   }

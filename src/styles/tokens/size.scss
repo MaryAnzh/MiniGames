@@ -1,4 +1,5 @@
 :root {
+  --size-0125: 1px;
   --size-025: 2px;
   --size-05: 4px;
   --size-1: 8px;
@@ -21,10 +22,21 @@
   --size-14: 112px;
   --size-15: 120px;
 
+  --border-1: 1px;
+  --border-1-5: 1.5px;
+  --border-2: 2px;
+  --border-2-5: 2.5px;
+
+  --border-1-neg: -1px;
+  --border-1-5-neg: -1.5px;
+  --border-2-neg: -2px;
+  --border-2-5-neg: -2.5px;
+
   --icon-size-x-lg: 50px;
+  --icon-size-sm: 20px;
+  --table-icon: 28px;
   --icon-size-lg: 32px;
   --icon-size-md: 40px;
-  --icon-size-sm: 20px;
 
   --btn-large-padding: 16px 24px;
   --btn-medium-padding: 10px 20px;

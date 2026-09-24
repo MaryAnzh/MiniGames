@@ -9,6 +9,17 @@
     gap: var(--size-1);
     overflow-x: auto;
     padding-bottom: var(--size-05);
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    user-select: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    &.dragging {
+      cursor: grabbing;
+    }
 
     &_item {
       list-style: none;

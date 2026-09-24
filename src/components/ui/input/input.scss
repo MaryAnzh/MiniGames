@@ -39,7 +39,6 @@
     gap: var(--size-2);
     color: var(--on-primary);
     font-size: var(--body-small);
-    // если на импуте ффокус то меняется бордер и цвет иконки на гнпраймери
     &:focus {
       background: var(--surface-low);
       outline-color: var(--on-primary);
@@ -71,10 +70,10 @@
   }
 
   &_icon {
-    left: 16px;
+    left: var(--size-2);
   }
 
   &_right-icon {
-    right: 16px;
+    right: var(--size-2);
   }
 }
