@@ -74,7 +74,7 @@
     }
 
     &_desc {
-      @include truncate-2;
+      @include truncate(2);
       font-size: var(--body-small);
       font-weight: var(--weight-medium);
       color: var(--on-bg);
@@ -82,6 +82,10 @@
       max-height: 66px;
       overflow: hidden;
       text-overflow: ellipsis;
+
+      @media (min-width: $tablet) {
+        @include truncate(3);
+      }
     }
 
     &_footer {
