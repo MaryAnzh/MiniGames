@@ -1,7 +1,8 @@
 import { Component } from '@components';
+import { CENTER } from '@constants';
 import appStore from '@state';
 import type { CategoriesType, ComponentProps } from '@types';
-import { Button } from '@ui';
+import { Button, Select } from '@ui';
 
 export class LibraryFilters extends Component {
   store: typeof appStore;
@@ -17,7 +18,7 @@ export class LibraryFilters extends Component {
     });
 
     this.store = appStore;
-    this.categoryList = this.store.categories.data;
+    this.categoryList = this.store.categories;
 
     const list = new Component({
       parentNode: this.node,
@@ -52,24 +53,16 @@ export class LibraryFilters extends Component {
 
       this.tagList.push(tagButton);
     });
-
-    const sortTrigger = new Button({
+    const sortWrap = new Component({
       parentNode: this.node,
-      rightIcon: 'ARROW_DOWN',
-      text: 'Sort by: Rating ↓',
-      color: 'light',
-      corner: 'lg',
       className: 'library_filters_sort',
-      size: 'sm',
-      ariaLabel: `Sort Games`,
     });
 
-    sortTrigger.setAttributes([
-      { attr: 'role', value: 'button' },
-      { attr: 'aria-haspopup', value: 'listbox' },
-      { attr: 'aria-expanded', value: 'false' },
-      { attr: 'aria-controls', value: 'sort-menu' },
-    ]);
+    new Select({
+      parentNode: sortWrap.node,
+      align: CENTER,
+      list: this.store.sort,
+    });
 
     this.initDragScroll(list.node);
   }

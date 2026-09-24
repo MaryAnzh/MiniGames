@@ -25,6 +25,8 @@ type ButtonProps = Pick<ComponentProps, 'parentNode'> & {
 };
 
 export class Button extends Component {
+  private textNode: Component | null = null;
+
   constructor({
     parentNode,
     className,
@@ -79,20 +81,34 @@ export class Button extends Component {
       new GoogleIcon({ parentNode: this.node, iconName: googleIcon });
     }
 
-    let textAdded = false;
     if (leftIcon) {
       this.node.insertAdjacentHTML('beforeend', ICON_PICKER[leftIcon]);
       if (text) {
-        textAdded = true;
-        this.node.append(text);
+        this.renderTextNode(text);
       }
     }
-    if (text && !textAdded) {
-      this.node.append(text);
+
+    if (text && !this.textNode) {
+      this.renderTextNode(text);
     }
 
     if (rightIcon) {
       this.node.insertAdjacentHTML('beforeend', ICON_PICKER[rightIcon]);
+    }
+  }
+
+  private renderTextNode(text: string) {
+    this.textNode = new Component({
+      parentNode: this.node,
+      className: 'app_button_text',
+      tagName: 'span',
+      content: text,
+    });
+  }
+
+  public setText(text: string) {
+    if (this.textNode) {
+      this.textNode.setContent(text);
     }
   }
 }

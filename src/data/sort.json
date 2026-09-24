@@ -1,0 +1,6 @@
+[
+  { "label": "Rating ↑", "value": "rating_up" },
+  { "label": "Rating ↓", "value": "rating_down", "selected": true },
+  { "label": "Name A→Z", "value": "name_az" },
+  { "label": "Name Z→A", "value": "name_za" }
+]

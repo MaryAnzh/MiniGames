@@ -1,4 +1,4 @@
-import type { ICON_PICKER, COMPONENT_SIZES } from '@constants';
+import type { ICON_PICKER, COMPONENT_SIZES, COMPONENT_ALIGN, LOGIN, REGISTER } from '@constants';
 import type { KeysTemplateType } from './common';
 
 export type ComponentAttributesType = {
@@ -16,7 +16,8 @@ export type ComponentProps = {
 
 export type IconPickerType = keyof typeof ICON_PICKER;
 export type ComponentSizesType = KeysTemplateType<typeof COMPONENT_SIZES>;
-export type AuthFormType = 'Login' | 'Register';
+export type AuthFormType = typeof LOGIN | typeof REGISTER;
+export type AlignType = KeysTemplateType<typeof COMPONENT_ALIGN>;
 
 export type GoogleIconsType =
   | 'mail'

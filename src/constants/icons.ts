@@ -108,6 +108,21 @@ const Google = `<svg
             />
           </svg>`;
 
+const checked = `<svg
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M11.6664 3.5L5.25036 9.9162L2.33398 6.99975"
+              stroke="var(--tertiary, #3A2EBF)"
+              stroke-width="3"
+              stroke-linecap="round"
+            />
+          </svg>`;
+
 export const ICON_PICKER = {
   BURGER,
   DOWNLOAD,
@@ -115,4 +130,5 @@ export const ICON_PICKER = {
   RS,
   Google,
   ARROW_DOWN,
+  CHECKED: checked,
 } as const;

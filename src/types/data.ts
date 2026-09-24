@@ -3,3 +3,9 @@ export type CategoriesType = {
   label: string;
   isDefault: boolean;
 };
+
+export type SortOptionType = {
+  label: string;
+  value: string;
+  selected?: boolean;
+};
