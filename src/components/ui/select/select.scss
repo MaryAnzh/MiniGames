@@ -1,18 +1,34 @@
+@use '../../../styles/variable' as *;
+
 .app-select {
   position: relative;
   width: 100%;
 
   .app-select-trigger {
     width: 100%;
+
+    @media (min-width: $mobile-lg) {
+      font-size: var(--body-small);
+    }
+
+    @media (min-width: $laptop) {
+      padding: var(--btn-small-padding);
+      height: var(--ui-select-height);
+    }
   }
 
   .app-select-trigger--open {
     svg {
       transform: rotate(180deg);
+      @media (min-width: $laptop) {
+        height: var(--size-3);
+        width: var(--size-3);
+      }
     }
   }
 
   .app-select_popup {
+    width: 100%;
     position: absolute;
     height: 0;
     opacity: 0;

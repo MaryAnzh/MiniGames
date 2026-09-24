@@ -1,3 +1,5 @@
+@use '../../../../styles/variable' as *;
+
 .library_intro {
   width: 100%;
   padding: var(--size-2);
@@ -6,7 +8,7 @@
   gap: var(--size-1);
 
   &_title {
-    font-size: var(--headline-medium);
+    font-size: var(--display-small);
     font-weight: var(--weight-bold);
     color: var(--on-primary);
   }
@@ -15,5 +17,25 @@
     font-size: var(--body-small);
     font-weight: var(--weight-medium);
     color: var(--on-bg);
+  }
+
+  @media (min-width: $tablet) {
+    padding: var(--layout-section-tablet-padding);
+    &_title {
+      font-size: var(--display-medium);
+    }
+    &_text {
+      font-size: var(--body-medium);
+    }
+  }
+
+  @media (min-width: $laptop) {
+    padding: var(--layout-section-desktop-padding);
+    &_title {
+      font-size: var(--display-large);
+    }
+    &_text {
+      font-size: var(--body-large);
+    }
   }
 }

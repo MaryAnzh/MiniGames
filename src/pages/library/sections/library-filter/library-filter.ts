@@ -53,6 +53,7 @@ export class LibraryFilters extends Component {
 
       this.tagList.push(tagButton);
     });
+
     const sortWrap = new Component({
       parentNode: this.node,
       className: 'library_filters_sort',

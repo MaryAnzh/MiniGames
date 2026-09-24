@@ -64,7 +64,12 @@
   --layout-card-img-width: 343px;
   --layout-card-img-height: 160px;
   --layout-sort-height: var(--size-6);
+  --layout-section-tablet-padding: var(--size-3) var(--size-5);
+  --layout-section-desktop-padding: var(--size-5) var(--size-15);
 
   --ui-select-width: 200px;
   --ui-select-max-height: 200px;
+  --ui-select-tablet-width: 182px;
+  --ui-select-desktop-width: 190px;
+  --ui-select-height: 44px;
 }
