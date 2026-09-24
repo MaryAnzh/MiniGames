@@ -1,0 +1,172 @@
+@use '../../../../styles/variable' as *;
+@use '../../../../styles/mixims/common.scss' as *;
+
+.library_cards {
+  width: 100%;
+  padding: 0 var(--size-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-2);
+
+  .library_game-card {
+    width: 100%;
+    background: var(--white);
+    border-radius: var(--corner-large);
+    outline: 2px solid var(--on-primary);
+    outline-offset: -2px;
+    box-shadow: var(--level-1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    &_img {
+      width: 100%;
+      height: var(--layout-card-img-height);
+      object-fit: cover;
+    }
+
+    &_body {
+      padding: var(--size-2);
+      display: flex;
+      flex-direction: column;
+      gap: var(--size-2);
+    }
+
+    &_header {
+      display: flex;
+      flex-direction: column;
+      gap: var(--size-1);
+
+      &_title {
+        font-size: var(--headline-small);
+        font-weight: var(--weight-bold);
+        color: var(--on-primary);
+      }
+
+      &_category {
+        width: fit-content;
+        padding: var(--size-05) var(--size-1);
+        background: var(--secondary);
+        border-radius: var(--corner-extra-large);
+        outline: 1px solid var(--on-primary);
+        outline-offset: -1px;
+        font-size: var(--label-medium);
+        font-weight: var(--weight-bold);
+        color: var(--on-primary);
+      }
+
+      &_price {
+        display: none;
+        font-size: var(--headline-medium);
+        font-weight: var(--weight-bold);
+        color: var(--price-free);
+      }
+
+      @media (min-width: $tablet) {
+        display: grid;
+        grid-template-columns: auto 1fr min-content;
+        align-items: center;
+
+        &_price {
+          display: block;
+        }
+      }
+    }
+
+    &_desc {
+      @include truncate-2;
+      font-size: var(--body-small);
+      font-weight: var(--weight-medium);
+      color: var(--on-bg);
+      line-height: 1.4;
+      max-height: 66px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &_footer {
+      width: 100%;
+      display: grid;
+      grid-template-columns: min-content auto 1fr;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--size-2);
+
+      &_rating,
+      &_likes {
+        display: flex;
+        align-items: center;
+        gap: var(--size-05);
+      }
+
+      .game-card_icon {
+        width: var(--icon-size-sm);
+        height: var(--icon-size-sm);
+      }
+
+      &_rating-value,
+      &_likes-value {
+        font-size: var(--body-small);
+        font-weight: var(--weight-bold);
+        color: var(--on-primary);
+      }
+
+      &_price {
+        justify-self: end;
+        color: var(--price-free, #0b8a8f);
+        font-size: var(--headline-small);
+        font-weight: var(--weight-extra-bold);
+      }
+
+      &_details {
+        grid-row: 2;
+        grid-column: 1/4;
+        padding: var(--btn-small-padding);
+      }
+
+      @media (min-width: $tablet) {
+        grid-template-columns: auto 1fr min-content;
+
+        &_price {
+          display: none;
+        }
+
+        &_details {
+          grid-column: 3;
+          grid-row: 1;
+        }
+      }
+    }
+  }
+
+  @media (min-width: $tablet) {
+    padding: var(--layout-section-tablet-padding);
+
+    .library_game-card {
+      flex-direction: row;
+      height: 200px;
+
+      &_img {
+        width: var(--layout-card-img-width);
+        height: 100%;
+      }
+
+      &_title {
+        font-size: var(--headline-large);
+      }
+
+      &_desc {
+        font-size: var(--body-medium);
+      }
+    }
+  }
+
+  @media (min-width: $laptop) {
+    padding: var(--layout-section-desktop-padding);
+
+    .library_game-card {
+      width: 828px;
+      height: 200px;
+    }
+  }
+}

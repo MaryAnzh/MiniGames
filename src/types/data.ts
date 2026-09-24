@@ -9,3 +9,15 @@ export type SortOptionType = {
   value: string;
   selected?: boolean;
 };
+
+export type GameCardData = {
+  slug: string;
+  name: string;
+  category: string;
+  price: string;
+  shortDescription: string;
+  rating: number;
+  likesCount: number;
+  cardImage: string;
+  featured: boolean;
+};
