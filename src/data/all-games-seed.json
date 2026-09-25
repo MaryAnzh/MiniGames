@@ -12,17 +12,6 @@
       "featured": true
     },
     {
-      "slug": "winter-burrow",
-      "name": "Winter Burrow",
-      "category": "farm",
-      "price": "Free",
-      "shortDescription": "A cozy woodland survival game about a mouse restoring their childhood burrow. Explore, gather resources, craft, knit warm sweaters, bake pies and meet the locals.",
-      "rating": 4.9,
-      "likesCount": 32400,
-      "cardImage": "img/library/winter-burrow-card.webp",
-      "featured": true
-    },
-    {
       "slug": "shelve-the-potions",
       "name": "Shelve the Potions!",
       "category": "puzzle",
@@ -31,6 +20,17 @@
       "rating": 4.7,
       "likesCount": 21300,
       "cardImage": "img/library/shelve-the-potions-card.webp",
+      "featured": true
+    },
+    {
+      "slug": "winter-burrow",
+      "name": "Winter Burrow",
+      "category": "farm",
+      "price": "Free",
+      "shortDescription": "A cozy woodland survival game about a mouse restoring their childhood burrow. Explore, gather resources, craft, knit warm sweaters, bake pies and meet the locals.",
+      "rating": 4.9,
+      "likesCount": 32400,
+      "cardImage": "img/library/winter-burrow-card.webp",
       "featured": true
     },
     {

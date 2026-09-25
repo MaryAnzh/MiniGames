@@ -17,7 +17,6 @@
 
   &[disabled] {
     pointer-events: none;
-    opacity: 0.6;
   }
 
   &[data-full='true'] {
@@ -49,8 +48,15 @@
   background: var(--white);
   color: var(--on-primary);
   outline-color: var(--black);
+
   &:hover {
     background: var(--surface);
+  }
+
+  &[disabled] {
+    background: var(--gray-100);
+    outline-color: var(--outline-variant);
+    opacity: 0.5;
   }
 }
 
@@ -95,7 +101,6 @@
 }
 
 /* SIZES */
-
 .app_button[data-size='sm'] {
   padding: var(--btn-small-padding);
   gap: var(--size-1);

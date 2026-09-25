@@ -10,7 +10,7 @@ export type SortOptionType = {
   selected?: boolean;
 };
 
-export type GameCardData = {
+export type GameCardDataType = {
   slug: string;
   name: string;
   category: string;

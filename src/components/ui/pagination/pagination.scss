@@ -1,0 +1,40 @@
+@use '../../../styles/variable' as *;
+
+.app-pagination {
+  width: 100%;
+  display: flex;
+  padding: var(--size-3) var(--size-1);
+  justify-content: center;
+  align-items: center;
+  gap: var(--size-1);
+
+  @media (min-width: $tablet) {
+    padding: var(--size-5);
+  }
+  .app-pagination_page--active[data-size='icon-md'] {
+    pointer-events: none;
+    outline-color: var(--black);
+    color: var(--white);
+    background: var(--bg-footer-low);
+    font-size: var(--body-small);
+  }
+
+  .app_button[data-size='icon-md'] {
+    width: var(--size-5);
+    height: var(--size-5);
+    font-size: var(--body-small);
+  }
+
+  .app_button[data-size='icon-md']:first-child,
+  .app_button[data-size='icon-md']:last-child {
+    color: var(--gray-800);
+  }
+
+  @media (min-width: $tablet) {
+    .app_button[data-size='icon-md'] {
+      width: var(--size-5);
+      height: var(--size-5);
+      font-size: var(--body-small);
+    }
+  }
+}

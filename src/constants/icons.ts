@@ -1,3 +1,5 @@
+import arrow_left from '/svg/arrow-left.svg?raw';
+import arrow_right from '/svg/arrow-right.svg?raw';
 import burger from '/svg/burger.svg?raw';
 import checked from '/svg/checked.svg?raw';
 import favorite from '/svg/favorite.svg?raw';
@@ -107,13 +109,15 @@ const Google = `<svg
           </svg>`;
 
 export const ICON_PICKER = {
+  arrow_left,
+  arrow_right,
   burger,
   DOWNLOAD,
   LOGO,
   RS,
   Google,
   ARROW_DOWN,
-  checked,
+  CHECKED: checked,
   star,
   favorite,
 } as const;

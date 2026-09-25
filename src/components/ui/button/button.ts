@@ -3,10 +3,12 @@ import { Component } from '../../component';
 import { ICON_PICKER } from '@constants';
 import { GoogleIcon } from '../google-icon/google-icon';
 
+type ColorType = 'primary' | 'light' | 'dark' | 'ghost' | 'chips';
+
 type ButtonProps = Pick<ComponentProps, 'parentNode'> & {
   className?: string;
   variant?: 'solid' | 'empty';
-  color?: 'primary' | 'light' | 'dark' | 'ghost' | 'chips';
+  color?: ColorType;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'icon-md' | 'icon-lg' | 'none';
   response?: 'sm' | 'md';
   corner?: 'sm' | 'md' | 'lg' | 'rounded' | 'circle';
@@ -110,5 +112,13 @@ export class Button extends Component {
     if (this.textNode) {
       this.textNode.setContent(text);
     }
+  }
+
+  public setColor(color: ColorType) {
+    this.setAttributes([{ attr: 'data-color', value: color }]);
+  }
+
+  public setDisabled(isDisabled: boolean) {
+    this.setAttributes([{ attr: 'disabled', value: isDisabled ? 'true' : null }]);
   }
 }

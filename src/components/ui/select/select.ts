@@ -90,7 +90,7 @@ export class Select extends Component {
         color: 'light',
         className: 'app-select_popup_item',
         text: label,
-        leftIcon: selected ? 'checked' : undefined,
+        leftIcon: selected ? 'CHECKED' : undefined,
       });
 
       row.setAttributes([

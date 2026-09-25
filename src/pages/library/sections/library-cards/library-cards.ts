@@ -1,22 +1,23 @@
 import { Component, Portal } from '@components';
-import appStore from '@state';
-import type { ComponentProps, GameCardData } from '@types';
+import type { ComponentProps, GameCardDataType } from '@types';
 import { Button } from '@ui';
+
+type LibraryCardsProps = Pick<ComponentProps, 'parentNode'> & {
+  list: GameCardDataType[];
+};
 
 export class LibraryCards extends Component {
   private portal: Portal;
-  private store: typeof appStore;
 
-  constructor({ parentNode }: Pick<ComponentProps, 'parentNode'>) {
+  constructor({ parentNode, list }: LibraryCardsProps) {
     super({
       parentNode,
       tagName: 'section',
       className: 'library_cards',
     });
-    this.store = appStore;
     this.portal = new Portal({ position: 'top' });
 
-    this.store.games.forEach((game) => {
+    list.forEach((game) => {
       this.renderCard(game);
     });
   }
@@ -29,7 +30,7 @@ export class LibraryCards extends Component {
     price,
     rating,
     shortDescription,
-  }: GameCardData) {
+  }: GameCardDataType) {
     const card = new Component({
       parentNode: this.node,
       tagName: 'article',
@@ -175,5 +176,12 @@ export class LibraryCards extends Component {
     });
 
     this.portal.mount(dialog.node);
+  }
+
+  public renderAllCards(list: GameCardDataType[]) {
+    this.node.innerHTML = '';
+    list.forEach((game) => {
+      this.renderCard(game);
+    });
   }
 }

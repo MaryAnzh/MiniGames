@@ -3,7 +3,7 @@ import type { KeysTemplateType } from './common';
 
 export type ComponentAttributesType = {
   attr: string;
-  value: string;
+  value: string | null;
 };
 
 export type ComponentProps = {
