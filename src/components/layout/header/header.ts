@@ -91,7 +91,7 @@ export class Header extends Component {
     this.burgerBtn = new Button({
       parentNode: this.node,
       color: 'light',
-      leftIcon: 'BURGER',
+      leftIcon: 'burger',
       size: 'icon-md',
       className: 'header_burger_btn',
     });

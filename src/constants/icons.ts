@@ -1,9 +1,7 @@
-const BURGER = `<svg xmlns="http://www.w3.org/2000/svg"
-	 viewBox="0 0 16 10" enable-background="new 0 0 16 10" xml:space="preserve">
-<line fill="none" stroke="#242145" stroke-width="2" x1="0" y1="1" x2="16" y2="1"/>
-<line fill="none" stroke="#242145" stroke-width="2" x1="0" y1="5" x2="16" y2="5"/>
-<line fill="none" stroke="#242145" stroke-width="2" x1="0" y1="9" x2="16" y2="9"/>
-</svg>`;
+import burger from '/svg/burger.svg?raw';
+import checked from '/svg/checked.svg?raw';
+import favorite from '/svg/favorite.svg?raw';
+import star from '/svg/star.svg?raw';
 
 const DOWNLOAD = `<svg
             width="16"
@@ -108,27 +106,14 @@ const Google = `<svg
             />
           </svg>`;
 
-const checked = `<svg
-            width="14"
-            height="14"
-            viewBox="0 0 14 14"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M11.6664 3.5L5.25036 9.9162L2.33398 6.99975"
-              stroke="var(--tertiary, #3A2EBF)"
-              stroke-width="3"
-              stroke-linecap="round"
-            />
-          </svg>`;
-
 export const ICON_PICKER = {
-  BURGER,
+  burger,
   DOWNLOAD,
   LOGO,
   RS,
   Google,
   ARROW_DOWN,
-  CHECKED: checked,
+  checked,
+  star,
+  favorite,
 } as const;

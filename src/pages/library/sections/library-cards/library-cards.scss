@@ -13,7 +13,7 @@
     gap: var(--size-3);
   }
 
-  @media (min-width: $tablet) {
+  @media (min-width: $pc) {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     padding: 0 var(--size-15);
@@ -34,6 +34,7 @@
       width: 100%;
       height: var(--layout-card-img-height);
       object-fit: cover;
+      overflow: hidden;
     }
 
     @media (min-width: $tablet) {
@@ -42,9 +43,10 @@
       gap: 0;
 
       &_img {
-        height: 100%;
+        height: var(--layout-card-img-height-tablet);
       }
     }
+
     @media (min-width: $tablet) {
       grid-template-columns: 38.9% auto;
     }
@@ -59,7 +61,7 @@
         gap: var(--size-1);
       }
 
-      @media (min-width: $laptop) {
+      @media (min-width: $pc) {
         gap: var(--size-2);
       }
     }
@@ -73,6 +75,8 @@
         font-size: var(--headline-small);
         font-weight: var(--weight-bold);
         color: var(--on-primary);
+        white-space: nowrap;
+        @include truncate(1);
       }
 
       &_category {
@@ -108,7 +112,7 @@
         }
       }
 
-      @media (min-width: $laptop) {
+      @media (min-width: $pc) {
         &_title {
           font-size: var(--headline-medium);
         }
@@ -133,7 +137,7 @@
         margin-bottom: var(--size-1);
       }
 
-      @media (min-width: $laptop) {
+      @media (min-width: $pc) {
         @include truncate(3);
         font-size: var(--body-medium);
         line-height: 22.8px;
@@ -193,7 +197,7 @@
           grid-row: 1;
         }
       }
-      @media (min-width: $laptop) {
+      @media (min-width: $pc) {
         gap: var(--size-3);
 
         &_details {
