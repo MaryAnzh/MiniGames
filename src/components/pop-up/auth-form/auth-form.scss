@@ -1,11 +1,11 @@
 .auth_popup {
-  width: 420px;
+  width: var(--layout-auth-dialog-width);
   max-width: 100%;
   height: fit-content;
   display: flex;
   padding: var(--size-4);
   background: var(--bg);
-  box-shadow: 8px 8px 0px var(--black);
+  box-shadow: var(--level-3);
   border-radius: var(--corner-extra-large);
   outline: 3px var(--on-primary) solid;
   outline-offset: -3px;

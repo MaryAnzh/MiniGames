@@ -57,6 +57,7 @@
   --layout-slider-gradient-height: 114px;
   --layout-table-height-lg: 72px;
   --layout-slide-info-height: 54px;
+  --layout-auth-dialog-width: 420px;
 
   --input-height-md: 48px;
 
@@ -66,10 +67,15 @@
   --layout-sort-height: var(--size-6);
   --layout-section-tablet-padding: var(--size-3) var(--size-5);
   --layout-section-desktop-padding: var(--size-5) var(--size-15);
+  --layout-footer-text-max-width: 400px;
 
   --ui-select-width: 200px;
   --ui-select-max-height: 200px;
   --ui-select-tablet-width: 182px;
   --ui-select-desktop-width: 190px;
   --ui-select-height: 44px;
+
+  --ui-max-card-text-height-sm: 66px;
+
+  --tag-padding: 4px 8px;
 }

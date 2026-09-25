@@ -4,8 +4,8 @@
   background: var(--white);
   display: flex;
   border-radius: var(--corner-medium);
-  outline: 2.5px var(--on-primary) solid;
-  outline-offset: -2.5px;
+  outline: var(--border-2-5) var(--on-primary) solid;
+  outline-offset: var(--border-2-5-neg);
   overflow: hidden;
   transition: 0.3s;
 

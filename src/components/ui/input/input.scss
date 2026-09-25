@@ -34,8 +34,8 @@
     padding: 0 var(--size-2);
     background: var(--white);
     border-radius: var(--corner-small);
-    outline: 2px var(--black) solid;
-    outline-offset: -2px;
+    outline: var(--border-2) var(--black) solid;
+    outline-offset: var(--border-2-neg);
     gap: var(--size-2);
     color: var(--on-primary);
     font-size: var(--body-small);

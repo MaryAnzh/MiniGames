@@ -11,7 +11,7 @@
   cursor: pointer;
   transition: all 0.3s;
   white-space: nowrap;
-  outline-offset: -2px;
+  outline-offset: var(--border-2-neg);
   border: none;
   background: transparent;
 
@@ -30,7 +30,7 @@
 }
 
 .app_button[data-variant='solid'] {
-  outline: 2px solid;
+  outline: var(--border-2) solid;
 }
 
 /* COLOR VARIANT */

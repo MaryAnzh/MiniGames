@@ -7,7 +7,7 @@
   height: var(--layout-burger-height);
   padding: var(--size-3);
   background: var(--bg-footer);
-  border-left: 2px solid var(--on-primary);
+  border-left: var(--border-2) solid var(--on-primary);
   display: grid;
   grid-template-rows: auto 1fr;
   gap: var(--size-4);
@@ -41,7 +41,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    outline: 2px solid;
+    outline: var(--border-2) solid;
     outline-color: var(--transparent);
     outline-offset: var(--border-2-neg);
     transition: 0.3s;

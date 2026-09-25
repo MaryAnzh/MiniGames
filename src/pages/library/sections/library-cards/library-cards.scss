@@ -8,12 +8,23 @@
   flex-direction: column;
   gap: var(--size-2);
 
+  @media (min-width: $tablet) {
+    padding: 0 var(--size-5);
+    gap: var(--size-3);
+  }
+
+  @media (min-width: $tablet) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 var(--size-15);
+  }
+
   .library_game-card {
     width: 100%;
     background: var(--white);
     border-radius: var(--corner-large);
-    outline: 2px solid var(--on-primary);
-    outline-offset: -2px;
+    outline: var(--border-2) solid var(--on-primary);
+    outline-offset: var(--border-2-neg);
     box-shadow: var(--level-1);
     overflow: hidden;
     display: flex;
@@ -25,11 +36,32 @@
       object-fit: cover;
     }
 
+    @media (min-width: $tablet) {
+      display: grid;
+      grid-template-columns: 39.3% auto;
+      gap: 0;
+
+      &_img {
+        height: 100%;
+      }
+    }
+    @media (min-width: $tablet) {
+      grid-template-columns: 38.9% auto;
+    }
+
     &_body {
       padding: var(--size-2);
       display: flex;
       flex-direction: column;
       gap: var(--size-2);
+
+      @media (min-width: $tablet) {
+        gap: var(--size-1);
+      }
+
+      @media (min-width: $laptop) {
+        gap: var(--size-2);
+      }
     }
 
     &_header {
@@ -45,11 +77,11 @@
 
       &_category {
         width: fit-content;
-        padding: var(--size-05) var(--size-1);
+        padding: var(--tag-padding);
         background: var(--secondary);
         border-radius: var(--corner-extra-large);
-        outline: 1px solid var(--on-primary);
-        outline-offset: -1px;
+        outline: var(--border-1) solid var(--on-primary);
+        outline-offset: var(--border-1-neg);
         font-size: var(--label-medium);
         font-weight: var(--weight-bold);
         color: var(--on-primary);
@@ -66,9 +98,23 @@
         display: grid;
         grid-template-columns: auto 1fr min-content;
         align-items: center;
+        gap: var(--size-2);
 
         &_price {
           display: block;
+          color: var(--price-free);
+          font-size: var(--headline-small);
+          font-weight: var(--weight-bold);
+        }
+      }
+
+      @media (min-width: $laptop) {
+        &_title {
+          font-size: var(--headline-medium);
+        }
+
+        &_price {
+          font-size: var(--headline-medium);
         }
       }
     }
@@ -79,12 +125,19 @@
       font-weight: var(--weight-medium);
       color: var(--on-bg);
       line-height: 1.4;
-      max-height: 66px;
+      max-height: var(--ui-max-card-text-height-sm);
       overflow: hidden;
       text-overflow: ellipsis;
 
       @media (min-width: $tablet) {
+        margin-bottom: var(--size-1);
+      }
+
+      @media (min-width: $laptop) {
         @include truncate(3);
+        font-size: var(--body-medium);
+        line-height: 22.8px;
+        margin-bottom: var(--size-05);
       }
     }
 
@@ -140,37 +193,14 @@
           grid-row: 1;
         }
       }
-    }
-  }
+      @media (min-width: $laptop) {
+        gap: var(--size-3);
 
-  @media (min-width: $tablet) {
-    padding: var(--layout-section-tablet-padding);
-
-    .library_game-card {
-      flex-direction: row;
-      height: 200px;
-
-      &_img {
-        width: var(--layout-card-img-width);
-        height: 100%;
+        &_details {
+          padding: var(--btn-medium-padding);
+          font-size: var(--body-small);
+        }
       }
-
-      &_title {
-        font-size: var(--headline-large);
-      }
-
-      &_desc {
-        font-size: var(--body-medium);
-      }
-    }
-  }
-
-  @media (min-width: $laptop) {
-    padding: var(--layout-section-desktop-padding);
-
-    .library_game-card {
-      width: 828px;
-      height: 200px;
     }
   }
 }
