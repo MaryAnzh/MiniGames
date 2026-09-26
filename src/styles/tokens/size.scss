@@ -76,8 +76,10 @@
   --ui-select-desktop-width: 190px;
   --ui-select-height: 44px;
 
+  --ui-card-height-mobile: 392px;
+  --ui-card-img-h-mobile: 286px;
   --ui-max-card-text-height-sm: 66px;
   --ui-min-card-height-sm: 215px;
 
-  --tag-padding: 4px 8px;
+  --tag-padding: var(--size-025) var(--size-1);
 }

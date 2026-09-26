@@ -161,6 +161,7 @@ export class LibraryCards extends Component {
       ariaLabel: `Details for ${name}`,
       fullWidth: true,
     });
+    detailsBtn.setAttributes([{ attr: 'role', value: 'card-dialog' }]);
 
     detailsBtn.node.addEventListener('click', () => {
       this.openDetails(name, shortDescription);
