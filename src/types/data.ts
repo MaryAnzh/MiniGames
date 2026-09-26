@@ -20,6 +20,8 @@ export type GameCardDataType = {
   likesCount: number;
   cardImage: string;
   featured: boolean;
+  players: string;
+  duration: string;
 };
 
 export type GameRecord = {
