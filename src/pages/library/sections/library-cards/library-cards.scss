@@ -208,7 +208,7 @@
 
       @media (min-width: $tablet) {
         align-self: flex-end;
-        grid-template-columns: 1fr auto min-content;
+        grid-template-columns: auto 1fr min-content;
 
         &_price {
           display: none;
