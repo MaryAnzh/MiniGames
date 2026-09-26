@@ -1,6 +1,6 @@
-import { Component } from '@components';
-import { GoogleIcon, Button } from '@ui';
 import { ICON_PICKER } from '@constants';
+import { Component } from '@components';
+import { Button } from '@ui';
 import type { AuthFormType, ComponentProps } from '@types';
 
 type BurgerMenuProps = Pick<ComponentProps, 'parentNode'> & {
@@ -56,7 +56,6 @@ export class BurgerMenu extends Component {
       tagName: 'button',
       className: 'burger_close_btn',
     });
-    new GoogleIcon({ parentNode: this.closeBtn.node, iconName: 'close' });
     this.closeBtn.node.addEventListener('click', this.onClose);
 
     const LINKS = ['Home', 'Library', 'Tournaments', 'Community'];
@@ -67,11 +66,17 @@ export class BurgerMenu extends Component {
       className: 'burger_links',
     });
 
+    const linksListWrap = new Component({
+      parentNode: linksWrap.node,
+      tagName: 'ul',
+      className: 'burger_links_list',
+    });
+
     LINKS.forEach((item, index) => {
       new Component({
-        parentNode: linksWrap.node,
+        parentNode: linksListWrap.node,
         tagName: 'button',
-        className: ['burger_link', index === 0 ? 'is-active' : ''].filter(Boolean),
+        className: ['burger_links_list_link', index === 0 ? 'is-active' : ''].filter(Boolean),
         content: item,
       });
     });
@@ -83,34 +88,23 @@ export class BurgerMenu extends Component {
       className: 'burger_bottom',
     });
 
-    if (isAuth) {
-      new Button({
-        parentNode: bottom.node,
-        text: 'Log Out',
-        size: 'pop-up',
-        colorVariant: 'ghost-light',
-        className: 'burger_logout_btn',
-        width: 'full',
-      });
-    } else {
-      new Button({
-        parentNode: bottom.node,
-        text: 'Log In',
-        size: 'pop-up',
-        colorVariant: 'ghost-light',
-        className: 'burger_login_btn',
-        width: 'full',
-      }).node.addEventListener('click', () => this.onOpenAuth('Login'));
+    new Button({
+      parentNode: bottom.node,
+      text: isAuth ? 'Log Out' : 'Log In',
+      size: 'md',
+      color: 'ghost',
+      className: isAuth ? 'burger_logout_btn' : 'burger_login_btn',
+      fullWidth: true,
+    }).node.addEventListener('click', () => this.onOpenAuth('Login'));
 
-      new Button({
-        parentNode: bottom.node,
-        text: 'Sign Up',
-        size: 'pop-up',
-        colorVariant: 'primary',
-        className: 'burger_signup_btn',
-        width: 'full',
-      }).node.addEventListener('click', () => this.onOpenAuth('Register'));
-    }
+    new Button({
+      parentNode: bottom.node,
+      text: 'Sign Up',
+      size: 'md',
+      color: 'primary',
+      className: 'burger_signup_btn',
+      fullWidth: true,
+    }).node.addEventListener('click', () => this.onOpenAuth('Register'));
   }
 
   destroy(): void {

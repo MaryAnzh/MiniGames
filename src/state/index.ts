@@ -1,9 +1,17 @@
 import { CUSTOM_EVENTS as e } from '@constants';
 import { appEvents } from '@utils';
+import type { CategoriesType, GameCardDataType, SortOptionType } from '@types';
+
+import categories from '../data/categories.json';
+import sortData from '../data/sort.json';
+import games from '../data/all-games-seed.json';
 
 class AppStore {
   private _isAuth = false;
   private _currentRoute = '/';
+  categories: CategoriesType[] = categories.data;
+  sort: SortOptionType[] = sortData;
+  games: GameCardDataType[] = games.data;
 
   get isAuth() {
     return this._isAuth;

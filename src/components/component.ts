@@ -31,7 +31,9 @@ export class Component {
     // Attributes
     if (attrs) {
       attrs.forEach(({ attr, value }) => {
-        element.setAttribute(attr, value);
+        if (value) {
+          element.setAttribute(attr, value);
+        }
       });
     }
 
@@ -45,7 +47,11 @@ export class Component {
 
   setAttributes(attrs: ComponentAttributesType[]) {
     attrs.forEach(({ attr, value }) => {
-      this.node.setAttribute(attr, value);
+      if (value === null || value === undefined) {
+        this.node.removeAttribute(attr);
+      } else {
+        this.node.setAttribute(attr, value);
+      }
     });
   }
 

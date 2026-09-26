@@ -38,8 +38,8 @@ export class HeroSection extends Component {
 
     new Button({
       parentNode: textWrap.node,
-      colorVariant: 'primary',
-      size: 'sm',
+      color: 'primary',
+      response: 'sm',
       text: 'Browse Library',
     });
   }

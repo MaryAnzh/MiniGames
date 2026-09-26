@@ -7,7 +7,7 @@
   height: var(--layout-burger-height);
   padding: var(--size-3);
   background: var(--bg-footer);
-  border-left: 2px solid var(--on-primary);
+  border-left: var(--border-2) solid var(--on-primary);
   display: grid;
   grid-template-rows: auto 1fr;
   gap: var(--size-4);
@@ -41,9 +41,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    outline: 2px solid;
+    outline: var(--border-2) solid;
     outline-color: var(--transparent);
-    outline-offset: -2px;
+    outline-offset: var(--border-2-neg);
     transition: 0.3s;
 
     .google-icons {
@@ -62,26 +62,31 @@
   }
 
   &_links {
-    display: flex;
-    flex-direction: column;
-    gap: var(--size-3);
-  }
+    height: 100%;
 
-  &_link {
-    background: none;
-    border: none;
+    &_list {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: var(--size-3);
 
-    @include nav-item;
+      &_link {
+        background: none;
+        border: none;
 
-    text-align: left;
-    font-size: var(--body-large);
-    font-weight: var(--weight-medium);
-    color: var(--on-bg-footer);
+        @include nav-item;
 
-    &:nth-of-type(1) {
-      color: var(--primary);
-      font-weight: var(--weight-bold);
-      pointer-events: none;
+        text-align: left;
+        font-size: var(--body-large);
+        font-weight: var(--weight-medium);
+        color: var(--on-bg-footer);
+
+        &:nth-of-type(1) {
+          color: var(--primary);
+          font-weight: var(--weight-bold);
+          pointer-events: none;
+        }
+      }
     }
   }
 

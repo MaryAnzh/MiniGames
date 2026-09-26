@@ -29,15 +29,17 @@ export class SliderSection extends Component {
     });
     new Button({
       parentNode: titleWrap.node,
-      variant: 'round',
-      colorVariant: 'light',
+      size: 'icon-lg',
+      corner: 'circle',
+      color: 'light',
       googleIcon: 'arrow_back',
       ariaLabel: 'back slider',
     });
     new Button({
       parentNode: titleWrap.node,
-      variant: 'round',
-      colorVariant: 'primary',
+      size: 'icon-lg',
+      corner: 'circle',
+      color: 'primary',
       googleIcon: 'arrow_forward',
       ariaLabel: 'forward slider',
     });
