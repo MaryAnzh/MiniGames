@@ -1,0 +1,38 @@
+[
+  {
+    "position": 1,
+    "playerName": "ForestSpirit",
+    "score": 356700,
+    "achievedAt": "2026-08-28T14:30:00Z"
+  },
+  {
+    "position": 2,
+    "playerName": "TeaBrewer",
+    "score": 332400,
+    "achievedAt": "2026-08-25T09:12:00Z"
+  },
+  {
+    "position": 3,
+    "playerName": "HerbalistPath",
+    "score": 308900,
+    "achievedAt": "2026-08-23T18:45:00Z"
+  },
+  {
+    "position": 4,
+    "playerName": "MossCollector",
+    "score": 301500,
+    "achievedAt": "2026-08-22T11:20:00Z"
+  },
+  {
+    "position": 5,
+    "playerName": "PineconeWizard",
+    "score": 297300,
+    "achievedAt": "2026-08-20T16:05:00Z"
+  },
+  {
+    "position": 6,
+    "playerName": "TeaLeafNomad",
+    "score": 289900,
+    "achievedAt": "2026-08-18T08:40:00Z"
+  }
+]

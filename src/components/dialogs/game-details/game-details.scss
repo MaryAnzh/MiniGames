@@ -1,5 +1,7 @@
 @use '../../../styles/variable' as *;
 @use './sections/hero-section/hero-section.scss' as *;
+@use './sections/info-section/info-section.scss' as *;
+@use './sections/meta-section/meta-section.scss' as *;
 
 .app-game-details-dialog {
   width: 100%;
@@ -17,5 +19,14 @@
 
   @media (min-width: $tablet) {
     width: var(--dialog-laptop-width);
+  }
+
+  &_body-wrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: var(--size-3);
+    gap: var(--size-3);
   }
 }

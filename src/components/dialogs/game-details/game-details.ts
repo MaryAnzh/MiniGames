@@ -1,6 +1,6 @@
 import { Component } from '@components';
 import type { GameCardDataType } from '@types';
-import { HeroSection } from './sections';
+import { HeroSection, InfoSection, MetaSection } from './sections';
 
 type GameDetailsProps = {
   parentNode: HTMLElement | null;
@@ -22,7 +22,18 @@ export class GameDetailsDialog extends Component {
     this.render(game);
   }
 
-  private render({ name, cardImage }: GameCardDataType) {
+  private render(game: GameCardDataType) {
+    const { name, cardImage, category, shortDescription } = game;
+
     new HeroSection({ parentNode: this.node, name, cardImage, onClose: this.handleClose });
+    const bodyWrap = new Component({
+      parentNode: this.node,
+      tagName: 'div',
+      className: 'app-game-details-dialog_body-wrap',
+    });
+    new InfoSection({
+      parentNode: bodyWrap.node,
+      game,
+    });
   }
 }

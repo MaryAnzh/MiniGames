@@ -1,0 +1,15 @@
+.game-detail_meta {
+  display: flex;
+  gap: var(--size-2);
+
+  &_rating,
+  &_likes {
+    display: flex;
+    align-items: center;
+    gap: var(--size-05);
+    span {
+      font-size: var(--body-small);
+      font-weight: var(--weight-bold);
+    }
+  }
+}

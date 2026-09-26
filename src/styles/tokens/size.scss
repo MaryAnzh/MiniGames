@@ -86,4 +86,11 @@
   --dialog-min-width: 320px;
   --dialog-laptop-width: 600px;
   --dialog-img-h: 220px;
+  --dialog-section-gap: var(--size-3);
+  --dialog-title-size: var(--font-size-4);
+  --dialog-category-bg: var(--secondary);
+  --dialog-category-outline: var(--border-1) solid var(--outline-variant);
+  --dialog-text: var(--on-bg);
+  --dialog-heading: var(--on-primary);
+  --dialog-btn-height: var(--size-5);
 }

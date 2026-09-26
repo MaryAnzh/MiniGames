@@ -1,3 +1,5 @@
+@use '../../../../../styles/variable' as *;
+
 .game-detail_hero {
   position: relative;
   width: 100%;
@@ -16,5 +18,12 @@
     width: var(--size-4);
     height: var(--size-4);
     box-shadow: var(--level-05);
+  }
+
+  @media (min-width: $tablet) {
+    &_close-btn {
+      width: var(--size-5);
+      height: var(--size-5);
+    }
   }
 }
