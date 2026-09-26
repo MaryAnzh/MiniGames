@@ -61,6 +61,22 @@
     }
   }
 
+  &_actions-wrap {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--size-2);
+
+    &_like {
+      width: var(--size-6);
+      height: var(--size-6);
+    }
+
+    &_like-desktop {
+      display: none;
+    }
+  }
+
   @media (min-width: $tablet) {
     &_title-wrap {
       flex-direction: row;
@@ -76,6 +92,16 @@
       width: 100%;
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    &_actions-wrap {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      &_like {
+        display: none;
+      }
+      &_like-desktop {
+        display: flex;
+      }
     }
   }
 }

@@ -7,6 +7,7 @@
   width: 100%;
   min-width: var(--dialog-min-width);
   max-width: var(--dialog-laptop-width);
+  height: 100%;
   background: var(--white);
   border-radius: var(--corner-extra-large);
   outline: var(--border-1) var(--outline-variant, #d2d2d2) solid;
@@ -16,6 +17,7 @@
   display: flex;
   flex-direction: column;
   align-self: center;
+  overflow: auto;
 
   @media (min-width: $tablet) {
     width: var(--dialog-laptop-width);

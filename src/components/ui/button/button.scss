@@ -146,6 +146,7 @@
   padding: var(--btn-large-padding);
   font-size: var(--body-medium);
   border-radius: var(--corner-medium);
+  height: var(--size-6);
 }
 
 /* round icon size */
@@ -187,6 +188,10 @@
 /* CORNERS */
 .app_button[data-shape='sm'] {
   border-radius: var(--corner-small);
+}
+
+.app_button[data-shape='sm-x'] {
+  border-radius: var(--corner-medium);
 }
 
 .app_button[data-shape='md'] {
