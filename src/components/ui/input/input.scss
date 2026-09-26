@@ -15,6 +15,16 @@
     width: 100%;
     height: var(--input-height-md);
     overflow: hidden;
+
+    &:focus-within {
+      background: var(--surface-low);
+      outline-color: var(--on-primary);
+
+      .app_input_icon,
+      .app_input_right-icon {
+        color: var(--on-primary);
+      }
+    }
   }
 
   &_field {
@@ -24,11 +34,15 @@
     padding: 0 var(--size-2);
     background: var(--white);
     border-radius: var(--corner-small);
-    outline: 2px var(--on-primary) solid;
-    outline-offset: -2px;
+    outline: var(--border-2) var(--black) solid;
+    outline-offset: var(--border-2-neg);
     gap: var(--size-2);
     color: var(--on-primary);
     font-size: var(--body-small);
+    &:focus {
+      background: var(--surface-low);
+      outline-color: var(--on-primary);
+    }
 
     &::placeholder {
       color: var(--on-bg);
@@ -56,10 +70,10 @@
   }
 
   &_icon {
-    left: 16px;
+    left: var(--size-2);
   }
 
   &_right-icon {
-    right: 16px;
+    right: var(--size-2);
   }
 }

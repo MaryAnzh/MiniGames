@@ -1,9 +1,9 @@
-const BURGER = `<svg xmlns="http://www.w3.org/2000/svg"
-	 viewBox="0 0 16 10" enable-background="new 0 0 16 10" xml:space="preserve">
-<line fill="none" stroke="#242145" stroke-width="2" x1="0" y1="1" x2="16" y2="1"/>
-<line fill="none" stroke="#242145" stroke-width="2" x1="0" y1="5" x2="16" y2="5"/>
-<line fill="none" stroke="#242145" stroke-width="2" x1="0" y1="9" x2="16" y2="9"/>
-</svg>`;
+import arrow_left from '/svg/arrow-left.svg?raw';
+import arrow_right from '/svg/arrow-right.svg?raw';
+import burger from '/svg/burger.svg?raw';
+import checked from '/svg/checked.svg?raw';
+import favorite from '/svg/favorite.svg?raw';
+import star from '/svg/star.svg?raw';
 
 const DOWNLOAD = `<svg
             width="16"
@@ -45,6 +45,19 @@ const LOGO = `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"
     />
   </defs>
 </svg>`;
+
+const ARROW_DOWN = `<svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 15L7 10H17L12 15Z"
+                fill="var(--Color-schemes-Surface-colors-On-surface-variant, #444746)"
+              />
+            </svg>`;
 
 const RS = `<svg width="24" height="24" viewBox="0 0 24 24"
   xmlns="http://www.w3.org/2000/svg">
@@ -96,9 +109,15 @@ const Google = `<svg
           </svg>`;
 
 export const ICON_PICKER = {
-  BURGER,
+  arrow_left,
+  arrow_right,
+  burger,
   DOWNLOAD,
   LOGO,
   RS,
   Google,
+  ARROW_DOWN,
+  CHECKED: checked,
+  star,
+  favorite,
 } as const;

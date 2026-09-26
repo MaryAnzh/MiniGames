@@ -1,11 +1,11 @@
 .auth_popup {
-  width: 420px;
+  width: var(--layout-auth-dialog-width);
   max-width: 100%;
   height: fit-content;
   display: flex;
   padding: var(--size-4);
   background: var(--bg);
-  box-shadow: 8px 8px 0px var(--black);
+  box-shadow: var(--level-3);
   border-radius: var(--corner-extra-large);
   outline: 3px var(--on-primary) solid;
   outline-offset: -3px;
@@ -65,10 +65,6 @@
   gap: var(--size-2);
 }
 
-.auth_main_btn {
-  box-shadow: 0px 4px 0px var(--on-primary);
-}
-
 .auth_divider {
   width: 100%;
   color: var(--on-bg);
@@ -81,8 +77,8 @@
   height: var(--icon-size-x-lg);
   padding: var(--size-2) var(--size-3);
   border-radius: var(--corner-medium);
-  outline: 2px var(--on-primary) solid;
-  outline-offset: -2px;
+  outline: var(--border-2) var(--on-primary) solid;
+  outline-offset: var(--border-2-neg);
   gap: var(--size-2);
   font-size: var(--body-medium);
 }
@@ -109,7 +105,7 @@
     text-decoration: underline;
     cursor: pointer;
     &:hover {
-      color: var(--bg-footer-low);
+      color: var(--tertiary);
     }
     &:active {
       transform: scale(0.9);
