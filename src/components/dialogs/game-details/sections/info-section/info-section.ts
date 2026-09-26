@@ -1,7 +1,6 @@
 import { Component } from '@components';
 import type { ComponentProps, GameCardDataType } from '@types';
 import { MetaSection } from '../meta-section/meta-section';
-import type { GameDetailsDialog } from '../../game-details';
 
 type InfoSectionProps = Pick<ComponentProps, 'parentNode'> & { game: GameCardDataType };
 
@@ -17,7 +16,7 @@ export class InfoSection extends Component {
   }
 
   private render(game: GameCardDataType) {
-    const { name, category, shortDescription } = game;
+    const { name, shortDescription } = game;
 
     const titleWWap = new Component({
       parentNode: this.node,

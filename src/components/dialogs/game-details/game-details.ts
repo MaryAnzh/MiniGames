@@ -1,6 +1,6 @@
 import { Component } from '@components';
 import type { GameCardDataType } from '@types';
-import { HeroSection, InfoSection, MetaSection } from './sections';
+import { HeroSection, InfoSection } from './sections';
 
 type GameDetailsProps = {
   parentNode: HTMLElement | null;
@@ -23,7 +23,7 @@ export class GameDetailsDialog extends Component {
   }
 
   private render(game: GameCardDataType) {
-    const { name, cardImage, category, shortDescription } = game;
+    const { name, cardImage } = game;
 
     new HeroSection({ parentNode: this.node, name, cardImage, onClose: this.handleClose });
     const bodyWrap = new Component({

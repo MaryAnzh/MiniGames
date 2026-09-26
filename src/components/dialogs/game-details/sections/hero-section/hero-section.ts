@@ -11,7 +11,7 @@ type HeroSectionProps = Pick<ComponentProps, 'parentNode'> &
 export class HeroSection extends Component {
   handleClose: () => void;
 
-  constructor({ parentNode, name, cardImage, onClose }: HeroSectionProps) {
+  constructor({ parentNode, cardImage, onClose }: HeroSectionProps) {
     super({
       parentNode,
       tagName: 'div',
@@ -19,10 +19,10 @@ export class HeroSection extends Component {
     });
     this.handleClose = onClose;
 
-    this.render(name, cardImage);
+    this.render(cardImage);
   }
 
-  private render(name: string, url: string) {
+  private render(url: string) {
     new Component({
       parentNode: this.node,
       tagName: 'img',
