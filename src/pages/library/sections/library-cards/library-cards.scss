@@ -52,6 +52,7 @@
     }
 
     @media (min-width: $tablet) {
+      height: max-content;
       grid-template-columns: 38.9% auto;
     }
 
