@@ -1,6 +1,7 @@
 import { Component } from '@components';
 import type { GameCardDataType } from '@types';
-import { HeroSection, InfoSection } from './sections';
+import { HeroSection, InfoSection, RecordsSection } from './sections';
+import appStore from '@state';
 
 type GameDetailsProps = {
   parentNode: HTMLElement | null;
@@ -9,6 +10,7 @@ type GameDetailsProps = {
 };
 
 export class GameDetailsDialog extends Component {
+  store: typeof appStore;
   handleClose: () => void;
 
   constructor({ parentNode, game, onClose }: GameDetailsProps) {
@@ -17,6 +19,7 @@ export class GameDetailsDialog extends Component {
       tagName: 'div',
       className: 'app-game-details-dialog',
     });
+    this.store = appStore;
     this.handleClose = onClose;
 
     this.render(game);
@@ -34,6 +37,10 @@ export class GameDetailsDialog extends Component {
     new InfoSection({
       parentNode: bodyWrap.node,
       game,
+    });
+    new RecordsSection({
+      parentNode: bodyWrap.node,
+      records: this.store.records,
     });
   }
 }

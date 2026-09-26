@@ -4,6 +4,7 @@ import burger from '/svg/burger.svg?raw';
 import close from '/svg/close.svg?raw';
 import checked from '/svg/checked.svg?raw';
 import favorite from '/svg/favorite.svg?raw';
+import gold from '/svg/favorite.svg?row';
 import star from '/svg/star.svg?raw';
 
 const DOWNLOAD = `<svg
@@ -122,4 +123,5 @@ export const ICON_PICKER = {
   CHECKED: checked,
   star,
   favorite,
+  gold,
 } as const;

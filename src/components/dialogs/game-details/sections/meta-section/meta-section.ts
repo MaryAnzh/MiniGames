@@ -1,5 +1,5 @@
 import { Component } from '@components';
-import { Button } from '@ui';
+import { Button, LikeButton } from '@ui';
 import type { ComponentProps, GameCardDataType } from '@types';
 
 type MetaSectionProps = Pick<ComponentProps, 'parentNode'> & {
@@ -45,11 +45,9 @@ export class MetaSection extends Component {
       className: 'game-detail_meta_likes',
     });
 
-    new Button({
+    new LikeButton({
       parentNode: likesWrap.node,
-      leftIcon: 'favorite',
       variant: 'empty',
-      ariaLabel: 'Click if your like game',
     });
 
     new Component({
