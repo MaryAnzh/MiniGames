@@ -1,0 +1,21 @@
+@use '../../../styles/variable' as *;
+@use './sections/hero-section/hero-section.scss' as *;
+
+.app-game-details-dialog {
+  width: 100%;
+  min-width: var(--dialog-min-width);
+  max-width: var(--dialog-laptop-width);
+  background: var(--white);
+  border-radius: var(--corner-extra-large);
+  outline: var(--border-1) var(--outline-variant, #d2d2d2) solid;
+  outline-offset: var(--border-1-neg);
+  box-shadow: var(--level-3);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+
+  @media (min-width: $tablet) {
+    width: var(--dialog-laptop-width);
+  }
+}

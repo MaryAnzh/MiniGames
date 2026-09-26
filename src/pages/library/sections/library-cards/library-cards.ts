@@ -1,6 +1,7 @@
 import { Component, Portal } from '@components';
 import type { ComponentProps, GameCardDataType } from '@types';
 import { Button } from '@ui';
+import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
 
 type LibraryCardsProps = Pick<ComponentProps, 'parentNode'> & {
   list: GameCardDataType[];
@@ -17,20 +18,13 @@ export class LibraryCards extends Component {
     });
     this.portal = new Portal({ position: 'top' });
 
-    list.forEach((game) => {
-      this.renderCard(game);
+    list.forEach((game, i) => {
+      this.renderCard(game, i);
     });
   }
 
-  private renderCard({
-    cardImage,
-    name,
-    category,
-    likesCount,
-    price,
-    rating,
-    shortDescription,
-  }: GameCardDataType) {
+  private renderCard(game: GameCardDataType, i?: number) {
+    const { cardImage, name, category, likesCount, price, rating, shortDescription } = game;
     const card = new Component({
       parentNode: this.node,
       tagName: 'article',
@@ -161,19 +155,19 @@ export class LibraryCards extends Component {
       ariaLabel: `Details for ${name}`,
       fullWidth: true,
     });
-    detailsBtn.setAttributes([{ attr: 'role', value: 'card-dialog' }]);
+    detailsBtn.node.onclick = () => this.openDetails(game);
 
-    detailsBtn.node.addEventListener('click', () => {
-      this.openDetails(name, shortDescription);
-    });
+    detailsBtn.setAttributes([{ attr: 'role', value: 'card-dialog' }]);
+    if (i === 0) {
+      this.openDetails(game);
+    }
   }
 
-  private openDetails(name: string, shortDescription: string) {
-    const dialog = new Component({
+  private openDetails(game: GameCardDataType) {
+    const dialog = new GameDetailsDialog({
       parentNode: null,
-      tagName: 'div',
-      className: 'app_game-details',
-      content: `<h2>${name}</h2><p>${shortDescription}</p>`,
+      game,
+      onClose: () => this.portal.unmount(),
     });
 
     this.portal.mount(dialog.node);

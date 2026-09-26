@@ -205,11 +205,6 @@
   border-radius: var(--corner-full);
 }
 
-/* SHADOW */
-.app_button[data-shadow='none'] {
-  box-shadow: none;
-}
-
 .app_button[data-shadow='soft'] {
   box-shadow: var(--button-shadow);
 }
