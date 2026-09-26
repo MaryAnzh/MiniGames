@@ -15,7 +15,7 @@
 
   @media (min-width: $pc) {
     display: grid;
-    grid-template-columns: repeat(2, 50%);
+    grid-template-columns: repeat(2, calc(100% / 2 - var(--size-2-1) / 2));
     gap: var(--size-3-1) var(--size-2-1);
     width: 100%;
     overflow: hidden;
