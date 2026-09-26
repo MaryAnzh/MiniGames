@@ -1,8 +1,32 @@
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🔍 Checking branch name..."
+
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+PATTERN='^(feature|bugfix|hotfix|refactor|docs)/story-[0-9]+_(0[1-9]|[1-9][0-9])_[a-z0-9][a-z0-9\-]*$'
+
+echo "Current branch: $BRANCH"
+
+if [[ ! "$BRANCH" =~ $PATTERN ]]; then
+  echo
+  echo "❌ Invalid branch name!"
+  echo "   '$BRANCH' does not match required pattern:"
+  echo "   feature/story-<storyId>_<taskId>_<slug>"
+  echo
+  echo "Examples:"
+  echo "   feature/story-2_02_library_page"
+  echo "   bugfix/story-10_01_fix-pagination"
+  echo
+  exit 1
+fi
+
+echo "✅ Branch name is valid!"
+echo
 
 echo "🔍 Running TSC..."
 npm run tsc
 tsc_status=$?
-
 
 echo
 echo "🔍 Running ESLint..."
