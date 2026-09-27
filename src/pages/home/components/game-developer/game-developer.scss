@@ -45,8 +45,8 @@
     background: var(--white);
     box-shadow: var(--card-shadow);
     border-radius: var(--corner-extra-large);
-    outline: 2px var(--on-primary) solid;
-    outline-offset: -2px;
+    outline: var(--border-2) var(--on-primary) solid;
+    outline-offset: var(--border-2-neg);
     flex-direction: column;
     gap: var(--size-2);
 
@@ -55,8 +55,8 @@
       position: relative;
       background: var(--white);
       border-radius: var(--corner-extra-large);
-      outline: 2px var(--on-primary) solid;
-      outline-offset: -2px;
+      outline: var(--border-2) var(--on-primary) solid;
+      outline-offset: var(--border-2-neg);
       flex-direction: column;
       justify-content: flex-start;
       align-items: flex-start;
@@ -67,8 +67,8 @@
     @media (min-width: $laptop) {
       padding: var(--size-5);
       border-radius: var(--corner-extra-large);
-      outline: 2px var(--on-primary) solid;
-      outline-offset: -2px;
+      outline: var(--border-2) var(--on-primary) solid;
+      outline-offset: var(--border-2-neg);
       gap: var(--size-3);
     }
 

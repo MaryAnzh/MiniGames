@@ -8,8 +8,8 @@ export const APP_PAGES = [
 export const FOOTER_NAV = [
   { name: 'Home', path: '/' },
   { name: 'Library', path: '/library' },
-  { name: 'Community', path: '/community' },
-  { name: 'Tournaments', path: '/tournaments' },
+  { name: 'Community', path: '/' },
+  { name: 'Tournaments', path: '/' },
 ];
 
 export const APP_ROUTES = {
@@ -32,4 +32,8 @@ export const constAPP_LINKS_TITLES = {
   COMMUNITY: 'Community',
 } as const;
 export const { COMMUNITY, COMPANY, EXPLORE } = constAPP_LINKS_TITLES;
-export const COMMUNITY_ICONS = ['share', 'chat', 'rss_feed'] as const;
+export const COMMUNITY_ICONS = [
+  { googleIcon: 'share', path: '/', ariaLabel: 'Share content' },
+  { googleIcon: 'chat', path: '/', ariaLabel: 'Open chat' },
+  { googleIcon: 'rss_feed', path: '/', ariaLabel: 'Open news feed' },
+] as const;

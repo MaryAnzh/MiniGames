@@ -1,12 +1,12 @@
 import { Component } from '@components';
-import type { ComponentProps } from '@types';
+import type { ComponentProps, GameCardDataType } from '@types';
 import { Button } from '@ui';
 import { Slider } from 'src/components/features/slider/slider';
 
-type SliderSectionProps = Pick<ComponentProps, 'parentNode'>;
+type SliderSectionProps = Pick<ComponentProps, 'parentNode'> & { slides: GameCardDataType[] };
 
 export class SliderSection extends Component {
-  constructor({ parentNode }: SliderSectionProps) {
+  constructor({ parentNode, slides }: SliderSectionProps) {
     super({ parentNode, tagName: 'section', className: 'home-page_slider' });
 
     const titleWrap = new Component({
@@ -27,23 +27,32 @@ export class SliderSection extends Component {
       className: 'slider_title-wrap_title',
       content: 'New Games',
     });
-    new Button({
+    const prevBtn = new Button({
       parentNode: titleWrap.node,
-      variant: 'round',
-      colorVariant: 'light',
+      size: 'icon-lg',
+      corner: 'circle',
+      color: 'light',
       googleIcon: 'arrow_back',
       ariaLabel: 'back slider',
     });
-    new Button({
+    prevBtn.setAttributes([{ attr: 'role', value: 'button' }]);
+
+    const nextBtn = new Button({
       parentNode: titleWrap.node,
-      variant: 'round',
-      colorVariant: 'primary',
+      size: 'icon-lg',
+      corner: 'circle',
+      color: 'primary',
       googleIcon: 'arrow_forward',
       ariaLabel: 'forward slider',
     });
+    nextBtn.setAttributes([{ attr: 'role', value: 'button' }]);
 
-    new Slider({
+    const slider = new Slider({
       parentNode: this.node,
+      slides,
     });
+
+    prevBtn.node.onclick = () => slider.animatePrev();
+    nextBtn.node.onclick = () => slider.animateNext();
   }
 }

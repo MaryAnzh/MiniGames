@@ -182,8 +182,9 @@ export class AuthPopup extends Component {
       parentNode: buttonWrap.node,
       text: isLogin ? 'Login' : 'Create Account',
       size: 'lg',
-      colorVariant: 'primary',
-      width: 'full',
+      color: 'primary',
+      fullWidth: true,
+      shadow: 'hard',
       className: 'auth_main_btn',
     });
 
@@ -197,9 +198,9 @@ export class AuthPopup extends Component {
     new Button({
       parentNode: buttonWrap.node,
       text: isLogin ? 'Continue with Google' : 'Sign up with Google',
-      size: 'pop-up',
-      colorVariant: 'light',
-      width: 'full',
+      size: 'lg',
+      color: 'light',
+      fullWidth: true,
       className: 'auth_google_btn',
       leftIcon: 'Google',
     });

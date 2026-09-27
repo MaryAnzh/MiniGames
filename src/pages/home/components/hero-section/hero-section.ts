@@ -16,7 +16,7 @@ export class HeroSection extends Component {
 
     new Component({
       parentNode: textWrap.node,
-      tagName: 'h2',
+      tagName: 'h1',
       className: 'hero_title',
       content: 'Take a Short Break & Have Fun',
     });
@@ -38,8 +38,8 @@ export class HeroSection extends Component {
 
     new Button({
       parentNode: textWrap.node,
-      colorVariant: 'primary',
-      size: 'sm',
+      color: 'primary',
+      response: 'sm',
       text: 'Browse Library',
     });
   }

@@ -1,8 +1,12 @@
+. "$(dirname "$0")/_/husky.sh"
+
+
+echo "✅ Branch name is valid!"
+echo
 
 echo "🔍 Running TSC..."
 npm run tsc
 tsc_status=$?
-
 
 echo
 echo "🔍 Running ESLint..."

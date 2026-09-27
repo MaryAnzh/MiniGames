@@ -36,6 +36,7 @@ export class App {
     });
     const footer = new Footer({
       parentNode: null,
+      router: this.router,
     });
 
     appContainer.append(header.node);

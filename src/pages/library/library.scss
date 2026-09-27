@@ -1,0 +1,8 @@
+@use './sections/styles.scss' as *;
+
+.library {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

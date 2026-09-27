@@ -1,0 +1,83 @@
+@use '../../../../../styles/mixims/common.scss' as *;
+
+.game-detail_records {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-2);
+  width: 100%;
+
+  &_title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--size-1);
+  }
+
+  &_icon {
+    font-size: var(--body-small);
+    font-weight: var(--weight-regular);
+  }
+
+  &_title {
+    color: var(--on-primary);
+    font-size: var(--body-medium);
+    font-weight: var(--weight-bold);
+  }
+
+  &_table {
+    width: 100%;
+    border-collapse: separate;
+  }
+
+  &_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--size-2);
+    background: var(--white);
+    border-radius: var(--corner-medium);
+    outline: var(--border-1) solid var(--outline-variant);
+    outline-offset: var(--border-1-neg);
+  }
+
+  &_row td {
+    display: flex;
+    align-items: center;
+    gap: var(--size-2);
+
+    padding: 0;
+    border: none;
+    flex-shrink: 0;
+  }
+
+  &_left,
+  &_right {
+    display: flex;
+    align-items: center;
+    gap: var(--size-2);
+    flex-shrink: 0;
+  }
+
+  &_medal {
+    font-size: var(--body-medium);
+    color: var(--on-primary);
+  }
+
+  &_player {
+    width: 100%;
+    color: var(--on-primary);
+    font-size: var(--body-small);
+    font-weight: var(--weight-regular);
+    @include truncate(1);
+  }
+
+  &_score {
+    font-size: var(--body-small);
+    font-weight: var(--weight-bold);
+  }
+
+  &_time {
+    color: var(--on-bg);
+    font-size: var(--label-medium);
+    font-weight: var(--weight-regular);
+  }
+}
