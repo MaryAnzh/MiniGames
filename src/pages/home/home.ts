@@ -10,7 +10,12 @@ export class HomePage extends Component {
   private store: typeof appStore;
 
   constructor({ parentNode }: HomePageProps) {
-    super({ parentNode, tagName: 'div', className: 'home-page' });
+    super({
+      parentNode,
+      tagName: 'div',
+      className: 'home-page',
+      attrs: [{ attr: 'id', value: 'page' }],
+    });
     this.store = appStore;
     new HeroSection({
       parentNode: this.node,

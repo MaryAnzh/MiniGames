@@ -7,8 +7,8 @@
   background: var(--bg);
   box-shadow: var(--level-3);
   border-radius: var(--corner-extra-large);
-  outline: 3px var(--on-primary) solid;
-  outline-offset: -3px;
+  outline: var(--border-3) var(--on-primary) solid;
+  outline-offset: var(--border-3-neg);
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;

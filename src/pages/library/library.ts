@@ -18,6 +18,7 @@ export class LibraryPage extends Component {
       parentNode,
       tagName: 'div',
       className: 'library',
+      attrs: [{ attr: 'id', value: 'page' }],
     });
 
     this.store = appStore;

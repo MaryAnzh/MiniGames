@@ -11,8 +11,10 @@ export class Slider extends Component {
   sliderBody: HTMLElement | null = null;
   slidesNode: HTMLElement[] = [];
   private isAnimating = false;
-  // private autoTimer: number | null = null;
+  private autoTimer: number | null = null;
+  private restartTimer: number | null = null;
   private resizeTimer: number | null = null;
+  private isTimerOn = true;
 
   constructor({ parentNode, slides }: SliderProps) {
     super({ parentNode, tagName: 'div', className: 'app_slider' });
@@ -27,11 +29,35 @@ export class Slider extends Component {
     });
     window.addEventListener('resize', () => this.handleResize());
 
-    // this.autoTimer = window.setInterval(() => {
-    //   if (!this.isAnimating) {
-    //     this.animateNext();
-    //   }
-    // }, 4000);
+    if (this.isTimerOn) {
+      this.startAutoTimer();
+    }
+  }
+
+  private startAutoTimer() {
+    this.autoTimer = window.setInterval(() => {
+      if (!this.isAnimating) {
+        this.animateNext();
+      }
+    }, 4000);
+  }
+
+  private stopAutoTimer() {
+    if (this.autoTimer) {
+      clearInterval(this.autoTimer);
+      this.autoTimer = null;
+    }
+  }
+
+  private restartAutoTimerDelayed() {
+    if (this.restartTimer) {
+      clearTimeout(this.restartTimer);
+    }
+
+    this.restartTimer = window.setTimeout(() => {
+      this.startAutoTimer();
+      this.restartTimer = null;
+    }, 10000);
   }
 
   private render(visibleSlides: GameCardDataType[]) {
@@ -200,11 +226,19 @@ export class Slider extends Component {
   }
 
   public animateNext() {
-    if (!this.isAnimating) this.animate('prev');
+    if (!this.isAnimating) {
+      this.stopAutoTimer();
+      this.restartAutoTimerDelayed();
+      if (!this.isAnimating) this.animate('prev');
+    }
   }
 
   public animatePrev() {
-    if (!this.isAnimating) this.animate('next');
+    if (!this.isAnimating) {
+      this.stopAutoTimer();
+      this.restartAutoTimerDelayed();
+      if (!this.isAnimating) this.animate('next');
+    }
   }
 
   private handleResize() {
@@ -227,7 +261,15 @@ export class Slider extends Component {
 
   //toDo
   destroy() {
-    //clearInterval(this.autoTimer);
+    if (this.autoTimer) {
+      clearInterval(this.autoTimer);
+    }
+
+    this.stopAutoTimer();
+
+    if (this.restartTimer) {
+      clearTimeout(this.restartTimer);
+    }
     super.destroy();
   }
 }
