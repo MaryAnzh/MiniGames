@@ -11,30 +11,40 @@ export class Slider extends Component {
 
   constructor({ parentNode, slides }: SliderProps) {
     super({ parentNode, tagName: 'div', className: 'app_slider' });
+
     this.portal = new Portal();
-    this.controller = new SliderController({ slides, onUpdateSlides: () => {} });
+
+    this.controller = new SliderController({
+      slides,
+      onUpdateSlides: (visibleSlides) => {
+        this.render(visibleSlides);
+      },
+    });
+
     this.render(this.controller.getVisibleSlides());
   }
 
   private render(visibleSlides: GameCardDataType[]) {
+    this.node.innerHTML = '';
+
     const sliderBody = new Component({
       parentNode: this.node,
       tagName: 'div',
       className: 'app_slider_body',
     });
 
-    visibleSlides.map((game) => {
+    visibleSlides.forEach((game) => {
       const { name, cardImage, likesCount, rating } = game;
 
       const slide = new Component({
         parentNode: sliderBody.node,
         tagName: 'div',
-        className: 'app_slider_body_item',
+        className: `app_slider_body_item`,
       });
-      const node = slide.node;
-      node.onclick = node.onclick = () => this.openDetails(game);
 
-      // IMAGE
+      const node = slide.node;
+      node.onclick = () => this.openDetails(game);
+
       new Component({
         parentNode: node,
         tagName: 'img',
@@ -45,14 +55,12 @@ export class Slider extends Component {
         ],
       });
 
-      // INFO
       const infoWrap = new Component({
         parentNode: node,
         tagName: 'div',
         className: 'app_slider_body_item_info',
       });
 
-      //name
       new Component({
         parentNode: infoWrap.node,
         tagName: 'h3',
