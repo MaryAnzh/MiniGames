@@ -164,14 +164,12 @@ export class Pagination extends Component {
     const first = pages[0];
     const last = pages[pages.length - 1];
 
-    // стрелка назад
     if (newPage < prevPage) {
       if (prevPage === first) {
         this.windowStart = Math.max(1, this.windowStart - 1);
       }
     }
 
-    // стрелка вперёд
     if (newPage > prevPage) {
       if (prevPage === last) {
         this.windowStart = Math.min(this.totalPages - this.maxVisible + 1, this.windowStart + 1);
