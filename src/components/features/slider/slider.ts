@@ -3,32 +3,27 @@ import type { SliderProps } from './types';
 import type { GameCardDataType } from '@types';
 import { Icon, LikeButton } from '@ui';
 import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
+import { SliderController } from './slider-controller';
 
 export class Slider extends Component {
   private portal: Portal;
-
-  slidesCount = 5;
-  slidesNode: HTMLElement[] = [];
-  games: GameCardDataType[] = [];
-  visibleSlide = 5;
+  private controller: SliderController;
 
   constructor({ parentNode, slides }: SliderProps) {
     super({ parentNode, tagName: 'div', className: 'app_slider' });
     this.portal = new Portal();
-
-    this.games = slides;
-    this.render(slides);
+    this.controller = new SliderController({ slides, onUpdateSlides: () => {} });
+    this.render(this.controller.getVisibleSlides());
   }
 
-  private render(slides: GameCardDataType[]) {
+  private render(visibleSlides: GameCardDataType[]) {
     const sliderBody = new Component({
       parentNode: this.node,
       tagName: 'div',
       className: 'app_slider_body',
     });
 
-    const currentSlides = slides.slice(0, this.visibleSlide);
-    currentSlides.map((game) => {
+    visibleSlides.map((game) => {
       const { name, cardImage, likesCount, rating } = game;
 
       const slide = new Component({
@@ -88,8 +83,6 @@ export class Slider extends Component {
         tagName: 'span',
         content: likesCount.toString(),
       });
-
-      this.slidesNode.push(slide.node);
     });
   }
 

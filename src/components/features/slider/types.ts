@@ -1,4 +1,4 @@
-import type { ComponentProps, GameCardDataType, SlideCardType } from '@types';
+import type { ComponentProps, GameCardDataType } from '@types';
 
 export type SliderState = {
   /**center card index*/
