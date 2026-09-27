@@ -20,4 +20,22 @@ export type GameCardDataType = {
   likesCount: number;
   cardImage: string;
   featured: boolean;
+  players: string;
+  duration: string;
+};
+
+export type GameRecord = {
+  position: number;
+  playerName: string;
+  score: number;
+  achievedAt: string; // ISO date
+};
+
+export type GameComment = {
+  commentId: string;
+  authorName: string;
+  text: string;
+  likesCount: number;
+  isLikedByCurrentUser: boolean;
+  createdAt: string; // ISO date
 };

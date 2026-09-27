@@ -5,13 +5,13 @@ import { GoogleIcon } from '../google-icon/google-icon';
 
 type ColorType = 'primary' | 'light' | 'dark' | 'ghost' | 'chips';
 
-type ButtonProps = Pick<ComponentProps, 'parentNode'> & {
+export type ButtonProps = Pick<ComponentProps, 'parentNode'> & {
   className?: string;
   variant?: 'solid' | 'empty';
   color?: ColorType;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'icon-md' | 'icon-lg' | 'none';
   response?: 'sm' | 'md';
-  corner?: 'sm' | 'md' | 'lg' | 'rounded' | 'circle';
+  corner?: 'sm' | 'sm-x' | 'md' | 'lg' | 'rounded' | 'circle';
   shadow?: 'none' | 'soft' | 'hard';
 
   text?: string;

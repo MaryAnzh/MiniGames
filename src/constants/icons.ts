@@ -1,8 +1,10 @@
 import arrow_left from '/svg/arrow-left.svg?raw';
 import arrow_right from '/svg/arrow-right.svg?raw';
 import burger from '/svg/burger.svg?raw';
+import close from '/svg/close.svg?raw';
 import checked from '/svg/checked.svg?raw';
 import favorite from '/svg/favorite.svg?raw';
+import gold from '/svg/gold.svg?raw';
 import star from '/svg/star.svg?raw';
 
 const DOWNLOAD = `<svg
@@ -112,6 +114,7 @@ export const ICON_PICKER = {
   arrow_left,
   arrow_right,
   burger,
+  close,
   DOWNLOAD,
   LOGO,
   RS,
@@ -120,4 +123,5 @@ export const ICON_PICKER = {
   CHECKED: checked,
   star,
   favorite,
+  gold,
 } as const;
