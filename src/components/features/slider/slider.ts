@@ -1,6 +1,6 @@
 import { Component, Portal } from '@components';
 import type { SliderProps } from './types';
-import type { GameCardDataType, SlideCardType } from '@types';
+import type { GameCardDataType } from '@types';
 import { Icon, LikeButton } from '@ui';
 import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
 
