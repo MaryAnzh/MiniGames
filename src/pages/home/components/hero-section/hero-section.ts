@@ -16,7 +16,7 @@ export class HeroSection extends Component {
 
     new Component({
       parentNode: textWrap.node,
-      tagName: 'h2',
+      tagName: 'h1',
       className: 'hero_title',
       content: 'Take a Short Break & Have Fun',
     });

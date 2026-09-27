@@ -39,3 +39,5 @@ export type GameComment = {
   isLikedByCurrentUser: boolean;
   createdAt: string; // ISO date
 };
+
+export type SlideCardType = Pick<GameCardDataType, 'name' | 'likesCount' | 'rating' | 'cardImage'>;

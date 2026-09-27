@@ -33,8 +33,8 @@
     background: var(--bg);
     box-shadow: var(--level-1);
     border-radius: var(--corner-medium);
-    outline: 2px var(--on-primary) solid;
-    outline-offset: -2px;
+    outline: var(--border-2) var(--on-primary) solid;
+    outline-offset: var(--border-2-neg);
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
@@ -76,8 +76,8 @@
       box-shadow: var(--level-2);
       width: var(--layout-hero-width-md);
       border-radius: var(--corner-large);
-      outline: 2.5px var(--on-primary) solid;
-      outline-offset: -2.5px;
+      outline: var(--border-2-5) var(--on-primary) solid;
+      outline-offset: var(--border-2-5-neg);
       justify-content: flex-start;
       align-items: flex-start;
       gap: var(--size-2);
@@ -108,8 +108,8 @@
       padding: var(--size-6);
       box-shadow: var(--level-3);
       border-radius: var(--corner-extra-large);
-      outline: 3px var(--on-primary) solid;
-      outline-offset: -3px;
+      outline: var(--border-3) var(--on-primary) solid;
+      outline-offset: var(--border-3-neg);
       gap: var(--size-3);
     }
 

@@ -23,7 +23,7 @@
       height: var(--size-3);
       border-radius: var(--corner-medium);
       background: var(--primary);
-      border: 1.5px solid var(--on-primary);
+      border: var(--border-1-5) solid var(--on-primary);
     }
 
     .slider_title-wrap_title {

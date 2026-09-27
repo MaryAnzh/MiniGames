@@ -11,14 +11,14 @@ export class LibraryPage extends Component {
   private store: typeof appStore;
   private cards!: LibraryCards;
   private pagination!: Pagination;
-  //for pagination check, your can add 4 forename
-  public totalPage = 16;
+  public totalPage = 6;
 
   constructor({ parentNode }: Pick<ComponentProps, 'parentNode'>) {
     super({
       parentNode,
       tagName: 'div',
       className: 'library',
+      attrs: [{ attr: 'id', value: 'page' }],
     });
 
     this.store = appStore;

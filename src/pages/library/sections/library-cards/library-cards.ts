@@ -18,12 +18,12 @@ export class LibraryCards extends Component {
     });
     this.portal = new Portal({ position: 'top' });
 
-    list.forEach((game, i) => {
-      this.renderCard(game, i);
+    list.forEach((game) => {
+      this.renderCard(game);
     });
   }
 
-  private renderCard(game: GameCardDataType, i?: number) {
+  private renderCard(game: GameCardDataType) {
     const { cardImage, name, category, likesCount, price, rating, shortDescription } = game;
     const card = new Component({
       parentNode: this.node,
@@ -150,9 +150,10 @@ export class LibraryCards extends Component {
     detailsBtn.node.onclick = () => this.openDetails(game);
 
     detailsBtn.setAttributes([{ attr: 'role', value: 'card-dialog' }]);
-    if (i === 11) {
-      this.openDetails(game);
-    }
+    //test
+    // if (i === 11) {
+    //   this.openDetails(game);
+    // }
   }
 
   private openDetails(game: GameCardDataType) {

@@ -39,6 +39,7 @@ export class Portal extends Component {
       clearTimeout(this.timeout);
       this.timeout = null;
     }
+    document.body.style.overflow = 'hidden';
     this.node.innerHTML = '';
 
     document.body.appendChild(this.node);
@@ -55,6 +56,7 @@ export class Portal extends Component {
       this.node.innerHTML = '';
       if (this.node.parentNode) {
         this.node.parentNode.removeChild(this.node);
+        document.body.style.overflow = 'auto';
       }
     }, 300);
   }
