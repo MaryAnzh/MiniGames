@@ -3,6 +3,7 @@ import type { ComponentProps } from '@types';
 import { ICON_PICKER } from '@constants';
 import * as C from '@constants';
 import { Button } from '@ui';
+import type { Router } from '@route';
 
 const FOOTER_LINKS = [
   { title: C.EXPLORE, list: C.FOOTER_NAV },
@@ -10,12 +11,15 @@ const FOOTER_LINKS = [
 ];
 
 export class Footer extends Component {
-  constructor({ parentNode }: Pick<ComponentProps, 'parentNode'>) {
+  router: Router;
+
+  constructor({ parentNode, router }: Pick<ComponentProps, 'parentNode'> & { router: Router }) {
     super({
       parentNode,
       tagName: 'footer',
       className: 'footer',
     });
+    this.router = router;
 
     this.renderTop();
     this.renderBottom();
@@ -72,7 +76,7 @@ export class Footer extends Component {
       className: 'footer_links',
     });
 
-    FOOTER_LINKS.forEach(({ title, list }) => {
+    FOOTER_LINKS.forEach(({ title, list }, i) => {
       const col = new Component({
         parentNode: wrap.node,
         tagName: 'div',
@@ -101,11 +105,16 @@ export class Footer extends Component {
 
         new Component({
           parentNode: item.node,
-          tagName: 'a',
+          tagName: 'span',
           className: 'footer_links_list_item_link',
           content: name,
-          attrs: [{ attr: 'href', value: path }],
         });
+        if (i === 0) {
+          item.node.onclick = () => {
+            this.router.navigate(path);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          };
+        }
       });
     });
   }

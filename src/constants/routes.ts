@@ -8,8 +8,8 @@ export const APP_PAGES = [
 export const FOOTER_NAV = [
   { name: 'Home', path: '/' },
   { name: 'Library', path: '/library' },
-  { name: 'Community', path: '/community' },
-  { name: 'Tournaments', path: '/tournaments' },
+  { name: 'Community', path: '/' },
+  { name: 'Tournaments', path: '/' },
 ];
 
 export const APP_ROUTES = {

@@ -1,25 +1,35 @@
-import { ICON_PICKER } from '@constants';
+import { ICON_PICKER, APP_PAGES } from '@constants';
 import { Component } from '@components';
 import { Button } from '@ui';
 import type { AuthFormType, ComponentProps } from '@types';
+import { Router } from '@route';
+import appStore from '@state';
 
 type BurgerMenuProps = Pick<ComponentProps, 'parentNode'> & {
   isAuth: boolean;
+  router: Router;
   onClose: () => void;
   onOpenAuth: (tab: AuthFormType) => void;
 };
 
 export class BurgerMenu extends Component {
   closeBtn: Component | null = null;
+  router: Router;
   onClose: () => void;
   onOpenAuth: (tab: AuthFormType) => void;
+  store = appStore;
 
-  constructor({ parentNode, isAuth, onClose, onOpenAuth }: BurgerMenuProps) {
+  items: Component[] = [];
+  highlightClass = 'is-active';
+
+  constructor({ parentNode, isAuth, router, onClose, onOpenAuth }: BurgerMenuProps) {
     super({
       parentNode,
       tagName: 'div',
       className: 'burger',
     });
+
+    this.router = router;
     this.onClose = onClose;
     this.onOpenAuth = onOpenAuth;
 
@@ -27,9 +37,7 @@ export class BurgerMenu extends Component {
   }
 
   private render(isAuth: boolean) {
-    // for check isAuth = true
-    //isAuth = true;
-
+    /* HEADER */
     const header = new Component({
       parentNode: this.node,
       tagName: 'div',
@@ -51,15 +59,18 @@ export class BurgerMenu extends Component {
       content: 'MiniGames',
     });
 
-    this.closeBtn = new Component({
+    this.closeBtn = new Button({
       parentNode: header.node,
-      tagName: 'button',
       className: 'burger_close_btn',
+      leftIcon: 'close',
+      color: 'dark',
+      size: 'icon-md',
+      corner: 'sm',
+      ariaLabel: 'Close button',
     });
     this.closeBtn.node.addEventListener('click', this.onClose);
 
-    const LINKS = ['Home', 'Library', 'Tournaments', 'Community'];
-
+    /* ROUTES */
     const linksWrap = new Component({
       parentNode: this.node,
       tagName: 'nav',
@@ -72,14 +83,23 @@ export class BurgerMenu extends Component {
       className: 'burger_links_list',
     });
 
-    LINKS.forEach((item, index) => {
-      new Component({
+    APP_PAGES.forEach(({ name, path }) => {
+      const item = new Component({
         parentNode: linksListWrap.node,
         tagName: 'button',
-        className: ['burger_links_list_link', index === 0 ? 'is-active' : ''].filter(Boolean),
-        content: item,
+        className: ['burger_links_list_link'],
+        content: name,
       });
+
+      item.node.addEventListener('click', () => {
+        this.router.navigate(path);
+        this.onClose();
+      });
+
+      this.items.push(item);
     });
+
+    this.highlight(this.store.currentRoute);
 
     /* BOTTOM BUTTONS */
     const bottom = new Component({
@@ -105,6 +125,17 @@ export class BurgerMenu extends Component {
       className: 'burger_signup_btn',
       fullWidth: true,
     }).node.addEventListener('click', () => this.onOpenAuth('Register'));
+  }
+
+  highlight(path: string) {
+    this.items.forEach((item) => {
+      item.node.classList.remove(this.highlightClass);
+
+      const text = item.node.textContent?.toLowerCase();
+      if (path.includes(text)) {
+        item.node.classList.add(this.highlightClass);
+      }
+    });
   }
 
   destroy(): void {

@@ -79,6 +79,7 @@ export class Header extends Component {
     /** BURGER MENU */
     this.burgerMenu = new BurgerMenu({
       parentNode: null,
+      router,
       isAuth: this.isAuth,
       onClose: () => this.portal.unmount(),
       onOpenAuth: (tab: AuthFormType) => {

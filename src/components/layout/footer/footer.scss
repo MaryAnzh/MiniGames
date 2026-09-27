@@ -108,7 +108,7 @@
       gap: var(--size-1-5);
 
       &_item {
-        a {
+        &_link {
           position: relative;
           width: fit-content;
           color: var(--on-bg-footer);

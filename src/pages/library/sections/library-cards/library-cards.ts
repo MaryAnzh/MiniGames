@@ -32,7 +32,6 @@ export class LibraryCards extends Component {
     });
 
     // IMAGE
-
     new Component({
       parentNode: card.node,
       tagName: 'img',

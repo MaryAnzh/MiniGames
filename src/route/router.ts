@@ -25,26 +25,30 @@ export class Router {
       { path: APP_ROUTES.COMMUNITY, view: CommunityPage },
     ];
 
-    window.addEventListener('popstate', () => this.handleRoute());
+    window.addEventListener('hashchange', () => this.handleRoute());
   }
 
   init() {
-    appStore.currentRoute = window.location.pathname;
+    if (!window.location.hash) {
+      window.location.hash = APP_ROUTES.HOME;
+    }
+
+    this.store.currentRoute = window.location.hash.slice(1);
     this.handleRoute();
   }
 
   navigate(path: string) {
-    history.pushState({}, '', path);
+    window.location.hash = path;
     this.store.currentRoute = path;
     this.handleRoute();
   }
 
   private handleRoute() {
-    const currentPath = window.location.pathname;
+    const currentPath = window.location.hash.slice(1) || APP_ROUTES.HOME;
+
     const route = this.routes.find((r) => r.path === currentPath) || this.routes[0];
 
     this.root.innerHTML = '';
-
     new route.view({ parentNode: this.root });
   }
 }
