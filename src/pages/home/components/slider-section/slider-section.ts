@@ -47,9 +47,12 @@ export class SliderSection extends Component {
     });
     nextBtn.setAttributes([{ attr: 'role', value: 'button' }]);
 
-    new Slider({
+    const slider = new Slider({
       parentNode: this.node,
       slides,
     });
+
+    prevBtn.node.onclick = () => slider.animatePrev();
+    nextBtn.node.onclick = () => slider.animateNext();
   }
 }

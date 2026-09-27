@@ -63,26 +63,23 @@ export class SliderController {
   public getVisibleSlides(): GameCardDataType[] {
     const { centerIndex, visibleCount } = this.state;
 
-    const half = Math.floor(visibleCount / 2);
     const visible: GameCardDataType[] = [];
 
-    const startIndex = centerIndex - half;
-
-    for (let i = startIndex; i < startIndex + visibleCount; i++) {
-      const safeIndex = ((i % this.slides.length) + this.slides.length) % this.slides.length;
-      visible.push(this.slides[safeIndex]);
+    for (let i = 0; i < visibleCount; i++) {
+      const idx = (centerIndex + i) % this.slides.length;
+      visible.push(this.slides[idx]);
     }
 
     return visible;
   }
 
   next() {
-    this.state.centerIndex = (this.state.centerIndex + 1) % this.slides.length;
+    this.state.centerIndex = (this.state.centerIndex - 1 + this.slides.length) % this.slides.length;
     this.updateSlides();
   }
 
   prev() {
-    this.state.centerIndex = (this.state.centerIndex - 1 + this.slides.length) % this.slides.length;
+    this.state.centerIndex = (this.state.centerIndex + 1) % this.slides.length;
     this.updateSlides();
   }
 }

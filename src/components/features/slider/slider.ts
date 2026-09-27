@@ -8,6 +8,8 @@ import { SliderController } from './slider-controller';
 export class Slider extends Component {
   private portal: Portal;
   private controller: SliderController;
+  sliderBody: HTMLElement | null = null;
+  slidesNode: HTMLElement[] = [];
 
   constructor({ parentNode, slides }: SliderProps) {
     super({ parentNode, tagName: 'div', className: 'app_slider' });
@@ -26,18 +28,30 @@ export class Slider extends Component {
 
   private render(visibleSlides: GameCardDataType[]) {
     this.node.innerHTML = '';
+    this.sliderBody = null;
+    this.slidesNode = [];
 
     const sliderBody = new Component({
       parentNode: this.node,
       tagName: 'div',
       className: 'app_slider_body',
     });
+    this.sliderBody = sliderBody.node;
+    this.renderSlides(visibleSlides);
+  }
+
+  renderSlides(visibleSlides: GameCardDataType[]) {
+    const body = this.sliderBody;
+    if (!body) return;
+
+    body.innerHTML = '';
+    this.slidesNode = [];
 
     visibleSlides.forEach((game) => {
       const { name, cardImage, likesCount, rating } = game;
 
       const slide = new Component({
-        parentNode: sliderBody.node,
+        parentNode: body,
         tagName: 'div',
         className: `app_slider_body_item`,
       });
@@ -91,6 +105,8 @@ export class Slider extends Component {
         tagName: 'span',
         content: likesCount.toString(),
       });
+
+      this.slidesNode.push(slide.node);
     });
   }
 
@@ -102,5 +118,78 @@ export class Slider extends Component {
     });
 
     this.portal.mount(dialog.node);
+  }
+
+  private animate(direction: 'next' | 'prev') {
+    const plan = this.getAnimationPlan();
+    if (!plan.length) return;
+
+    let finishedCount = 0;
+
+    plan.forEach((slidePlan) => {
+      const { node, index, x: fromX, width: fromWidth } = slidePlan;
+
+      const neighbor =
+        direction === 'next'
+          ? plan[(index + 1) % plan.length]
+          : plan[(index - 1 + plan.length) % plan.length];
+
+      const toX = neighbor.x;
+      const toWidth = neighbor.width;
+
+      const deltaX = direction === 'next' ? toX - fromX : fromX - toX;
+
+      const animation = node.animate(
+        [
+          {
+            transform: `translateX(0px)`,
+            width: `${fromWidth}px`,
+            transformOrigin: direction === 'prev' ? 'left' : 'right',
+          },
+          {
+            transform: `translateX(${deltaX}px)`,
+            width: `${toWidth}px`,
+            transformOrigin: direction === 'prev' ? 'left' : 'right',
+          },
+        ],
+        {
+          duration: 1000,
+          easing: 'ease-in-out',
+        },
+      );
+
+      animation.onfinish = () => {
+        finishedCount++;
+
+        if (finishedCount === plan.length) {
+          direction === 'next' ? this.controller.next() : this.controller.prev();
+        }
+      };
+    });
+  }
+
+  private getAnimationPlan() {
+    const data: { node: HTMLElement; index: number; x: number; width: number }[] = [];
+
+    this.slidesNode.forEach((slide, index) => {
+      const rect = slide.getBoundingClientRect();
+
+      data.push({
+        node: slide,
+        index,
+        x: rect.left,
+        width: rect.width,
+      });
+    });
+
+    return data;
+  }
+
+  public animateNext() {
+    this.animate('next');
+  }
+
+  public animatePrev() {
+    this.animate('prev');
   }
 }
