@@ -40,19 +40,11 @@ export class SliderController {
   init() {
     this.updateVisibleCount();
     this.updateSlides();
-
-    window.addEventListener('resize', () => {
-      const width = window.innerWidth;
-      if (width > 600 && width < 900) {
-        this.updateVisibleCount();
-        this.updateSlides();
-      }
-    });
   }
 
   updateVisibleCount() {
     const w = window.innerWidth;
-    this.state.visibleCount = w < 768 ? MOBILE_SLIDE_COUNT : DESKTOP_SLIDE_COUNT;
+    this.state.visibleCount = w < 1024 ? MOBILE_SLIDE_COUNT : DESKTOP_SLIDE_COUNT;
   }
 
   updateSlides() {

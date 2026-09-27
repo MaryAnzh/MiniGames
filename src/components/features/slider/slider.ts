@@ -10,6 +10,9 @@ export class Slider extends Component {
   private controller: SliderController;
   sliderBody: HTMLElement | null = null;
   slidesNode: HTMLElement[] = [];
+  private isAnimating = false;
+  // private autoTimer: number | null = null;
+  private resizeTimer: number | null = null;
 
   constructor({ parentNode, slides }: SliderProps) {
     super({ parentNode, tagName: 'div', className: 'app_slider' });
@@ -22,8 +25,13 @@ export class Slider extends Component {
         this.render(visibleSlides);
       },
     });
+    window.addEventListener('resize', () => this.handleResize());
 
-    this.render(this.controller.getVisibleSlides());
+    // this.autoTimer = window.setInterval(() => {
+    //   if (!this.isAnimating) {
+    //     this.animateNext();
+    //   }
+    // }, 4000);
   }
 
   private render(visibleSlides: GameCardDataType[]) {
@@ -121,8 +129,13 @@ export class Slider extends Component {
   }
 
   private animate(direction: 'next' | 'prev') {
+    if (this.isAnimating) return; // блокируем повторный вызов
+    this.isAnimating = true;
     const plan = this.getAnimationPlan();
-    if (!plan.length) return;
+    if (!plan.length) {
+      this.isAnimating = false;
+      return;
+    }
 
     let finishedCount = 0;
 
@@ -153,7 +166,7 @@ export class Slider extends Component {
           },
         ],
         {
-          duration: 200,
+          duration: 350,
           easing: 'ease-in-out',
         },
       );
@@ -164,6 +177,7 @@ export class Slider extends Component {
         if (finishedCount === plan.length) {
           direction === 'next' ? this.controller.next() : this.controller.prev();
         }
+        this.isAnimating = false;
       };
     });
   }
@@ -186,10 +200,34 @@ export class Slider extends Component {
   }
 
   public animateNext() {
-    this.animate('prev');
+    if (!this.isAnimating) this.animate('prev');
   }
 
   public animatePrev() {
-    this.animate('next');
+    if (!this.isAnimating) this.animate('next');
+  }
+
+  private handleResize() {
+    if (this.resizeTimer) {
+      clearTimeout(this.resizeTimer);
+    }
+
+    this.resizeTimer = window.setTimeout(() => {
+      this.isAnimating = false;
+
+      this.controller.updateVisibleCount();
+
+      const visible = this.controller.getVisibleSlides();
+
+      this.render(visible);
+
+      this.getAnimationPlan();
+    }, 150);
+  }
+
+  //toDo
+  destroy() {
+    //clearInterval(this.autoTimer);
+    super.destroy();
   }
 }
