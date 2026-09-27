@@ -1,22 +1,26 @@
-import { Component } from '@components';
+import { Component, Portal } from '@components';
 import type { SliderProps } from './types';
-import type { SlideCardType } from '@types';
+import type { GameCardDataType, SlideCardType } from '@types';
 import { Icon, LikeButton } from '@ui';
+import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
 
 export class Slider extends Component {
+  private portal: Portal;
+
   slidesCount = 5;
   slidesNode: HTMLElement[] = [];
-  slidesData: SlideCardType[] = [];
+  games: GameCardDataType[] = [];
   visibleSlide = 5;
 
   constructor({ parentNode, slides }: SliderProps) {
     super({ parentNode, tagName: 'div', className: 'app_slider' });
+    this.portal = new Portal();
 
-    this.slidesData = slides;
+    this.games = slides;
     this.render(slides);
   }
 
-  private render(slides: SlideCardType[]) {
+  private render(slides: GameCardDataType[]) {
     const sliderBody = new Component({
       parentNode: this.node,
       tagName: 'div',
@@ -24,13 +28,16 @@ export class Slider extends Component {
     });
 
     const currentSlides = slides.slice(0, this.visibleSlide);
-    currentSlides.map(({ name, cardImage, likesCount, rating }) => {
+    currentSlides.map((game) => {
+      const { name, cardImage, likesCount, rating } = game;
+
       const slide = new Component({
         parentNode: sliderBody.node,
         tagName: 'div',
         className: 'app_slider_body_item',
       });
       const node = slide.node;
+      node.onclick = node.onclick = () => this.openDetails(game);
 
       // IMAGE
       new Component({
@@ -84,5 +91,15 @@ export class Slider extends Component {
 
       this.slidesNode.push(slide.node);
     });
+  }
+
+  private openDetails(game: GameCardDataType) {
+    const dialog = new GameDetailsDialog({
+      parentNode: null,
+      game,
+      onClose: () => this.portal.unmount(),
+    });
+
+    this.portal.mount(dialog.node);
   }
 }

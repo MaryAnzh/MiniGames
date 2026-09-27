@@ -1,9 +1,9 @@
 import { Component } from '@components';
-import type { ComponentProps, SlideCardType } from '@types';
+import type { ComponentProps, GameCardDataType } from '@types';
 import { Button } from '@ui';
 import { Slider } from 'src/components/features/slider/slider';
 
-type SliderSectionProps = Pick<ComponentProps, 'parentNode'> & { slides: SlideCardType[] };
+type SliderSectionProps = Pick<ComponentProps, 'parentNode'> & { slides: GameCardDataType[] };
 
 export class SliderSection extends Component {
   constructor({ parentNode, slides }: SliderSectionProps) {
