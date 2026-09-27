@@ -1,0 +1,138 @@
+.comments {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-2);
+  padding: var(--size-2);
+
+  &_title {
+    font-size: var(--body-medium);
+    font-weight: var(--weight-bold);
+    color: var(--on-primary);
+  }
+
+  /* NEW COMMENT */
+  &_new {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--size-2);
+  }
+
+  &_new-avatar {
+    width: var(--size-5);
+    height: var(--size-5);
+    border-radius: var(--corner-full);
+    background: var(--primary);
+    outline: var(--border-1-5) solid var(--on-primary);
+    outline-offset: var(--border-1-5-neg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: var(--weight-bold);
+    font-size: var(--body-small);
+    color: var(--on-primary);
+  }
+
+  &_new-textarea {
+    flex: 1;
+  }
+
+  .comments_textarea {
+    width: 100%;
+    min-height: var(--size-6);
+    max-height: var(--size-11);
+    resize: none;
+    padding: var(--size-1) var(--size-2);
+    border-radius: var(--size-1);
+    outline: var(--border-1) solid var(--on-primary);
+    outline-offset: var(--border-1-neg);
+    font-size: var(--body-small);
+    color: var(--on-primary);
+    overflow: hidden;
+
+    &::placeholder {
+      color: var(--text-placeholder);
+    }
+  }
+
+  /* COMMENTS LIST */
+  &_list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-2);
+  }
+
+  /* CARD */
+  &_card {
+    padding: var(--size-2);
+    background: var(--white);
+    border-radius: var(--corner-medium);
+    box-shadow: var(--level-05-2);
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-1);
+  }
+
+  &_card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &_card-user {
+    display: flex;
+    align-items: center;
+    gap: var(--size-1);
+  }
+
+  &_card-avatar {
+    width: var(--size-3-1);
+    height: var(--size-3-1);
+    border-radius: var(--corner-medium);
+    outline: var(--border-1) solid var(--on-primary);
+    outline-offset: var(--border-1-neg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--label-medium);
+    font-weight: var(--weight-bold);
+    color: var(--on-primary);
+  }
+
+  &_card-username {
+    font-size: var(--body-small);
+    font-weight: var(--weight-bold);
+    color: var(--on-primary);
+  }
+
+  &_card-time {
+    font-size: var(--label-medium);
+    color: var(--on-bg);
+  }
+
+  &_card-text {
+    font-size: var(--body-small);
+    line-height: 18px;
+    color: var(--on-primary);
+  }
+
+  &_card-footer {
+    display: flex;
+    align-items: center;
+  }
+
+  .comments_like {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--size-1);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .comments_like-count {
+    font-size: var(--label-medium);
+    font-weight: var(--weight-bold);
+    color: var(--on-primary);
+  }
+}

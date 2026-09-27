@@ -3,6 +3,7 @@
 @use './sections/info-section/info-section.scss' as *;
 @use './sections/meta-section/meta-section.scss' as *;
 @use './sections/records-section/records.scss' as *;
+@use './sections/comments/comments.scss' as *;
 
 .app-game-details-dialog {
   width: 100%;

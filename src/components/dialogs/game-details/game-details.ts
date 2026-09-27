@@ -1,6 +1,6 @@
 import { Component } from '@components';
 import type { GameCardDataType } from '@types';
-import { HeroSection, InfoSection, RecordsSection } from './sections';
+import { CommentsSection, HeroSection, InfoSection, RecordsSection } from './sections';
 import appStore from '@state';
 
 type GameDetailsProps = {
@@ -42,5 +42,6 @@ export class GameDetailsDialog extends Component {
       parentNode: bodyWrap.node,
       records: this.store.records,
     });
+    new CommentsSection({ parentNode: this.node });
   }
 }
