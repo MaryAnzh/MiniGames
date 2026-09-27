@@ -137,7 +137,7 @@ export class Slider extends Component {
       const toX = neighbor.x;
       const toWidth = neighbor.width;
 
-      const deltaX = direction === 'next' ? toX - fromX : fromX - toX;
+      const deltaX = direction === 'next' ? toX - fromX : toX - fromX; // ВСЕГДА влево
 
       const animation = node.animate(
         [
@@ -153,7 +153,7 @@ export class Slider extends Component {
           },
         ],
         {
-          duration: 1000,
+          duration: 200,
           easing: 'ease-in-out',
         },
       );
@@ -186,10 +186,10 @@ export class Slider extends Component {
   }
 
   public animateNext() {
-    this.animate('next');
+    this.animate('prev');
   }
 
   public animatePrev() {
-    this.animate('prev');
+    this.animate('next');
   }
 }

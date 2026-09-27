@@ -122,13 +122,11 @@
     }
     &_item:nth-of-type(0) {
       width: 0;
-      opacity: 0;
       overflow: hidden;
     }
     &_item:last-child {
       width: 0;
       overflow: hidden;
-      opacity: 0;
     }
   }
 
