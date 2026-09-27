@@ -9,3 +9,4 @@ export { Input } from './input/input';
 export { Select } from './select/select';
 export { Pagination } from './pagination/pagination';
 export { LikeButton } from './like-button/like-button';
+export { Icon } from './icon/icon';

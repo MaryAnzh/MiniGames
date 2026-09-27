@@ -150,9 +150,10 @@ export class LibraryCards extends Component {
     detailsBtn.node.onclick = () => this.openDetails(game);
 
     detailsBtn.setAttributes([{ attr: 'role', value: 'card-dialog' }]);
-    if (i === 11) {
-      this.openDetails(game);
-    }
+    //test
+    // if (i === 11) {
+    //   this.openDetails(game);
+    // }
   }
 
   private openDetails(game: GameCardDataType) {

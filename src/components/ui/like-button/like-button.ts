@@ -2,20 +2,28 @@ import { Button, type ButtonProps } from '@ui';
 
 type LikeButtonProps = ButtonProps & {
   withText?: boolean;
+  isLight?: boolean;
+  isIcon?: boolean;
 };
 
 export class LikeButton extends Button {
   private isPressed = false;
   private withText: boolean = false;
+  private isLight: boolean = false;
 
-  constructor({ withText, ...props }: LikeButtonProps) {
+  constructor({ withText, isLight, isIcon, ...props }: LikeButtonProps) {
     super({
       ...props,
       leftIcon: 'favorite',
       ariaLabel: props.ariaLabel ?? 'Like this game',
       text: withText ? 'Add to Favorites' : undefined,
+      variant: isIcon ? 'empty' : props.variant,
     });
     this.withText = Boolean(withText);
+    this.isLight = Boolean(isLight);
+    if (isLight) {
+      this.node.style.color = 'var(--white)';
+    }
 
     this.initAccessibility();
     this.initToggleLogic();
@@ -43,7 +51,7 @@ export class LikeButton extends Button {
           super.setText('In your Favorites');
         }
       } else {
-        this.node.style.color = 'var(--on-primary)';
+        this.node.style.color = this.isLight ? 'var(--white)' : 'var(--on-primary)';
 
         super.setText('Add to Favorites');
       }
