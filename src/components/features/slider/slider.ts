@@ -1,5 +1,4 @@
 import { Component } from '@components';
-import { arrayFromNumber } from '@utils';
 import type { SliderProps } from './types';
 import type { SlideCardType } from '@types';
 import { Icon, LikeButton } from '@ui';
@@ -25,7 +24,7 @@ export class Slider extends Component {
     });
 
     const currentSlides = slides.slice(0, this.visibleSlide);
-    currentSlides.map(({ name, cardImage, likesCount, rating }, i) => {
+    currentSlides.map(({ name, cardImage, likesCount, rating }) => {
       const slide = new Component({
         parentNode: sliderBody.node,
         tagName: 'div',
@@ -40,7 +39,7 @@ export class Slider extends Component {
         className: 'app_slider_body_item_img',
         attrs: [
           { attr: 'src', value: cardImage },
-          { atr: 'alt', value: name },
+          { attr: 'alt', value: name },
         ],
       });
 

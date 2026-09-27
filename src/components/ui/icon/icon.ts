@@ -1,6 +1,6 @@
 import { Component } from '@components';
 import { ICON_PICKER } from '@constants';
-import type { ComponentProps, ComponentSizesType, IconPickerType } from '@types';
+import type { ComponentProps, IconPickerType } from '@types';
 
 type IconProps = Pick<ComponentProps, 'parentNode'> & {
   icon: IconPickerType;
