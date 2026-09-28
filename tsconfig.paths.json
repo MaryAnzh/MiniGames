@@ -10,7 +10,7 @@
       "@ui": ["src/components/ui"],
       "@route": ["src/route"],
       "@app": ["src/app"],
-      "@state": ["src/state"],
+      "@store": ["src/store/store"],
       "@pages": ["src/pages"]
     }
   }

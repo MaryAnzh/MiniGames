@@ -1,6 +1,6 @@
 import { Component } from '@components';
 import { CENTER } from '@constants';
-import appStore from '@state';
+import appStore from '@store';
 import type { CategoriesType, ComponentProps } from '@types';
 import { Button, Select } from '@ui';
 
