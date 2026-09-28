@@ -82,7 +82,7 @@
         &:nth-of-type(1) {
           border-top: none;
         }
-        &:nth-last-child {
+        &:last-child {
           border-bottom: none;
         }
       }
