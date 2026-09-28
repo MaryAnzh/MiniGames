@@ -1,7 +1,7 @@
 import { Component } from '@components';
 import type { GameCardDataType } from '@types';
 import { CommentsSection, HeroSection, InfoSection, RecordsSection } from './sections';
-import appStore from '@state';
+import appStore from '@store';
 
 type GameDetailsProps = {
   parentNode: HTMLElement | null;

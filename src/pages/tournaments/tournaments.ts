@@ -3,13 +3,17 @@ import type { ComponentProps } from '@types';
 
 type TournamentsPageProps = Pick<ComponentProps, 'parentNode'>;
 
-export class TournamentsPage {
+export class TournamentsPage extends Component {
   constructor({ parentNode }: TournamentsPageProps) {
-    new Component({
+    super({
       parentNode,
       tagName: 'section',
       className: 'tournaments_page',
       content: 'Tournaments Page',
     });
+  }
+
+  destroy() {
+    super.destroy();
   }
 }

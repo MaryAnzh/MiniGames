@@ -1,6 +1,5 @@
-import { Component, Header, Footer } from '@components';
-import * as C from '@constants';
-
+import { Component, Footer, Header } from '@components';
+import { APP_ID } from '@constants';
 import { Router } from '@route';
 import appStore from '@store';
 
@@ -17,7 +16,7 @@ export class App {
   init() {
     const appContainer = new Component({
       parentNode: this.root,
-      attrs: [{ attr: 'id', value: C.APP_ID }],
+      attrs: [{ attr: 'id', value: APP_ID }],
     });
 
     const main = new Component({

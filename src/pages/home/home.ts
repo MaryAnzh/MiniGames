@@ -2,7 +2,7 @@ import { Component } from '@components';
 import type { ComponentProps } from '@types';
 
 import { HeroSection, SliderSection, GameDeveloperSection, TableSection } from './components';
-import appStore from '@state';
+import appStore from '@store';
 
 type HomePageProps = Pick<ComponentProps, 'parentNode'>;
 
