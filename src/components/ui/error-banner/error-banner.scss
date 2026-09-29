@@ -1,0 +1,29 @@
+.app-error-banner {
+  width: 100%;
+  max-width: var(--dialog-width-sm);
+  padding: var(--size-2);
+  border-radius: var(--corner-medium);
+  background-color: var(--on-primary);
+  outline: var(--border-2) solid var(--error);
+  offset: var(--border-2-neg);
+  color: var(--white);
+  display: grid;
+  grid-template-columns: var(--size-3) auto;
+  align-items: center;
+  gap: var(--size-2);
+  box-shadow: var(--level-1);
+
+  &_icon {
+    width: var(--size-3);
+  }
+
+  &_text {
+    font-size: var(--body-medium);
+    font-weight: var(--weight-bold);
+  }
+  &_retry {
+    grid-row: 2;
+    grid-column: 2;
+    justify-self: flex-end;
+  }
+}

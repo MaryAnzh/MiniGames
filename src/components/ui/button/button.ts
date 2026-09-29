@@ -9,7 +9,7 @@ export type ButtonProps = Pick<ComponentProps, 'parentNode'> & {
   className?: string;
   variant?: 'solid' | 'empty';
   color?: ColorType;
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'icon-md' | 'icon-lg' | 'none';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'icon-sm' | 'icon-md' | 'icon-lg' | 'none';
   response?: 'sm' | 'md';
   corner?: 'sm' | 'sm-x' | 'md' | 'lg' | 'rounded' | 'circle';
   shadow?: 'none' | 'soft' | 'hard';
@@ -24,6 +24,7 @@ export type ButtonProps = Pick<ComponentProps, 'parentNode'> & {
   disabled?: boolean;
   ariaLabel?: string;
   isRoboto?: boolean;
+  role?: string;
 };
 
 export class Button extends Component {
@@ -47,6 +48,7 @@ export class Button extends Component {
     ariaLabel,
     response,
     isRoboto,
+    role,
   }: ButtonProps) {
     super({
       parentNode,
@@ -54,6 +56,7 @@ export class Button extends Component {
       className: ['app_button', className ?? ''],
       attrs: [
         { attr: 'data-variant', value: variant },
+        { attr: 'role', value: role ?? 'button' },
         { attr: 'data-shadow', value: shadow },
         color ? { attr: 'data-color', value: color } : null,
         { attr: 'data-shape', value: corner },
@@ -63,7 +66,7 @@ export class Button extends Component {
         disabled ? { attr: 'disabled', value: 'true' } : null,
         ariaLabel ? { attr: 'aria-label', value: ariaLabel } : null,
         isRoboto ? { attr: 'aria-font', value: 'true' } : null,
-        rightIcon === 'ARROW_DOWN' ? { attr: 'data-dropdown', value: 'true' } : null,
+        rightIcon === 'arrow_down' ? { attr: 'data-dropdown', value: 'true' } : null,
       ].filter((el) => el !== null),
     });
 

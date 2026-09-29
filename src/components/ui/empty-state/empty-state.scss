@@ -1,0 +1,25 @@
+.app-empty-state {
+  width: 100%;
+  max-width: var(--dialog-width-sm);
+  padding: var(--size-4);
+  border-radius: var(--corner-medium);
+  border: var(--border-1) solid var(--on-bg-low);
+  background-color: var(--surface);
+  color: var(--on-primary);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--size-2);
+  box-shadow: var(--card-shadow);
+
+  &_title {
+    font-size: var(--headline-small);
+    font-weight: var(--weight-bold);
+  }
+
+  &_description {
+    font-size: var(--body-medium);
+    color: var(--on-bg-low);
+  }
+}

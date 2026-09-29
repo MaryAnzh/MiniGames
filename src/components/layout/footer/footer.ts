@@ -51,7 +51,7 @@ export class Footer extends Component {
       className: 'footer_brand-logo',
     });
 
-    logoWrap.node.insertAdjacentHTML('beforeend', ICON_PICKER.LOGO);
+    logoWrap.node.insertAdjacentHTML('beforeend', ICON_PICKER.logo);
 
     new Component({
       parentNode: brand.node,
@@ -181,7 +181,7 @@ export class Footer extends Component {
         { attr: 'target', value: '_blank' },
       ],
     });
-    rsIcon.node.insertAdjacentHTML('beforeend', ICON_PICKER.RS);
+    rsIcon.node.insertAdjacentHTML('beforeend', ICON_PICKER.rs);
 
     new Component({
       parentNode: rsWrap.node,

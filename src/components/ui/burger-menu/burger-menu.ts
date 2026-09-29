@@ -3,7 +3,7 @@ import { Component } from '@components';
 import { Button } from '@ui';
 import type { AuthFormType, ComponentProps } from '@types';
 import { Router } from '@route';
-import appStore from '@state';
+import appStore from '@store';
 
 type BurgerMenuProps = Pick<ComponentProps, 'parentNode'> & {
   isAuth: boolean;
@@ -50,7 +50,7 @@ export class BurgerMenu extends Component {
       className: 'burger_brand',
     });
 
-    brand.node.insertAdjacentHTML('beforeend', ICON_PICKER.LOGO);
+    brand.node.insertAdjacentHTML('beforeend', ICON_PICKER.logo);
 
     new Component({
       parentNode: brand.node,

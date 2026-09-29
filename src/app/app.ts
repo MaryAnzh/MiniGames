@@ -2,7 +2,7 @@ import { Component, Header, Footer } from '@components';
 import * as C from '@constants';
 
 import { Router } from '@route';
-import appStore from '@state';
+import appStore from '@store';
 
 export class App {
   private root: HTMLElement;
@@ -34,6 +34,7 @@ export class App {
       isAuth: this.store.isAuth,
       router: this.router,
     });
+
     const footer = new Footer({
       parentNode: null,
       router: this.router,

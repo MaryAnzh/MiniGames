@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  base: '/MiniGames/',
+  base: '/',
   plugins: [tsconfigPaths()],
   resolve: {
     alias: {
@@ -14,7 +14,7 @@ export default defineConfig({
       '@ui': path.resolve(__dirname, './src/components/ui'),
       '@route': path.resolve(__dirname, './src/route'),
       '@app': path.resolve(__dirname, './src/app'),
-      '@state': path.resolve(__dirname, './src/state'),
+      '@store': path.resolve(__dirname, './src/store/store'),
       '@pages': path.relative(__dirname, './src/pages'),
     },
   },

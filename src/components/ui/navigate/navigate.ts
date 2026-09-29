@@ -3,7 +3,7 @@ import { Component } from '../../component';
 import { APP_PAGES, CUSTOM_EVENTS as e } from '@constants';
 import { Router } from '@route';
 import { appEvents } from '@utils';
-import appStore from '@state';
+import appStore from '@store';
 
 type NavigateProps = Pick<ComponentProps, 'parentNode'> & {
   className: string;
