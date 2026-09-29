@@ -8,3 +8,9 @@ export type ApiError = {
   message: string;
   status?: number;
 };
+
+export type ApiState<T> =
+  | { status: 'loading' }
+  | { status: 'success'; data: T }
+  | { status: 'empty' }
+  | { status: 'error'; error: ApiError };
