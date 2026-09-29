@@ -3,6 +3,7 @@ import type { ComponentProps } from '@types';
 
 import { HeroSection, SliderSection, GameDeveloperSection, TableSection } from './components';
 import appStore from '@store';
+import { LOADING } from '@constants';
 
 type HomePageProps = Pick<ComponentProps, 'parentNode'>;
 
@@ -20,11 +21,10 @@ export class HomePage extends Component {
     new HeroSection({
       parentNode: this.node,
     });
-
-    //const games = this.store.getGames();
     new SliderSection({
       parentNode: this.node,
-      slides: this.store.games.filter((game) => game.featured),
+      slides: [],
+      status: LOADING,
     });
 
     new TableSection({
@@ -33,6 +33,10 @@ export class HomePage extends Component {
 
     new GameDeveloperSection({
       parentNode: this.node,
+    });
+
+    this.store.getGames().then((data) => {
+      console.log(data);
     });
   }
 }

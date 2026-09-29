@@ -7,3 +7,11 @@ export const ERROR_GROUP = {
   EMPTY: 'EMPTY',
   UNKNOWN: 'UNKNOWN',
 } as const;
+
+export const RESPONSE_STATUS = {
+  LOADING: 'loading',
+  SUCCESS: 'success',
+  ERROR: 'error',
+} as const;
+
+export const { ERROR, LOADING, SUCCESS } = RESPONSE_STATUS;

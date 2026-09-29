@@ -1,12 +1,16 @@
 import { Component } from '@components';
-import type { ComponentProps, GameCardDataType } from '@types';
+import { LOADING, SUCCESS } from '@constants';
+import type { ComponentProps, GameCardDataType, ResponseStatus } from '@types';
 import { Button } from '@ui';
 import { Slider } from 'src/components/features/slider/slider';
 
-type SliderSectionProps = Pick<ComponentProps, 'parentNode'> & { slides: GameCardDataType[] };
+type SliderSectionProps = Pick<ComponentProps, 'parentNode'> & {
+  slides: GameCardDataType[];
+  status: ResponseStatus;
+};
 
 export class SliderSection extends Component {
-  constructor({ parentNode, slides }: SliderSectionProps) {
+  constructor({ parentNode, slides, status }: SliderSectionProps) {
     super({ parentNode, tagName: 'section', className: 'home-page_slider' });
 
     const titleWrap = new Component({
@@ -34,6 +38,7 @@ export class SliderSection extends Component {
       color: 'light',
       googleIcon: 'arrow_back',
       ariaLabel: 'back slider',
+      disabled: status !== SUCCESS,
     });
     prevBtn.setAttributes([{ attr: 'role', value: 'button' }]);
 
@@ -44,12 +49,14 @@ export class SliderSection extends Component {
       color: 'primary',
       googleIcon: 'arrow_forward',
       ariaLabel: 'forward slider',
+      disabled: status !== SUCCESS,
     });
     nextBtn.setAttributes([{ attr: 'role', value: 'button' }]);
 
     const slider = new Slider({
       parentNode: this.node,
       slides,
+      status,
     });
 
     prevBtn.node.onclick = () => slider.animatePrev();

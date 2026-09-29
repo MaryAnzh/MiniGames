@@ -1,4 +1,4 @@
-import type { ERROR_GROUP } from '@constants';
+import type { ERROR_GROUP, RESPONSE_STATUS } from '@constants';
 import type { KeysTemplateType } from './common';
 
 export type ErrorGropeType = KeysTemplateType<typeof ERROR_GROUP>;
@@ -38,3 +38,5 @@ export type GameCardItemType = {
   likesCount: number;
   cardImage: string;
 };
+
+export type ResponseStatusType = KeysTemplateType<typeof RESPONSE_STATUS>;

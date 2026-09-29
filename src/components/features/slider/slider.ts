@@ -1,9 +1,10 @@
 import { Component, Portal } from '@components';
 import type { SliderProps } from './types';
-import type { GameCardDataType } from '@types';
-import { Icon, LikeButton } from '@ui';
+import type { GameCardDataType, ResponseStatusType } from '@types';
+import { Icon, LikeButton, Skeleton } from '@ui';
 import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
 import { SliderController } from './slider-controller';
+import { ERROR, LOADING, SUCCESS } from '@constants';
 
 export class Slider extends Component {
   private portal: Portal;
@@ -14,12 +15,13 @@ export class Slider extends Component {
   private autoTimer: number | null = null;
   private restartTimer: number | null = null;
   private resizeTimer: number | null = null;
-  private isTimerOn = true;
+  // private isTimerOn = true;
+  status: ResponseStatusType;
 
-  constructor({ parentNode, slides }: SliderProps) {
+  constructor({ parentNode, slides, status }: SliderProps) {
     super({ parentNode, tagName: 'div', className: 'app_slider' });
-
     this.portal = new Portal();
+    this.status = status;
 
     this.controller = new SliderController({
       slides,
@@ -29,9 +31,9 @@ export class Slider extends Component {
     });
     window.addEventListener('resize', () => this.handleResize());
 
-    if (this.isTimerOn) {
-      this.startAutoTimer();
-    }
+    // if (this.isTimerOn) {
+    //   this.startAutoTimer();
+    // }
   }
 
   private startAutoTimer() {
@@ -82,65 +84,72 @@ export class Slider extends Component {
     this.slidesNode = [];
 
     visibleSlides.forEach((game) => {
-      const { name, cardImage, likesCount, rating } = game;
-
       const slide = new Component({
         parentNode: body,
         tagName: 'div',
         className: `app_slider_body_item`,
       });
+      // if (this.status === LOADING || this.status == ERROR) {
+      //   new Skeleton({
+      //     parentNode: slide.node,
+      //     color: 'dark',
+      //   });
+      // }
+      if (this.status === SUCCESS) {
+        const { name, cardImage, likesCount, rating } = game;
 
-      const node = slide.node;
-      node.onclick = () => this.openDetails(game);
+        const node = slide.node;
+        node.onclick = () => this.openDetails(game);
 
-      new Component({
-        parentNode: node,
-        tagName: 'img',
-        className: 'app_slider_body_item_img',
-        attrs: [
-          { attr: 'src', value: cardImage },
-          { attr: 'alt', value: name },
-        ],
-      });
+        new Component({
+          parentNode: node,
+          tagName: 'img',
+          className: 'app_slider_body_item_img',
+          attrs: [
+            { attr: 'src', value: cardImage },
+            { attr: 'alt', value: name },
+          ],
+        });
 
-      const infoWrap = new Component({
-        parentNode: node,
-        tagName: 'div',
-        className: 'app_slider_body_item_info',
-      });
+        const infoWrap = new Component({
+          parentNode: node,
+          tagName: 'div',
+          className: 'app_slider_body_item_info',
+        });
 
-      new Component({
-        parentNode: infoWrap.node,
-        tagName: 'h3',
-        className: 'app_slider_body_item_info_title',
-        content: name,
-      });
+        new Component({
+          parentNode: infoWrap.node,
+          tagName: 'h3',
+          className: 'app_slider_body_item_info_title',
+          content: name,
+        });
 
-      const starWrap = new Component({
-        parentNode: infoWrap.node,
-        tagName: 'span',
-        className: 'app_slider_body_item_info_count',
-      });
-      new Icon({ parentNode: starWrap.node, icon: 'star' });
-      new Component({
-        parentNode: starWrap.node,
-        tagName: 'span',
-        content: rating.toString(),
-      });
+        const starWrap = new Component({
+          parentNode: infoWrap.node,
+          tagName: 'span',
+          className: 'app_slider_body_item_info_count',
+        });
+        new Icon({ parentNode: starWrap.node, icon: 'star' });
+        new Component({
+          parentNode: starWrap.node,
+          tagName: 'span',
+          content: rating.toString(),
+        });
 
-      const likeWrap = new Component({
-        parentNode: infoWrap.node,
-        tagName: 'span',
-        className: 'app_slider_body_item_info_count',
-      });
-      new LikeButton({ parentNode: likeWrap.node, isIcon: true, isLight: true });
-      new Component({
-        parentNode: likeWrap.node,
-        tagName: 'span',
-        content: likesCount.toString(),
-      });
+        const likeWrap = new Component({
+          parentNode: infoWrap.node,
+          tagName: 'span',
+          className: 'app_slider_body_item_info_count',
+        });
+        new LikeButton({ parentNode: likeWrap.node, isIcon: true, isLight: true });
+        new Component({
+          parentNode: likeWrap.node,
+          tagName: 'span',
+          content: likesCount.toString(),
+        });
 
-      this.slidesNode.push(slide.node);
+        this.slidesNode.push(slide.node);
+      }
     });
   }
 
