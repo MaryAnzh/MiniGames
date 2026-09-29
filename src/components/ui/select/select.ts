@@ -43,7 +43,7 @@ export class Select extends Component {
     this.trigger = new Button({
       parentNode: this.node,
       className: 'app-select-trigger',
-      rightIcon: 'ARROW_DOWN',
+      rightIcon: 'arrow_down',
       text,
       color: 'light',
       corner: 'lg',
@@ -90,7 +90,7 @@ export class Select extends Component {
         color: 'light',
         className: 'app-select_popup_item',
         text: label,
-        leftIcon: selected ? 'CHECKED' : undefined,
+        leftIcon: selected ? 'checked' : undefined,
       });
 
       row.setAttributes([

@@ -1,0 +1,23 @@
+<svg width="24" height="24" viewBox="0 0 24 24"
+  xmlns="http://www.w3.org/2000/svg">
+  <rect
+    x="0"
+    y="0"
+    width="24"
+    height="24"
+    rx="12"
+    fill="var(--on-primary, #242145)"
+  />
+  <text
+    x="12"
+    y="13"
+    text-anchor="middle"
+    dominant-baseline="central"
+    fill="var(--primary, #FFD02B)"
+    font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont"
+    font-size="10"
+    font-weight="700"
+  >
+    RS
+  </text>
+</svg>

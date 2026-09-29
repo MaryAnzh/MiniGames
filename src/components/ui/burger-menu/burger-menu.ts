@@ -50,7 +50,7 @@ export class BurgerMenu extends Component {
       className: 'burger_brand',
     });
 
-    brand.node.insertAdjacentHTML('beforeend', ICON_PICKER.LOGO);
+    brand.node.insertAdjacentHTML('beforeend', ICON_PICKER.logo);
 
     new Component({
       parentNode: brand.node,

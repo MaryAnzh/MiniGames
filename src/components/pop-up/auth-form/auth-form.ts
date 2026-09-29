@@ -202,7 +202,7 @@ export class AuthPopup extends Component {
       color: 'light',
       fullWidth: true,
       className: 'auth_google_btn',
-      leftIcon: 'Google',
+      leftIcon: 'google',
     });
 
     const footerText = isLogin ? "Don't have an account?" : 'Already have an account?';
