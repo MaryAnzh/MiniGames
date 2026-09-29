@@ -3,14 +3,38 @@ import type { KeysTemplateType } from './common';
 
 export type ErrorGropeType = KeysTemplateType<typeof ERROR_GROUP>;
 
-export type ApiError = {
-  group: ErrorGropeType;
-  message: string;
-  status?: number;
+export type MetaType = {
+  page: number;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
+  appliedFilter: Record<string, boolean>;
 };
 
-export type ApiState<T> =
-  | { status: 'loading' }
-  | { status: 'success'; data: T }
-  | { status: 'empty' }
-  | { status: 'error'; error: ApiError };
+export type ResponseType<T> = {
+  data: T[];
+  meta: MetaType;
+};
+
+export type ApiSuccess<T> = {
+  status: 'success';
+  data: T;
+};
+
+export type ApiError = {
+  status: 'error';
+  error: string;
+};
+
+export type ApiState<T> = ApiSuccess<T> | ApiError;
+
+export type GameCardItemType = {
+  slug: string;
+  name: string;
+  category: string;
+  price: string;
+  shortDescription: string;
+  rating: number;
+  likesCount: number;
+  cardImage: string;
+};

@@ -1,6 +1,7 @@
 import { CUSTOM_EVENTS as e } from '@constants';
 import { appEvents } from '@utils';
 import type { CategoriesType, GameCardDataType, GameRecord, SortOptionType } from '@types';
+import { api } from '../services/app';
 
 import categories from '../data/categories.json';
 import sortData from '../data/sort.json';
@@ -11,6 +12,7 @@ import type { PageComponentType } from '@pages';
 class AppStore {
   private _isAuth = false;
   private _currentRoute = '/';
+  private api: typeof api;
 
   categories: CategoriesType[] = categories.data;
   sort: SortOptionType[] = sortData;
@@ -21,6 +23,10 @@ class AppStore {
   queryParams: Record<string, string> = {};
 
   currentPageInstance: PageComponentType | null = null;
+
+  constructor() {
+    this.api = api;
+  }
 
   get isAuth() {
     return this._isAuth;
@@ -37,6 +43,11 @@ class AppStore {
   set currentRoute(value: string) {
     this._currentRoute = value;
     appEvents.emit(e.ROUTE_CHANGE, value);
+  }
+
+  async getGames() {
+    const data = await this.api.getGames();
+    return data;
   }
 }
 

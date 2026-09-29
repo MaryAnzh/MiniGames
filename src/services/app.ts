@@ -1,70 +1,48 @@
-import type { ApiState } from '@types';
 import * as C from '@constants';
+import type { ResponseType, GameCardItemType, ApiState } from '@types';
 
-const { CLIENT, NETWORK, SERVER, UNKNOWN } = C.ERROR_GROUP;
+const { NETWORK } = C.ERROR_GROUP;
 
 export class ApiService {
-  private baseUrl = 'https://faxb76kxra.execute-api.eu-central-1.amazonaws.com/api';
+  private baseUrl = '/api/';
 
   async get<T>(path: string): Promise<ApiState<T>> {
     try {
       const response = await fetch(`${this.baseUrl}${path}`);
 
       if (!response.ok) {
-        return this.handleHttpError(response);
+        return {
+          status: 'error',
+          error: this.handleHttpError(response),
+        };
       }
 
       const json = await response.json();
-
-      if (Array.isArray(json) && json.length === 0) {
-        return { status: 'empty' };
-      }
-
-      return { status: 'success', data: json };
+      return { status: 'success', data: json as T };
     } catch {
       return {
         status: 'error',
-        error: {
-          group: NETWORK,
-          message: 'Network error. Check your connection.',
-        },
+        error: NETWORK,
       };
     }
   }
 
-  private handleHttpError(response: Response) {
+  async getGames() {
+    return await this.get<ResponseType<GameCardItemType>>('games');
+  }
+
+  private handleHttpError(response: Response): string {
     const status = response.status;
 
     if (status === 404) {
-      return {
-        status: 'error',
-        error: {
-          group: CLIENT,
-          message: 'Resource not found.',
-          status,
-        },
-      };
+      return 'Resource not found.';
     }
 
     if (status >= 500) {
-      return {
-        status: 'error',
-        error: {
-          group: SERVER,
-          message: 'Server error. Try again later.',
-          status,
-        },
-      };
+      return 'Server error. Try again later.';
     }
 
-    return {
-      status: 'error',
-      error: {
-        group: UNKNOWN,
-        message: 'Unexpected error.',
-        status,
-      },
-    };
+    return 'Unexpected error.';
   }
 }
 

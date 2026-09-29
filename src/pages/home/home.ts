@@ -21,6 +21,7 @@ export class HomePage extends Component {
       parentNode: this.node,
     });
 
+    //const games = this.store.getGames();
     new SliderSection({
       parentNode: this.node,
       slides: this.store.games.filter((game) => game.featured),

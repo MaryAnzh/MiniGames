@@ -20,7 +20,7 @@ import no_info from '/svg/no-info.svg?raw';
 import rs from '/svg/rs.svg?raw';
 import send from '/svg/send.svg?raw';
 import star from '/svg/star.svg?raw';
-import success from '/svg/Success.svg?raw';
+import success from '/svg/success.svg?raw';
 
 export const ICON_PICKER = {
   arrow_down,
