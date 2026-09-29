@@ -12,6 +12,7 @@ import favorite from '/svg/favorite.svg?raw';
 import gold from '/svg/gold.svg?raw';
 import google from './svg/google.svg?raw';
 import info from './svg/info.svg?raw';
+import logo from './svg/lobo.svg?raw';
 import no_cards from './svg/no-cards.svg?raw';
 import no_comments from './svg/no-comments.svg?raw';
 import no_games from './svg/no-games.svg?raw';
@@ -36,6 +37,7 @@ export const ICON_PICKER = {
   info,
   gold,
   google,
+  logo,
   no_cards,
   no_comments,
   no_games,

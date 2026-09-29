@@ -15,7 +15,7 @@ export class Skeleton extends Component {
     super({
       parentNode,
       tagName: 'div',
-      className: ['app-skeleton', `skeleton-${variant}`, className ?? ''],
+      className: ['app-skeleton', className ?? ''],
       attrs: [
         width ? { attr: 'style', value: `width:${width}` } : null,
         height ? { attr: 'style', value: `height:${height}` } : null,

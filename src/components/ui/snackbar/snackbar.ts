@@ -1,5 +1,5 @@
 import { Component } from '@components';
-import type { ComponentProps, IconPickerType } from '@types';
+import type { ComponentProps } from '@types';
 import { Icon, Button } from '@ui';
 
 type SnackbarType = 'success' | 'error' | 'info';
@@ -7,14 +7,13 @@ type SnackbarType = 'success' | 'error' | 'info';
 type SnackbarProps = Pick<ComponentProps, 'parentNode'> & {
   message: string;
   type: SnackbarType;
-  duration?: number;
   onClose: () => void;
 };
 
 export class Snackbar extends Component {
   private closeBtn: Button;
 
-  constructor({ parentNode, message, type = 'info', duration = 3000, onClose }: SnackbarProps) {
+  constructor({ parentNode, message, type = 'info', onClose }: SnackbarProps) {
     super({
       parentNode,
       tagName: 'div',
