@@ -3,12 +3,13 @@ import type { ComponentProps } from '@types';
 
 import { HeroSection, SliderSection, GameDeveloperSection, TableSection } from './components';
 import appStore from '@store';
-import { LOADING } from '@constants';
+import { LOADING, SUCCESS } from '@constants';
 
 type HomePageProps = Pick<ComponentProps, 'parentNode'>;
 
 export class HomePage extends Component {
   private store: typeof appStore;
+  children: Component[] = [];
 
   constructor({ parentNode }: HomePageProps) {
     super({
@@ -18,25 +19,37 @@ export class HomePage extends Component {
       attrs: [{ attr: 'id', value: 'page' }],
     });
     this.store = appStore;
-    new HeroSection({
+
+    const heroSection = new HeroSection({
       parentNode: this.node,
     });
-    new SliderSection({
+
+    const sliderSection = new SliderSection({
       parentNode: this.node,
       slides: [],
       status: LOADING,
     });
+    this.children.push(sliderSection);
 
-    new TableSection({
+    const table = new TableSection({
       parentNode: this.node,
     });
 
-    new GameDeveloperSection({
+    const gameDev = new GameDeveloperSection({
       parentNode: this.node,
     });
+
+    this.children = [heroSection, sliderSection, table, gameDev];
 
     this.store.getGames().then((data) => {
-      console.log(data);
+      if (data.status === SUCCESS) {
+        sliderSection.updateSlides(data.data.data);
+      }
     });
+  }
+
+  destroy(): void {
+    this.children.forEach((ch) => ch.destroy());
+    super.destroy();
   }
 }

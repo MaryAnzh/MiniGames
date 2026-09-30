@@ -1,4 +1,4 @@
-import type { ComponentProps, GameCardDataType, ResponseStatusType } from '@types';
+import type { ComponentProps, GameCardItemType, ResponseStatusType } from '@types';
 
 export type SliderState = {
   /**center card index*/
@@ -12,6 +12,6 @@ export type SliderState = {
 };
 
 export type SliderProps = Pick<ComponentProps, 'parentNode'> & {
-  slides: GameCardDataType[];
+  slides: GameCardItemType[];
   status: ResponseStatusType;
 };

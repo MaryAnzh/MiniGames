@@ -1,6 +1,6 @@
 import { Component, Portal } from '@components';
 import type { SliderProps } from './types';
-import type { GameCardDataType, ResponseStatusType } from '@types';
+import type { GameCardItemType, ResponseStatusType } from '@types';
 import { Icon, LikeButton, Skeleton } from '@ui';
 import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
 import { SliderController } from './slider-controller';
@@ -62,7 +62,7 @@ export class Slider extends Component {
     }, 10000);
   }
 
-  private render(visibleSlides: GameCardDataType[]) {
+  private render(visibleSlides: GameCardItemType[]) {
     this.node.innerHTML = '';
     this.sliderBody = null;
     this.slidesNode = [];
@@ -76,7 +76,7 @@ export class Slider extends Component {
     this.renderSlides(visibleSlides);
   }
 
-  renderSlides(visibleSlides: GameCardDataType[]) {
+  renderSlides(visibleSlides: GameCardItemType[]) {
     const body = this.sliderBody;
     if (!body) return;
 
@@ -99,7 +99,7 @@ export class Slider extends Component {
         const { name, cardImage, likesCount, rating } = game;
 
         const node = slide.node;
-        node.onclick = () => this.openDetails(game);
+        node.onclick = () => this.openDetails();
 
         new Component({
           parentNode: node,
@@ -153,10 +153,9 @@ export class Slider extends Component {
     });
   }
 
-  private openDetails(game: GameCardDataType) {
+  private openDetails() {
     const dialog = new GameDetailsDialog({
       parentNode: null,
-      game,
       onClose: () => this.portal.unmount(),
     });
 
@@ -234,22 +233,6 @@ export class Slider extends Component {
     return data;
   }
 
-  public animateNext() {
-    if (!this.isAnimating) {
-      this.stopAutoTimer();
-      this.restartAutoTimerDelayed();
-      if (!this.isAnimating) this.animate('prev');
-    }
-  }
-
-  public animatePrev() {
-    if (!this.isAnimating) {
-      this.stopAutoTimer();
-      this.restartAutoTimerDelayed();
-      if (!this.isAnimating) this.animate('next');
-    }
-  }
-
   private handleResize() {
     if (this.resizeTimer) {
       clearTimeout(this.resizeTimer);
@@ -267,6 +250,28 @@ export class Slider extends Component {
       this.getAnimationPlan();
     }, 150);
   }
+
+  //PUBLIC
+  public animateNext() {
+    if (!this.isAnimating) {
+      this.stopAutoTimer();
+      this.restartAutoTimerDelayed();
+      if (!this.isAnimating) this.animate('prev');
+    }
+  }
+
+  public animatePrev() {
+    if (!this.isAnimating) {
+      this.stopAutoTimer();
+      this.restartAutoTimerDelayed();
+      if (!this.isAnimating) this.animate('next');
+    }
+  }
+
+  public updateSlides = (slides: GameCardItemType[]) => {
+    this.controller.setSlides(slides);
+    this.controller.updateSlides(); // ← вот этого не хватало
+  };
 
   //toDo
   destroy() {

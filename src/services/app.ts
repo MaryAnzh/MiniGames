@@ -27,7 +27,7 @@ export class ApiService {
     }
   }
 
-  async getGames() {
+  async getGames(): Promise<ApiState<ResponseType<GameCardItemType>>> {
     return await this.get<ResponseType<GameCardItemType>>('games');
   }
 

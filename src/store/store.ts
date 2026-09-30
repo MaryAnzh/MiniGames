@@ -1,6 +1,14 @@
 import { CUSTOM_EVENTS as e } from '@constants';
 import { appEvents } from '@utils';
-import type { CategoriesType, GameCardDataType, GameRecord, SortOptionType } from '@types';
+import type {
+  ApiState,
+  CategoriesType,
+  GameCardDataType,
+  GameCardItemType,
+  GameRecord,
+  ResponseType,
+  SortOptionType,
+} from '@types';
 import { api } from '../services/app';
 
 import categories from '../data/categories.json';
@@ -45,7 +53,7 @@ class AppStore {
     appEvents.emit(e.ROUTE_CHANGE, value);
   }
 
-  async getGames() {
+  async getGames(): Promise<ApiState<ResponseType<GameCardItemType>>> {
     const data = await this.api.getGames();
     return data;
   }
