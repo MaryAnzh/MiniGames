@@ -89,12 +89,12 @@ export class Slider extends Component {
         tagName: 'div',
         className: `app_slider_body_item`,
       });
-      // if (this.status === LOADING || this.status == ERROR) {
-      //   new Skeleton({
-      //     parentNode: slide.node,
-      //     color: 'dark',
-      //   });
-      // }
+      if (this.status === LOADING || this.status == ERROR) {
+        new Skeleton({
+          parentNode: slide.node,
+          color: 'light',
+        });
+      }
       if (this.status === SUCCESS) {
         const { name, cardImage, likesCount, rating } = game;
 
