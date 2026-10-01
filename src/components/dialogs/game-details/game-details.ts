@@ -6,13 +6,14 @@ import appStore from '@store';
 type GameDetailsProps = {
   parentNode: HTMLElement | null;
   onClose: () => void;
+  game?: GameCardDataType;
 };
 
 export class GameDetailsDialog extends Component {
   store: typeof appStore;
   handleClose: () => void;
 
-  constructor({ parentNode, onClose }: GameDetailsProps) {
+  constructor({ parentNode, onClose, game }: GameDetailsProps) {
     super({
       parentNode,
       tagName: 'div',
@@ -20,8 +21,8 @@ export class GameDetailsDialog extends Component {
     });
     this.store = appStore;
     this.handleClose = onClose;
-    const game = this.store.games.at(11);
-    this.render(game as GameCardDataType);
+    const g = game ?? this.store.games.at(11);
+    this.render(g as GameCardDataType);
   }
 
   private render(game: GameCardDataType) {

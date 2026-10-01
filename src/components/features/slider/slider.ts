@@ -63,6 +63,7 @@ export class Slider extends Component {
   }
 
   private render(visibleSlides: GameCardItemType[]) {
+    if (this.isAnimating) return;
     this.node.innerHTML = '';
     this.sliderBody = null;
     this.slidesNode = [];
@@ -106,7 +107,7 @@ export class Slider extends Component {
           tagName: 'img',
           className: 'app_slider_body_item_img',
           attrs: [
-            { attr: 'src', value: cardImage },
+            { attr: 'src', value: cardImage.replace('.jpg', '.webp') },
             { attr: 'alt', value: name },
           ],
         });
@@ -267,11 +268,6 @@ export class Slider extends Component {
       if (!this.isAnimating) this.animate('next');
     }
   }
-
-  public updateSlides = (slides: GameCardItemType[]) => {
-    this.controller.setSlides(slides);
-    this.controller.updateSlides(); // ← вот этого не хватало
-  };
 
   //toDo
   destroy() {

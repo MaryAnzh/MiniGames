@@ -46,7 +46,6 @@ export class SliderSection extends Component {
       color: 'light',
       googleIcon: 'arrow_back',
       ariaLabel: 'back slider',
-      disabled: this.status !== SUCCESS,
     });
     this.prevBtn.setAttributes([{ attr: 'role', value: 'button' }]);
 
@@ -57,7 +56,6 @@ export class SliderSection extends Component {
       color: 'primary',
       googleIcon: 'arrow_forward',
       ariaLabel: 'forward slider',
-      disabled: this.status !== SUCCESS,
     });
     this.nextBtn.setAttributes([{ attr: 'role', value: 'button' }]);
 
@@ -71,15 +69,19 @@ export class SliderSection extends Component {
     this.nextBtn.node.onclick = () => this.slider.animateNext();
   }
 
-  public update(status: ResponseStatusType, games?: GameCardItemType[]) {
-    this.status = status;
-    this.slides = games ? games : [];
-  }
-
   public updateSlides(slides: GameCardItemType[]) {
-    this.slider.updateSlides(slides);
-    this.prevBtn.node.removeAttribute('disabled');
-    this.nextBtn.node.removeAttribute('disabled');
+    this.status = SUCCESS;
+
+    this.slider.destroy();
+
+    this.slider = new Slider({
+      parentNode: this.node,
+      slides,
+      status: this.status,
+    });
+
+    this.prevBtn.node.onclick = () => this.slider.animatePrev();
+    this.nextBtn.node.onclick = () => this.slider.animateNext();
   }
 
   destroy(): void {
