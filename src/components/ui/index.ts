@@ -15,3 +15,4 @@ export { EmptyState } from './empty-state/empty-state';
 export { ErrorBanner } from './error-banner/error-banner';
 export { Snackbar } from './snackbar/snackbar';
 export { Spinner } from './spinner/spinner';
+export { SkeletonText } from './skeleton-text/skeleton-text';
