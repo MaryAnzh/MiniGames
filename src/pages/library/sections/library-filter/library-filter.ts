@@ -1,59 +1,77 @@
 import { Component } from '@components';
-import { CENTER } from '@constants';
-import appStore from '@store';
-import type { CategoriesType, ComponentProps } from '@types';
+import { CENTER, RATING_DESC } from '@constants';
+import type { CategoriesType, CategoryType, ComponentProps, SortTypes } from '@types';
 import { Button, Select } from '@ui';
+import { CHIPS_COUNT, LOADING_CHIP, SORT_OPTIONS } from './constants';
+import { arrayFromNumber } from '@utils';
+type LibraryFiltersProps = Pick<ComponentProps, 'parentNode'> & {
+  categories: CategoryType[];
+};
 
 export class LibraryFilters extends Component {
-  store: typeof appStore;
-  categoryList: CategoriesType[];
-  tagList: Button[] = [];
+  categoriesData: CategoriesType[];
+  categoriesNode: Component[] = [];
+  currentSot: SortTypes = RATING_DESC;
+  categoriesWrapNode: Component | null = null;
   isDragStart = false;
 
-  constructor({ parentNode }: Pick<ComponentProps, 'parentNode'>) {
+  constructor({ parentNode, categories }: LibraryFiltersProps) {
     super({
       parentNode,
       tagName: 'section',
       className: 'library_filters',
     });
+    this.categoriesData = categories;
 
-    this.store = appStore;
-    this.categoryList = this.store.categories;
+    this.renderCategories();
+    this.renderSort();
+  }
 
-    const list = new Component({
+  private renderCategories() {
+    this.categoriesWrapNode = new Component({
       parentNode: this.node,
       tagName: 'ul',
       className: 'library_filters_categories',
     });
+    const node = this.categoriesWrapNode;
+    if (node) {
+      arrayFromNumber(CHIPS_COUNT).forEach((el) => this.renderChip(node.node, LOADING_CHIP, el));
+    }
+    this.initDragScroll(this.categoriesWrapNode.node);
+  }
 
-    this.categoryList.forEach(({ isDefault, label }, index) => {
-      const li = new Component({
-        parentNode: list.node,
-        tagName: 'li',
-        className: 'library_filters_categories_item',
-      });
+  renderChip(node: HTMLElement, category: CategoriesType, index: number) {
+    const isSkeleton = this.categoriesData.length === 0;
 
-      const tagButton = new Button({
-        parentNode: li.node,
-        text: label,
-        color: isDefault ? 'primary' : 'light',
-        size: 'sm',
-        corner: 'lg',
-        ariaLabel: `Category: ${label}`,
-      });
-
-      tagButton.setAttributes([
-        { attr: 'id', value: `${index}_${label}` },
-        { attr: 'role', value: 'tab' },
-        { attr: 'aria-selected', value: isDefault ? 'true' : 'false' },
-        { attr: 'data-active', value: isDefault ? 'true' : 'false' },
-      ]);
-
-      tagButton.node.addEventListener('click', this.selectCategory(index));
-
-      this.tagList.push(tagButton);
+    const li = new Component({
+      parentNode: node,
+      tagName: 'li',
+      className: 'library_filters_categories_item',
     });
 
+    const tagButton = new Button({
+      parentNode: li.node,
+      text: category.label,
+      color: category.isDefault ? 'primary' : 'light',
+      size: 'sm',
+      corner: 'lg',
+      ariaLabel: `Category: ${category.label}`,
+      variant: isSkeleton ? 'skeleton' : undefined,
+    });
+    if (!isSkeleton) {
+      tagButton.setAttributes([
+        { attr: 'id', value: `${index}_${category.label}` },
+        { attr: 'role', value: 'tab' },
+        { attr: 'aria-selected', value: category.isDefault ? 'true' : 'false' },
+        { attr: 'data-active', value: category.isDefault ? 'true' : 'false' },
+      ]);
+      tagButton.node.click = () => this.selectCategory(index);
+    }
+
+    this.categoriesNode.push(tagButton);
+  }
+
+  private renderSort() {
     const sortWrap = new Component({
       parentNode: this.node,
       className: 'library_filters_sort',
@@ -62,14 +80,12 @@ export class LibraryFilters extends Component {
     new Select({
       parentNode: sortWrap.node,
       align: CENTER,
-      list: this.store.sort,
+      list: SORT_OPTIONS,
     });
-
-    this.initDragScroll(list.node);
   }
 
   private selectCategory = (index: number) => () => {
-    this.tagList.forEach((btn, i) => {
+    this.categoriesNode.forEach((btn, i) => {
       const isActive = i === index;
 
       btn.setAttributes([
@@ -140,10 +156,26 @@ export class LibraryFilters extends Component {
     );
   }
 
+  public updateCategories(categories: CategoryType[]) {
+    this.categoriesData = categories;
+    const list = this.categoriesWrapNode;
+    if (list) {
+      this.categoriesNode.forEach((el) => {
+        el.node.onclick = null;
+        el.destroy();
+      });
+      this.categoriesNode = [];
+      list.node.innerHTML = '';
+      categories.forEach((el, i) => {
+        this.renderChip(list.node, el, i);
+      });
+    }
+  }
+
   destroy() {
-    this.tagList.map((el, index) =>
-      el.node.removeEventListener('click', this.selectCategory(index)),
-    );
+    this.categoriesNode.map((el) => {
+      el.node.onclick = null;
+    });
     super.destroy();
   }
 }

@@ -1,4 +1,4 @@
-import type { ERROR_GROUP, RESPONSE_STATUS } from '@constants';
+import type { ERROR_GROUP, RESPONSE_STATUS, SORT_DATA_KEYS } from '@constants';
 import type { KeysTemplateType } from './common';
 
 export type ErrorGropeType = KeysTemplateType<typeof ERROR_GROUP>;
@@ -58,3 +58,16 @@ export type LeaderBoardType = {
   favoriteGameSlug: string;
   favoriteGameName: string;
 };
+
+export type CategoryType = {
+  slug: string;
+  label: string;
+  isDefault: boolean;
+};
+
+export type CategoryMetaType = {
+  totalItems: number;
+  description: string;
+};
+
+export type SortTypes = KeysTemplateType<typeof SORT_DATA_KEYS>;

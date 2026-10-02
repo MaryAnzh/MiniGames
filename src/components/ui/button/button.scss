@@ -1,6 +1,7 @@
 @use '../../../styles/variable' as *;
 
 .app_button {
+  position: relative;
   width: fit-content;
   display: inline-flex;
   align-items: center;
@@ -14,7 +15,7 @@
   outline-offset: var(--border-2-neg);
   border: none;
   background: transparent;
-
+  overflow: hidden;
   &[disabled] {
     pointer-events: none;
     opacity: 0.7;
@@ -247,6 +248,10 @@
   outline: none;
   border-radius: 0;
   padding: 0;
+}
+
+.app_button[data-variant='skeleton'] {
+  pointer-events: none;
 }
 
 .app_button[data-font] {

@@ -5,7 +5,7 @@ import appStore from '@store';
 import { appEvents } from '@utils';
 
 import { LibraryIntro, LibraryFilters, LibraryCards } from './sections';
-import { ROUTE_CHANGE } from '@constants';
+import { ROUTE_CHANGE, SUCCESS } from '@constants';
 
 export class LibraryPage extends Component {
   private store: typeof appStore;
@@ -56,7 +56,7 @@ export class LibraryPage extends Component {
     const page = this.getPageFromURL();
 
     new LibraryIntro({ parentNode: this.node });
-    new LibraryFilters({ parentNode: this.node });
+    const filters = new LibraryFilters({ parentNode: this.node, categories: [] });
 
     this.cards = new LibraryCards({
       parentNode: this.node,
@@ -67,6 +67,12 @@ export class LibraryPage extends Component {
       parentNode: this.node,
       totalPages: Math.ceil(this.store.games.length / this.totalPage),
       currentPage: page,
+    });
+
+    this.store.getCategories().then((result) => {
+      if (result.status === SUCCESS) {
+        filters.updateCategories(result.data.data);
+      }
     });
   }
 

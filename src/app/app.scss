@@ -3,4 +3,5 @@
   min-height: 100%;
   display: grid;
   grid-template-rows: min-content auto max-content;
+  overflow: hidden;
 }

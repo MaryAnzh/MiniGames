@@ -9,6 +9,7 @@
   gap: var(--size-2);
   align-items: center;
   border-bottom: var(--size-025) var(--on-primary) solid;
+  overflow: hidden;
 
   .header_nav,
   .header_login_btn,

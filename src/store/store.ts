@@ -3,6 +3,7 @@ import { appEvents } from '@utils';
 import type {
   ApiState,
   CategoriesType,
+  CategoryType,
   GameCardDataType,
   GameCardItemType,
   GameCardParamsType,
@@ -62,6 +63,11 @@ class AppStore {
 
   async getLeaderboard(): Promise<ApiState<ResponseType<LeaderBoardType>>> {
     const data = await this.api.getLeaders();
+    return data;
+  }
+
+  async getCategories(): Promise<ApiState<ResponseType<CategoryType>>> {
+    const data = await this.api.getCategories();
     return data;
   }
 }

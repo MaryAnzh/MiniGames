@@ -2,12 +2,13 @@ import type { ComponentProps, GoogleIconsType, IconPickerType } from '@types';
 import { Component } from '../../component';
 import { ICON_PICKER } from '@constants';
 import { GoogleIcon } from '../google-icon/google-icon';
+import { Skeleton } from '../skeleton/skeleton';
 
 type ColorType = 'primary' | 'light' | 'dark' | 'ghost' | 'chips';
 
 export type ButtonProps = Pick<ComponentProps, 'parentNode'> & {
   className?: string;
-  variant?: 'solid' | 'empty';
+  variant?: 'solid' | 'empty' | 'skeleton';
   color?: ColorType;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'icon-sm' | 'icon-md' | 'icon-lg' | 'none';
   response?: 'sm' | 'md';
@@ -99,6 +100,13 @@ export class Button extends Component {
 
     if (rightIcon) {
       this.node.insertAdjacentHTML('beforeend', ICON_PICKER[rightIcon]);
+    }
+
+    if (variant === 'skeleton') {
+      new Skeleton({
+        parentNode: this.node,
+        color: 'dark',
+      });
     }
   }
 

@@ -20,6 +20,7 @@ export class Select extends Component {
   private trigger: Button;
   private popup: Component;
   private isOpen = false;
+  private optionNodes: Component[] = [];
 
   private outsideHandler = (e: MouseEvent) => {
     if (!this.node.contains(e.target as Node)) {
@@ -98,9 +99,10 @@ export class Select extends Component {
         { attr: 'aria-selected', value: selected ? 'true' : 'false' },
       ]);
 
-      row.node.addEventListener('click', () => {
+      row.node.onclick = () => {
         this.select(value);
-      });
+      };
+      this.optionNodes.push(row);
     });
   }
 
@@ -140,6 +142,8 @@ export class Select extends Component {
   }
 
   destroy() {
+    this.optionNodes.forEach((el) => (el.node.onclick = null));
+
     document.removeEventListener('click', this.outsideHandler);
     super.destroy();
   }
