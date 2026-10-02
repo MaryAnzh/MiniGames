@@ -96,7 +96,6 @@ export class LibraryPage extends Component {
 
     if (result.status === 'success') {
       const { data, meta } = result.data;
-      console.log(meta);
       this.cards.renderAllCards(data);
       this.pagination.updateMeta(meta.totalPages, meta.page);
 
