@@ -105,7 +105,6 @@ export class Button extends Component {
     if (variant === 'skeleton') {
       new Skeleton({
         parentNode: this.node,
-        color: 'dark',
       });
     }
   }

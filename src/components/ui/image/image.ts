@@ -7,16 +7,17 @@ type ImageProps = Pick<ComponentProps, 'parentNode'> & {
   src: string;
   alt: string;
   skeletonColor?: ColorVariantType;
+  className?: string;
 };
 
 export class Image extends Component {
   img: Component;
 
-  constructor({ parentNode, src, alt, skeletonColor = DARK }: ImageProps) {
+  constructor({ parentNode, src, alt, skeletonColor = DARK, className }: ImageProps) {
     super({
       parentNode,
       tagName: 'div',
-      className: 'app-image',
+      className: ['app-image', className ?? ''],
     });
     this.img = new Component({
       parentNode: this.node,

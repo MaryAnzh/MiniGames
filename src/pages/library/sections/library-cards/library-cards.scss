@@ -38,7 +38,6 @@
     &_img {
       width: 100%;
       height: var(--ui-card-img-h-mobile);
-      object-fit: cover;
       overflow: hidden;
     }
 
@@ -83,15 +82,21 @@
       gap: var(--size-1);
 
       &_title {
+        position: relative;
         font-size: var(--headline-small);
         font-weight: var(--weight-bold);
         color: var(--on-primary);
         white-space: nowrap;
         @include truncate(1);
+        min-height: var(--headline-small);
+        min-width: var(--size-15);
+        overflow: hidden;
       }
 
       &_category {
+        position: relative;
         width: fit-content;
+        min-height: var(--size-2-2);
         padding: var(--tag-padding);
         background: var(--secondary);
         border-radius: var(--corner-extra-large);
@@ -100,13 +105,18 @@
         font-size: var(--label-medium);
         font-weight: var(--weight-bold);
         color: var(--on-primary);
+        overflow: hidden;
+        min-width: var(--size-5);
       }
 
       &_price {
+        position: relative;
         display: none;
         font-size: var(--headline-medium);
         font-weight: var(--weight-bold);
         color: var(--price-free);
+        min-height: var(--headline-medium);
+        outline: 1px solid black;
       }
 
       @media (min-width: $tablet) {
@@ -140,12 +150,15 @@
 
     &_desc {
       @include truncate(2);
+      position: relative;
       font-size: var(--body-small);
       font-weight: var(--weight-medium);
       color: var(--on-bg);
       line-height: 1.4;
       overflow: hidden;
       text-overflow: ellipsis;
+      min-height: var(--size-5);
+      width: 100%;
 
       @media (min-width: $tablet) {
         @include truncate(2);
@@ -171,9 +184,11 @@
 
       &_rating,
       &_likes {
+        position: relative;
         display: flex;
         align-items: center;
         gap: var(--size-05);
+        width: fit-content;
       }
 
       .game-card_icon {
@@ -189,10 +204,13 @@
       }
 
       &_price {
+        position: relative;
         justify-self: end;
         color: var(--price-free, #0b8a8f);
         font-size: var(--headline-small);
         font-weight: var(--weight-extra-bold);
+        min-height: var(--headline-small);
+        min-width: var(--size-1);
       }
 
       &_details {
@@ -212,6 +230,9 @@
 
         &_price {
           display: none;
+          div {
+            display: none;
+          }
         }
 
         &_details {

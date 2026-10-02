@@ -8,7 +8,7 @@ type SkeletonTextProps = Pick<ComponentProps, 'parentNode'> & {
   rows?: number;
   variant?: 'one' | 'multi';
   className?: string;
-  color: ColorVariantType;
+  color?: ColorVariantType;
 };
 
 export class SkeletonText extends Component {
@@ -24,13 +24,13 @@ export class SkeletonText extends Component {
       parentNode,
       tagName: 'div',
       className: ['app-skeleton-text', `app-skeleton-text_${variant}`, className ?? ''],
-      attrs: [{ attr: 'data-color', value: color }],
     });
     if (rows === 1 && columns === 1) {
       new Component({
         parentNode: this.node,
         tagName: 'div',
-        className: 'app-skeleton-text_row_item',
+        className: ['app-skeleton-text_row_item', 'app-skeleton-text_skeleton'],
+        attrs: [{ attr: 'data-color', value: color }],
       });
       return;
     }
@@ -45,8 +45,9 @@ export class SkeletonText extends Component {
       arrayFromNumber(columns).forEach(() => {
         new Component({
           parentNode: rowWrap.node,
-          tagName: 'div',
-          className: 'app-skeleton-text_row_item',
+          tagName: 'span',
+          className: ['app-skeleton-text_row_item', 'app-skeleton-text_skeleton'],
+          attrs: [{ attr: 'data-color', value: color }],
         });
       });
     });

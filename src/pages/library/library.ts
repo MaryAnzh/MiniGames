@@ -64,7 +64,7 @@ export class LibraryPage extends Component {
 
     this.cards = new LibraryCards({
       parentNode: this.node,
-      list: [],
+      defaultCardCount: this.store.pageLimit,
     });
 
     this.pagination = new Pagination({
@@ -87,6 +87,8 @@ export class LibraryPage extends Component {
   }
 
   private async loadGames(page: number) {
+    this.cards.showSkeletons();
+
     const result = await this.store.getGames({
       category: this.store.currentCategory,
       sort: this.store.currentSort,
@@ -96,14 +98,13 @@ export class LibraryPage extends Component {
 
     if (result.status === 'success') {
       const { data, meta } = result.data;
+
       this.cards.renderAllCards(data);
       this.pagination.updateMeta(meta.totalPages, meta.page);
 
       if (!data.length) {
-        // empty state
       }
     } else {
-      // error state
     }
   }
 }
