@@ -17,7 +17,7 @@ export class Pagination extends Component {
   private isMobile = false;
   private maxVisible = 4;
 
-  private windowStart = 1; // окно страниц
+  private windowStart = 1;
 
   private prevBtn!: Button;
   private nextBtn!: Button;
@@ -44,13 +44,6 @@ export class Pagination extends Component {
     this.initResizeListener();
   }
 
-  /** PUBLIC API */
-  public update(page: number) {
-    this.currentPage = page;
-    this.updateStates();
-  }
-
-  /** INITIAL WINDOW POSITION */
   private calcInitialWindowStart(): number {
     if (this.totalPages <= this.maxVisible) return 1;
 
@@ -65,9 +58,7 @@ export class Pagination extends Component {
     return start;
   }
 
-  /** CREATE BUTTONS */
   private createButtons() {
-    // PREV
     this.prevBtn = new Button({
       parentNode: this.node,
       leftIcon: 'arrow_left',
@@ -81,7 +72,6 @@ export class Pagination extends Component {
       if (this.currentPage > 1) this.updatePage(this.currentPage - 1, false);
     };
 
-    // PAGE BUTTONS
     const pages = this.getWindowPages();
     pages.forEach((page) => {
       const btn = new Button({
@@ -100,7 +90,6 @@ export class Pagination extends Component {
       this.pageButtons.push(btn);
     });
 
-    // NEXT
     this.nextBtn = new Button({
       parentNode: this.node,
       leftIcon: 'arrow_right',
@@ -115,7 +104,6 @@ export class Pagination extends Component {
     };
   }
 
-  /** UPDATE STATES */
   private updateStates() {
     this.prevBtn.setAttributes([
       { attr: 'disabled', value: this.currentPage === 1 ? 'true' : null },
@@ -140,7 +128,6 @@ export class Pagination extends Component {
     });
   }
 
-  /** UPDATE PAGE */
   private updatePage(page: number, isPageClick: boolean) {
     const prevPage = this.currentPage;
     this.currentPage = page;
@@ -158,31 +145,25 @@ export class Pagination extends Component {
     this.updateStates();
   }
 
-  /** HANDLE ARROW MOVEMENT */
   private handleArrowMove(prevPage: number, newPage: number) {
     const pages = this.getWindowPages();
     const first = pages[0];
     const last = pages[pages.length - 1];
 
-    if (newPage < prevPage) {
-      if (prevPage === first) {
-        this.windowStart = Math.max(1, this.windowStart - 1);
-      }
+    if (newPage < prevPage && prevPage === first) {
+      this.windowStart = Math.max(1, this.windowStart - 1);
     }
 
-    if (newPage > prevPage) {
-      if (prevPage === last) {
-        this.windowStart = Math.min(this.totalPages - this.maxVisible + 1, this.windowStart + 1);
-      }
+    if (newPage > prevPage && prevPage === last) {
+      this.windowStart = Math.min(this.totalPages - this.maxVisible + 1, this.windowStart + 1);
     }
   }
 
-  /** WINDOW PAGES */
   private getWindowPages(): number[] {
-    return arrayFromNumber(this.maxVisible, this.windowStart);
+    const count = Math.min(this.maxVisible, this.totalPages);
+    return arrayFromNumber(count, this.windowStart);
   }
 
-  /** RESIZE LISTENER */
   private initResizeListener() {
     window.addEventListener('resize', () => {
       const nowMobile = window.innerWidth < this.tabletWidth;
@@ -198,13 +179,25 @@ export class Pagination extends Component {
     });
   }
 
-  /** REBUILD BUTTONS */
   private rebuildPageButtons() {
     this.node.innerHTML = '';
     this.pageButtons.forEach((btn) => btn.destroy());
     this.pageButtons = [];
 
     this.createButtons();
+    this.updateStates();
+  }
+
+  public updateMeta(totalPages: number, currentPage: number) {
+    this.totalPages = totalPages;
+    this.currentPage = currentPage;
+
+    this.windowStart = this.calcInitialWindowStart();
+    this.rebuildPageButtons();
+  }
+
+  public update(page: number) {
+    this.currentPage = page;
     this.updateStates();
   }
 }
