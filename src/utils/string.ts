@@ -1,6 +1,5 @@
 export function getAvatarLetters(name: string) {
   if (!name) return '';
-  console.log(`name: ${name}`);
   const clean = name.trim();
   const parts = clean.split('_');
 

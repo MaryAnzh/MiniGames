@@ -1,5 +1,5 @@
 import { Component } from '@components';
-import { DARK, SUCCESS } from '@constants';
+import { DARK, LIGHT, SUCCESS } from '@constants';
 import type { ComponentProps, LeaderBoardType, ResponseStatusType } from '@types';
 import { Skeleton, SkeletonText } from '@ui';
 import { arrayFromNumber, getAvatarLetters } from '@utils';
@@ -230,9 +230,9 @@ export class TableSection extends Component {
     });
 
     if (this.leaderboard.length === 0) {
-      [favorite, avatar].forEach((el) => new Skeleton({ parentNode: el.node, color: DARK }));
+      [favorite, avatar].forEach((el) => new Skeleton({ parentNode: el.node, color: LIGHT }));
       [rank, score, streakDays, games, playerName].forEach(
-        (el) => new SkeletonText({ parentNode: el.node, color: DARK }),
+        (el) => new SkeletonText({ parentNode: el.node, color: LIGHT }),
       );
     }
   }

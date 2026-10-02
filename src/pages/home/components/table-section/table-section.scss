@@ -88,9 +88,7 @@
 
     .home_table-ceil {
       position: relative;
-      min-height: var(--size-2);
       height: fit-content;
-      min-height: var(--size-3);
       width: fit-content;
       min-width: var(--size-4);
       overflow: hidden;
@@ -129,7 +127,7 @@
     }
     height: var(--size-7);
     @media (min-width: $tablet) {
-      grid-template-columns: 80px 160px 17.5% 15.5% 17.5%;
+      grid-template-columns: 80px auto 17.5% 15.5% 17.5%;
       gap: var(--size-1-5);
       height: var(--size-8);
     }
@@ -164,10 +162,12 @@
 
   .col-rank {
     display: flex;
-    min-height: var(--size-2);
     text-align: center;
     font-weight: var(--weight-extra-bold);
     min-width: var(--size-2);
+    &::first-letter {
+      color: var(--tertiary);
+    }
   }
 
   .col-player {
@@ -209,7 +209,6 @@
   .player-name {
     position: relative;
     min-width: var(--size-10);
-    min-height: var(--size-3);
     font-size: var(--body-small);
     font-weight: var(--weight-bold);
     overflow: hidden;
@@ -252,6 +251,7 @@
     min-width: var(--size-8);
     min-height: var(--size-3);
     overflow: hidden;
+    background: var(--bg);
   }
   .header_favorite,
   .col-favorite {
