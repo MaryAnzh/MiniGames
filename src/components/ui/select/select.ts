@@ -1,6 +1,6 @@
 import { Component } from '@components';
 import { LEFT, SORT_GAMES } from '@constants';
-import type { AlignType, ComponentProps } from '@types';
+import type { AlignType, ComponentProps, SortTypes } from '@types';
 import { Button } from '@ui';
 
 type SelectItem = {
@@ -12,6 +12,7 @@ type SelectItem = {
 type SelectProps = Pick<ComponentProps, 'parentNode'> & {
   list: SelectItem[];
   align?: AlignType;
+  onChange: (value: SortTypes) => void;
 };
 
 export class Select extends Component {
@@ -21,6 +22,7 @@ export class Select extends Component {
   private popup: Component;
   private isOpen = false;
   private optionNodes: Component[] = [];
+  private onChange: (value: SortTypes) => void;
 
   private outsideHandler = (e: MouseEvent) => {
     if (!this.node.contains(e.target as Node)) {
@@ -28,7 +30,7 @@ export class Select extends Component {
     }
   };
 
-  constructor({ parentNode, list, align = LEFT }: SelectProps) {
+  constructor({ parentNode, list, align = LEFT, onChange }: SelectProps) {
     super({
       parentNode,
       tagName: 'div',
@@ -37,6 +39,7 @@ export class Select extends Component {
 
     this.list = list;
     this.align = align;
+    this.onChange = onChange;
 
     const selectedLabel = this.list.find((i) => i.selected)?.label;
     const text = this.setSortTitle(selectedLabel);
@@ -134,6 +137,7 @@ export class Select extends Component {
     this.trigger.setText(this.setSortTitle(selected?.label));
 
     this.renderList();
+    this.onChange(value as SortTypes);
     this.close();
   }
 

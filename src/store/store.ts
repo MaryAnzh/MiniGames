@@ -1,4 +1,4 @@
-import { CUSTOM_EVENTS as e } from '@constants';
+import { CUSTOM_EVENTS as e, RATING_DESC } from '@constants';
 import { appEvents } from '@utils';
 import type {
   ApiState,
@@ -11,6 +11,7 @@ import type {
   LeaderBoardType,
   ResponseType,
   SortOptionType,
+  SortTypes,
 } from '@types';
 import { api } from '../services/app';
 
@@ -34,6 +35,11 @@ class AppStore {
   queryParams: Record<string, string> = {};
 
   currentPageInstance: PageComponentType | null = null;
+
+  //Sorting
+  currentCategory: string = 'all';
+  currentSort: SortTypes = RATING_DESC;
+  pageLimit = 6;
 
   constructor() {
     this.api = api;

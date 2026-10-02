@@ -4,8 +4,11 @@ import type { CategoriesType, CategoryType, ComponentProps, SortTypes } from '@t
 import { Button, Select } from '@ui';
 import { CHIPS_COUNT, LOADING_CHIP, SORT_OPTIONS } from './constants';
 import { arrayFromNumber } from '@utils';
+
 type LibraryFiltersProps = Pick<ComponentProps, 'parentNode'> & {
-  categories: CategoryType[];
+  categories: CategoriesType[];
+  onCategoryChange: (value: string) => void;
+  onSortChange: (value: SortTypes) => void;
 };
 
 export class LibraryFilters extends Component {
@@ -15,13 +18,19 @@ export class LibraryFilters extends Component {
   categoriesWrapNode: Component | null = null;
   isDragStart = false;
 
-  constructor({ parentNode, categories }: LibraryFiltersProps) {
+  //callbacks
+  private onCategoryChange: (value: string) => void;
+  private onSortChange: (value: SortTypes) => void;
+
+  constructor({ parentNode, categories, onCategoryChange, onSortChange }: LibraryFiltersProps) {
     super({
       parentNode,
       tagName: 'section',
       className: 'library_filters',
     });
     this.categoriesData = categories;
+    this.onCategoryChange = onCategoryChange;
+    this.onSortChange = onSortChange;
 
     this.renderCategories();
     this.renderSort();
@@ -65,7 +74,7 @@ export class LibraryFilters extends Component {
         { attr: 'aria-selected', value: category.isDefault ? 'true' : 'false' },
         { attr: 'data-active', value: category.isDefault ? 'true' : 'false' },
       ]);
-      tagButton.node.click = () => this.selectCategory(index);
+      tagButton.node.onclick = this.selectCategory(index, category.slug);
     }
 
     this.categoriesNode.push(tagButton);
@@ -81,20 +90,25 @@ export class LibraryFilters extends Component {
       parentNode: sortWrap.node,
       align: CENTER,
       list: SORT_OPTIONS,
+      onChange: (value: SortTypes) => {
+        this.currentSot = value as SortTypes;
+        this.onSortChange(value);
+      },
     });
   }
 
-  private selectCategory = (index: number) => () => {
+  private selectCategory = (index: number, value: string) => () => {
     this.categoriesNode.forEach((btn, i) => {
       const isActive = i === index;
 
       btn.setAttributes([
         { attr: 'aria-selected', value: isActive ? 'true' : 'false' },
         { attr: 'data-active', value: isActive ? 'true' : 'false' },
+        { attr: 'data-color', value: isActive ? 'primary' : 'light' },
       ]);
-
-      btn.setAttributes([{ attr: 'data-color', value: isActive ? 'primary' : 'light' }]);
     });
+
+    this.onCategoryChange(value);
   };
 
   private initDragScroll(container: HTMLElement) {

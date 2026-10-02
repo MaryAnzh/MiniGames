@@ -1,5 +1,5 @@
 import { Component, Portal } from '@components';
-import type { ComponentProps, GameCardDataType } from '@types';
+import type { ComponentProps, GameCardDataType, GameCardItemType } from '@types';
 import { Button, LikeButton } from '@ui';
 import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
 
@@ -23,7 +23,7 @@ export class LibraryCards extends Component {
     });
   }
 
-  private renderCard(game: GameCardDataType) {
+  private renderCard(game: GameCardItemType) {
     const { cardImage, name, category, likesCount, price, rating, shortDescription } = game;
     const card = new Component({
       parentNode: this.node,
@@ -37,7 +37,7 @@ export class LibraryCards extends Component {
       tagName: 'img',
       className: 'library_game-card_img',
       attrs: [
-        { attr: 'src', value: cardImage },
+        { attr: 'src', value: cardImage.replace('.jpg', '.webp') },
         { attr: 'alt', value: name },
       ],
     });
@@ -146,7 +146,7 @@ export class LibraryCards extends Component {
       ariaLabel: `Details for ${name}`,
       fullWidth: true,
     });
-    detailsBtn.node.onclick = () => this.openDetails(game);
+    detailsBtn.node.onclick = () => this.openDetails(game as GameCardDataType);
 
     detailsBtn.setAttributes([{ attr: 'role', value: 'card-dialog' }]);
     //test
@@ -165,7 +165,7 @@ export class LibraryCards extends Component {
     this.portal.mount(dialog.node);
   }
 
-  public renderAllCards(list: GameCardDataType[]) {
+  public renderAllCards(list: GameCardItemType[]) {
     this.node.innerHTML = '';
     list.forEach((game) => {
       this.renderCard(game);
