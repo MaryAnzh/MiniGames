@@ -1,5 +1,5 @@
 import { Component } from '@components';
-import { DARK, LIGHT, SUCCESS } from '@constants';
+import { LIGHT, SUCCESS } from '@constants';
 import type { ComponentProps, LeaderBoardType, ResponseStatusType } from '@types';
 import { Skeleton, SkeletonText } from '@ui';
 import { arrayFromNumber, getAvatarLetters } from '@utils';
