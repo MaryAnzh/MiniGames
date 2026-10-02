@@ -68,13 +68,14 @@
     display: none;
   }
 
-  @media (min-width: $min-tablet) {
+  @media (min-width: $tablet) {
     padding: var(--size-9) var(--size-5);
 
     .hero_text-wrap {
+      width: 100%;
+      max-width: var(--layout-hero-width-md);
       padding: var(--size-3);
       box-shadow: var(--level-2);
-      width: var(--layout-hero-width-md);
       border-radius: var(--corner-large);
       outline: var(--border-2-5) var(--on-primary) solid;
       outline-offset: var(--border-2-5-neg);
@@ -98,12 +99,12 @@
     }
   }
 
-  @media (min-width: $min-laptop) {
+  @media (min-width: $laptop) {
     padding: var(--size-14) var(--size-15);
 
     .hero_text-wrap {
-      width: var(--layout-hero-width-lg);
-      max-width: 100%;
+      max-width: var(--layout-hero-width-lg);
+      width: 100%;
 
       padding: var(--size-6);
       box-shadow: var(--level-3);

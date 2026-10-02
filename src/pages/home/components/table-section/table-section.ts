@@ -1,14 +1,12 @@
 import { Component } from '@components';
-import type { ComponentProps } from '@types';
+import { DARK, SUCCESS } from '@constants';
+import type { ComponentProps, LeaderBoardType, ResponseStatusType } from '@types';
+import { Skeleton, SkeletonText } from '@ui';
+import { arrayFromNumber, getAvatarLetters } from '@utils';
 
-type TableSectionProps = Pick<ComponentProps, 'parentNode'>;
-
-type AddCellType = {
-  parentNode: HTMLElement;
-  content?: string;
-  isHeader?: boolean;
-  className: string;
-  additionalClass?: string;
+type TableSectionProps = Pick<ComponentProps, 'parentNode'> & {
+  status: ResponseStatusType;
+  leaderBoard: LeaderBoardType[];
 };
 
 type RowType = {
@@ -19,80 +17,43 @@ type RowType = {
   streak: string;
   favorite?: string;
   isHeader?: boolean;
-  avatar?: string;
-  avatarColor?: string;
-  name?: string;
 };
 
-export class TableSection extends Component {
-  tableRows: RowType[] = [
-    {
-      rank: 'Rank',
-      player: 'Player',
-      games: 'Games Played',
-      score: 'Total Score',
-      streak: 'Streak',
-      favorite: 'Favorite Game',
-      isHeader: true,
-    },
-    {
-      rank: '#1',
-      avatar: 'AP',
-      avatarColor: 'var(--primary)',
-      name: 'Alex_Pro99',
-      games: '142',
-      score: '94,250',
-      streak: '🔥 12 ',
-      favorite: 'Heartopia',
-    },
-    {
-      rank: '#2',
-      avatar: 'CG',
-      avatarColor: 'var(--avatar-random-2)',
-      name: 'CozyGamer_x',
-      games: '118',
-      score: '81,400',
-      streak: '🔥 8 ',
-      favorite: 'Cat Mail Co.',
-    },
-    {
-      rank: '#3',
-      avatar: 'MM',
-      avatarColor: 'var(--avatar-random-3)',
-      name: 'MatchMaster',
-      games: '98',
-      score: '72,110',
-      streak: '🔥 5 ',
-      favorite: 'Tiny Glade',
-    },
-    {
-      rank: '#4',
-      avatar: 'BP',
-      avatarColor: 'var(--avatar-random-4)',
-      name: 'BubblePop',
-      games: '87',
-      score: '65,900',
-      streak: '🔥 3 ',
-      favorite: 'Whisper of the House',
-    },
-    {
-      rank: '#5',
-      avatar: 'SG',
-      avatarColor: 'var(--avatar-random-5)',
-      name: 'SudokuGod',
-      games: '74',
-      score: '59,320',
-      streak: '🔥 2 ',
-      favorite: 'Cat Chess',
-    },
-  ];
+const EMPTY_ROW: LeaderBoardType = {
+  favoriteGameName: ' ',
+  favoriteGameSlug: ' ',
+  gamesPlayed: 0,
+  playerName: ' ',
+  rank: 0,
+  streakDays: 0,
+  totalScore: 0,
+};
 
-  constructor({ parentNode }: TableSectionProps) {
+const ROWS_COUNT = 5;
+
+export class TableSection extends Component {
+  status: ResponseStatusType;
+  leaderboard: LeaderBoardType[];
+  tableHeader: RowType = {
+    isHeader: true,
+    rank: 'Rank',
+    player: 'Player',
+    games: 'Games Played',
+    score: 'Total Score',
+    streak: 'Streak',
+    favorite: 'Favorite Game',
+  };
+  rows: Component | null = null;
+
+  constructor({ parentNode, status, leaderBoard }: TableSectionProps) {
     super({
       parentNode,
       tagName: 'section',
       className: 'table-section',
     });
+
+    this.status = status;
+    this.leaderboard = leaderBoard;
 
     this.renderTitle();
     this.renderTable();
@@ -122,101 +83,167 @@ export class TableSection extends Component {
   private renderTable() {
     const table = new Component({
       parentNode: this.node,
-      tagName: 'div',
+      tagName: 'table',
       className: 'table-section_table',
     });
 
-    this.tableRows.forEach((row) => this.renderRow(table.node, row));
+    this.renderHeader(table.node, this.tableHeader);
+
+    this.rows = new Component({
+      parentNode: table.node,
+      tagName: 'tbody',
+      className: 'table-section_table_body',
+    });
+
+    const body = this.rows;
+
+    if (body) {
+      if (!this.leaderboard || this.leaderboard.length === 0) {
+        arrayFromNumber(ROWS_COUNT).forEach(() => this.renderRow(body.node, EMPTY_ROW));
+      } else {
+        this.leaderboard.forEach((row) => this.renderRow(body.node, row));
+      }
+    }
   }
 
-  private renderRow(parent: HTMLElement, row: RowType) {
+  private renderHeader(parent: HTMLElement, row: RowType) {
     const rowEl = new Component({
       parentNode: parent,
-      tagName: 'div',
-      className: `table-section_row ${row.isHeader ? 'table-section_row--header' : ''}`,
+      tagName: 'thead',
     });
 
-    // Rank
-    this.addCell({
+    const tr = new Component({
       parentNode: rowEl.node,
-      content: row.rank,
-      isHeader: row.isHeader,
-      className: 'col-rank',
+      tagName: 'tr',
+      className: ['table-section_row', 'table-section_row--header'],
     });
 
-    // Player
-    if (row.isHeader) {
-      this.addCell({
-        parentNode: rowEl.node,
-        content: row.player,
-        isHeader: true,
-        className: 'header-col',
-      });
-    } else {
-      const playerCell = new Component({
-        parentNode: rowEl.node,
-        tagName: 'div',
-        className: 'col-player',
-      });
+    const headerClass = 'header-col';
 
-      new Component({
-        parentNode: playerCell.node,
-        tagName: 'div',
-        className: 'player-avatar',
-        content: row.avatar!,
-        attrs: [{ attr: 'style', value: `background:${row.avatarColor}` }],
-      });
+    new Component({
+      parentNode: tr.node,
+      tagName: 'th',
+      content: row.rank,
+      className: headerClass,
+    });
 
-      new Component({
-        parentNode: playerCell.node,
-        tagName: 'span',
-        className: 'player-name',
-        content: row.name!,
-      });
-    }
+    new Component({
+      parentNode: tr.node,
+      tagName: 'th',
+      content: row.player,
+      className: headerClass,
+    });
+
+    new Component({
+      parentNode: tr.node,
+      tagName: 'th',
+      className: ['header_games', headerClass],
+    });
+
+    new Component({
+      parentNode: tr.node,
+      tagName: 'th',
+      className: ['header-score', headerClass],
+    });
+
+    new Component({
+      parentNode: tr.node,
+      tagName: 'th',
+      content: row.streak,
+      className: headerClass,
+    });
+
+    new Component({
+      parentNode: tr.node,
+      tagName: 'th',
+      content: row.favorite,
+      className: ['header_favorite', headerClass],
+    });
+  }
+
+  private renderRow(parentNode: HTMLElement, row: LeaderBoardType) {
+    const tr = new Component({
+      parentNode,
+      tagName: 'tr',
+      className: 'table-section_row',
+    });
+    const ceilClass = 'home_table-ceil';
+    // Rank
+    const rank = new Component({
+      parentNode: tr.node,
+      tagName: 'td',
+      content: row.rank ? `#${row.rank}` : '',
+      className: ['col-rank', ceilClass],
+    });
+
+    // Player cell
+    const playerCell = new Component({
+      parentNode: tr.node,
+      tagName: 'td',
+      className: ['col-player'],
+    });
+
+    const avatar = new Component({
+      parentNode: playerCell.node,
+      tagName: 'div',
+      className: 'player-avatar',
+      content: row.playerName ? getAvatarLetters(row.playerName) : '',
+    });
+
+    const playerName = new Component({
+      parentNode: playerCell.node,
+      tagName: 'span',
+      className: 'player-name',
+      content: row.playerName || ' ',
+    });
 
     // Games
-    this.addCell({
-      parentNode: rowEl.node,
-      content: row.isHeader ? '' : row.games,
-      isHeader: row.isHeader,
-      className: 'col-games',
-      additionalClass: row.isHeader ? 'header_games' : '',
+    const games = new Component({
+      parentNode: tr.node,
+      tagName: 'td',
+      content: row.gamesPlayed ? row.gamesPlayed.toString() : '',
+      className: ['col-games', ceilClass],
     });
 
     // Score
-    this.addCell({
-      parentNode: rowEl.node,
-      content: row.isHeader ? '' : row.score,
-      isHeader: row.isHeader,
-      className: 'col-score',
-      additionalClass: row.isHeader ? 'header-score' : '',
+    const score = new Component({
+      parentNode: tr.node,
+      tagName: 'td',
+      content: row.totalScore ? row.totalScore.toString() : '',
+      className: ['col-score', ceilClass],
     });
 
     // Streak
-    this.addCell({
-      parentNode: rowEl.node,
-      content: row.streak,
-      isHeader: row.isHeader,
-      className: 'col-streak',
+    const streakDays = new Component({
+      parentNode: tr.node,
+      tagName: 'td',
+      content: row.streakDays ? `🔥 ${row.streakDays}` : ' ',
+      className: ['col-streak', ceilClass],
     });
 
     // Favorite
-    this.addCell({
-      parentNode: rowEl.node,
-      content: row.isHeader ? '' : row.favorite,
-      isHeader: row.isHeader,
-      className: 'col-favorite',
-      additionalClass: row.isHeader ? 'header_favorite' : '',
+    const favorite = new Component({
+      parentNode: tr.node,
+      tagName: 'td',
+      content: row.favoriteGameSlug || ' ',
+      className: ['col-favorite', ceilClass],
     });
+
+    if (this.leaderboard.length === 0) {
+      [favorite, avatar].forEach((el) => new Skeleton({ parentNode: el.node, color: DARK }));
+      [rank, score, streakDays, games, playerName].forEach(
+        (el) => new SkeletonText({ parentNode: el.node, color: DARK }),
+      );
+    }
   }
 
-  private addCell({ parentNode, content, isHeader, className, additionalClass }: AddCellType) {
-    new Component({
-      parentNode,
-      tagName: 'span',
-      className: `${isHeader ? 'header-col' : className} ${additionalClass ?? ''}`,
-      content: content ?? '',
-    });
+  public updateRows(data: LeaderBoardType[]) {
+    this.leaderboard = data;
+    this.status = SUCCESS;
+
+    if (this.rows) {
+      this.rows.node.innerHTML = '';
+      data.forEach((row) => this.renderRow(this.rows!.node, row));
+    }
   }
 }

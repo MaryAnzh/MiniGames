@@ -5,7 +5,9 @@ import type {
   CategoriesType,
   GameCardDataType,
   GameCardItemType,
+  GameCardParamsType,
   GameRecord,
+  LeaderBoardType,
   ResponseType,
   SortOptionType,
 } from '@types';
@@ -53,8 +55,13 @@ class AppStore {
     appEvents.emit(e.ROUTE_CHANGE, value);
   }
 
-  async getGames(): Promise<ApiState<ResponseType<GameCardItemType>>> {
-    const data = await this.api.getGames();
+  async getGames(params?: GameCardParamsType): Promise<ApiState<ResponseType<GameCardItemType>>> {
+    const data = await this.api.getGames(params);
+    return data;
+  }
+
+  async getLeaderboard(): Promise<ApiState<ResponseType<LeaderBoardType>>> {
+    const data = await this.api.getLeaders();
     return data;
   }
 }

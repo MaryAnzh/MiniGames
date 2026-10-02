@@ -39,4 +39,22 @@ export type GameCardItemType = {
   cardImage: string;
 };
 
+export type GameCardParamsType = {
+  featured?: boolean;
+  page?: number;
+  limit?: number;
+  category?: string;
+  sort?: string;
+};
+
 export type ResponseStatusType = KeysTemplateType<typeof RESPONSE_STATUS>;
+
+export type LeaderBoardType = {
+  rank: number;
+  playerName: string;
+  gamesPlayed: number;
+  totalScore: number;
+  streakDays: number;
+  favoriteGameSlug: string;
+  favoriteGameName: string;
+};

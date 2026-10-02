@@ -1,14 +1,13 @@
 import type { ColorVariantType, ComponentProps } from '@types';
 import { arrayFromNumber } from '@utils';
 import { Component } from 'src/components/component';
-import { Skeleton } from '../skeleton/skeleton';
 import { LIGHT } from '@constants';
 
 type SkeletonTextProps = Pick<ComponentProps, 'parentNode'> & {
-  columns: number;
-  rows: number;
-  variant: 'title' | 'text';
-  className: string;
+  columns?: number;
+  rows?: number;
+  variant?: 'one' | 'multi';
+  className?: string;
   color: ColorVariantType;
 };
 
@@ -17,7 +16,7 @@ export class SkeletonText extends Component {
     parentNode,
     columns = 1,
     rows = 1,
-    variant,
+    variant = 'one',
     className,
     color = LIGHT,
   }: SkeletonTextProps) {
@@ -25,7 +24,16 @@ export class SkeletonText extends Component {
       parentNode,
       tagName: 'div',
       className: ['app-skeleton-text', `app-skeleton-text_${variant}`, className ?? ''],
+      attrs: [{ attr: 'data-color', value: color }],
     });
+    if (rows === 1 && columns === 1) {
+      new Component({
+        parentNode: this.node,
+        tagName: 'div',
+        className: 'app-skeleton-text_row_item',
+      });
+      return;
+    }
 
     arrayFromNumber(rows).forEach(() => {
       const rowWrap = new Component({
@@ -35,12 +43,11 @@ export class SkeletonText extends Component {
       });
 
       arrayFromNumber(columns).forEach(() => {
-        const item = new Component({
+        new Component({
           parentNode: rowWrap.node,
-          tagName: 'span',
+          tagName: 'div',
           className: 'app-skeleton-text_row_item',
         });
-        new Skeleton({ parentNode: item.node, color });
       });
     });
   }

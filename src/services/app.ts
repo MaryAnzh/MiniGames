@@ -1,10 +1,18 @@
 import * as C from '@constants';
-import type { ResponseType, GameCardItemType, ApiState } from '@types';
+import * as R from './constants';
+
+import type {
+  ResponseType,
+  GameCardItemType,
+  ApiState,
+  LeaderBoardType,
+  GameCardParamsType,
+} from '@types';
 
 const { NETWORK } = C.ERROR_GROUP;
 
 export class ApiService {
-  private baseUrl = '/api/';
+  private baseUrl = R.API;
 
   async get<T>(path: string): Promise<ApiState<T>> {
     try {
@@ -27,8 +35,26 @@ export class ApiService {
     }
   }
 
-  async getGames(): Promise<ApiState<ResponseType<GameCardItemType>>> {
-    return await this.get<ResponseType<GameCardItemType>>('games');
+  async getGames(params?: GameCardParamsType): Promise<ApiState<ResponseType<GameCardItemType>>> {
+    const query = new URLSearchParams();
+
+    if (params) {
+      if (params.featured) {
+        query.set('featured', 'true');
+      } else {
+        if (params.page) query.set('page', String(params.page));
+        if (params.limit) query.set('limit', String(params.limit));
+        if (params.category) query.set('category', params.category);
+        if (params.sort) query.set('sort', params.sort);
+      }
+    }
+
+    const url = `${R.GAMES}?${query.toString()}`;
+    return await this.get<ResponseType<GameCardItemType>>(url);
+  }
+
+  async getLeaders() {
+    return await this.get<ResponseType<LeaderBoardType>>(R.LEADER_BOARD);
   }
 
   private handleHttpError(response: Response): string {

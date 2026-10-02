@@ -33,7 +33,8 @@
     }
 
     @media (min-width: $laptop) {
-      width: var(--layout-dev-img-xl);
+      width: 100%;
+      max-width: var(--layout-dev-img-xl);
       height: var(--layout-hero-width-md);
     }
   }

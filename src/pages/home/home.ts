@@ -29,10 +29,11 @@ export class HomePage extends Component {
       slides: [],
       status: LOADING,
     });
-    this.children.push(sliderSection);
 
     const table = new TableSection({
       parentNode: this.node,
+      status: LOADING,
+      leaderBoard: [],
     });
 
     const gameDev = new GameDeveloperSection({
@@ -41,9 +42,14 @@ export class HomePage extends Component {
 
     this.children = [heroSection, sliderSection, table, gameDev];
 
-    this.store.getGames().then((data) => {
-      if (data.status === SUCCESS) {
-        sliderSection.updateSlides(data.data.data);
+    this.store.getGames({ featured: true }).then((result) => {
+      if (result.status === SUCCESS) {
+        sliderSection.updateSlides(result.data.data);
+      }
+    });
+    this.store.getLeaderboard().then((result) => {
+      if (result.status === SUCCESS) {
+        table.updateRows(result.data.data);
       }
     });
   }

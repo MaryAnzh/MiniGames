@@ -12,14 +12,11 @@
     padding: var(--size-3) var(--size-5);
     gap: var(--size-3);
   }
-
   @media (min-width: $laptop) {
     padding: var(--size-5) var(--size-15);
-    gap: var(--size-5);
   }
 
   &_title-wrap {
-    width: 100%;
     display: flex;
     align-items: center;
     gap: var(--size-1);
@@ -35,10 +32,6 @@
 
       &::after {
         content: 'Top Players';
-        color: var(--on-primary);
-        font-size: var(--headline-medium);
-        font-weight: var(--weight-bold);
-
         @media (min-width: $tablet) {
           content: 'Top Players This Week';
         }
@@ -57,29 +50,33 @@
     outline: var(--border-2-5) var(--on-primary) solid;
     outline-offset: var(--border-2-5-neg);
     box-shadow: var(--level-1);
+    border-collapse: collapse;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
 
     @media (min-width: $tablet) {
       box-shadow: var(--level-2);
-      gap: var(--size-2);
     }
-
     @media (min-width: $laptop) {
       box-shadow: var(--level-3);
+      border-top-left-radius: var(--corner-medium);
+      border-top-right-radius: var(--corner-medium);
     }
+  }
+
+  &_table_body {
+    width: 100%;
+    height: fit-content;
   }
 
   &_row {
     width: 100%;
-    display: grid;
-    align-items: center;
-    padding: var(--size-2);
-    gap: var(--size-1) 0;
     border-bottom: var(--border-1-5) var(--outline) solid;
 
-    grid-template-columns: 40px 1fr 80px 70px;
+    display: grid;
+    align-items: center;
+    gap: var(--size-1) 0;
+
+    grid-template-columns: 40px 1fr 64px 70px;
 
     font-size: var(--label-large);
     font-weight: var(--weight-bold);
@@ -88,10 +85,22 @@
     &:nth-child(even) {
       background: var(--bg);
     }
-    &:nth-child(5),
-    &:nth-child(6) {
-      display: none;
 
+    .home_table-ceil {
+      position: relative;
+      min-height: var(--size-2);
+      height: fit-content;
+      min-height: var(--size-3);
+      width: fit-content;
+      min-width: var(--size-4);
+      overflow: hidden;
+      justify-self: center;
+      justify-content: center;
+    }
+
+    &:nth-child(4),
+    &:nth-child(5) {
+      display: none;
       @media (min-width: $laptop) {
         display: grid;
       }
@@ -100,54 +109,71 @@
     &--header {
       background: var(--tertiary);
       border-bottom: var(--border-1-5) solid var(--on-primary);
-      font-family: var(--font-roboto);
       font-size: var(--label-medium);
       font-weight: var(--weight-extra-bold);
       text-transform: uppercase;
 
       .header-col {
         color: var(--white);
-        width: 100%;
         text-align: center;
       }
-    }
 
+      @media (min-width: $tablet) {
+        font-size: var(--body-small);
+        height: var(--size-6);
+      }
+
+      @media (min-width: $laptop) {
+        height: var(--size-8);
+      }
+    }
+    height: var(--size-7);
     @media (min-width: $tablet) {
       grid-template-columns: 80px 160px 17.5% 15.5% 17.5%;
       gap: var(--size-1-5);
-      padding: var(--size-2);
-
-      &--header {
-        font-size: var(--body-small);
-        .header-col {
-          padding: 0 var(--size-2);
-        }
-      }
+      height: var(--size-8);
     }
 
     @media (min-width: $laptop) {
-      padding: var(--size-3);
       height: var(--size-9);
-      gap: 0;
       grid-template-columns: 80px repeat(5, 1fr);
+    }
+
+    &:nth-of-type(1) .player-avatar {
+      background: var(--avatar-color-1);
+    }
+    &:nth-of-type(2) .player-avatar {
+      background: var(--avatar-color-2);
+    }
+    &:nth-of-type(3) .player-avatar {
+      background: var(--avatar-color-3);
+    }
+    &:nth-of-type(4) .player-avatar {
+      background: var(--avatar-color-4);
+    }
+    &:nth-of-type(5) .player-avatar {
+      background: var(--avatar-color-5);
     }
   }
 
-  .col-rank {
-    justify-self: center;
-    font-weight: var(--weight-extra-bold);
+  td,
+  th {
+    padding: var(--size-1);
+    vertical-align: middle;
+  }
 
-    &:first-child {
-      color: var(--tertiary);
-    }
+  .col-rank {
+    display: flex;
+    min-height: var(--size-2);
+    text-align: center;
+    font-weight: var(--weight-extra-bold);
+    min-width: var(--size-2);
   }
 
   .col-player {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: var(--size-05);
-    overflow: hidden;
+    gap: var(--size-1);
 
     @media (min-width: $laptop) {
       padding-left: var(--size-2);
@@ -156,6 +182,7 @@
   }
 
   .player-avatar {
+    position: relative;
     width: var(--size-3);
     height: var(--size-3);
     border-radius: var(--corner-full);
@@ -166,116 +193,99 @@
     justify-content: center;
     font-size: var(--label-small);
     font-weight: var(--weight-bold);
+    overflow: hidden;
 
     @media (min-width: $tablet) {
       width: var(--table-icon);
       height: var(--table-icon);
     }
-
     @media (min-width: $laptop) {
       width: var(--size-5);
       height: var(--size-5);
-      font-size: var(--label-medium);
+      font-size: var(--body-small);
     }
   }
 
   .player-name {
-    font-size: var(--label-large);
+    position: relative;
+    min-width: var(--size-10);
+    min-height: var(--size-3);
+    font-size: var(--body-small);
     font-weight: var(--weight-bold);
-    color: var(--on-primary);
+    overflow: hidden;
   }
 
   .col-score,
   .col-streak,
   .col-games,
   .col-favorite {
-    width: 100%;
     text-align: center;
     font-size: var(--label-large);
     font-weight: var(--weight-bold);
-    color: var(--on-primary);
-
-    @media (min-width: $tablet) {
-      padding-left: var(--size-1);
-    }
-  }
-
-  .col-favorite,
-  .header_favorite,
-  .col-games,
-  .header_games {
-    display: none;
-  }
-
-  .col-games,
-  .header_games {
-    @media (min-width: $tablet) {
-      display: block;
-    }
-  }
-
-  .col-favorite,
-  .header_favorite {
-    @media (min-width: $laptop) {
-      display: block;
-    }
-  }
-
-  .header_games {
-    width: 100%;
-    &::after {
-      content: 'Game';
-    }
-    @media (min-width: $laptop) {
-      &::after {
-        content: 'Games Played';
-      }
-    }
   }
 
   .header-score {
-    width: 100%;
+    display: flex;
+    justify-content: center;
 
     &::after {
-      content: 'Store';
-    }
-    @media (min-width: $laptop) {
-      &::after {
-        content: 'Total score';
+      content: 'Score';
+      @media (min-width: $laptop) {
+        content: 'Total Score';
       }
     }
   }
 
-  .header_favorite {
-    width: 100%;
-
-    &::after {
-      content: 'Favorite';
-    }
-    @media (min-width: $laptop) {
-      &::after {
-        content: 'Favorite Game';
-      }
+  .header_games,
+  .col-games {
+    display: none;
+    @media (min-width: $tablet) {
+      display: table-cell;
     }
   }
+
   .col-favorite {
     @include tag;
-    width: fit-content;
     justify-self: center;
-
+    position: relative;
+    width: fit-content;
+    min-width: var(--size-8);
+    min-height: var(--size-3);
+    overflow: hidden;
+  }
+  .header_favorite,
+  .col-favorite {
     display: none;
-
     @media (min-width: $laptop) {
-      display: flex;
+      display: table-cell;
     }
   }
-  .col-streak {
-    &::after {
-      content: 'd';
 
-      @media (min-width: $laptop) {
-        content: 'days';
-      }
+  .col-streak::after {
+    content: 'd';
+    @media (min-width: $laptop) {
+      content: 'days';
+      padding-left: var(--size-05);
+    }
+  }
+
+  .header_games::after {
+    content: 'Games';
+
+    @media (min-width: $laptop) {
+      content: 'Games Played';
+    }
+  }
+
+  .col-games,
+  .col-streak,
+  .col-score {
+    min-width: var(--size-4);
+    @media (min-width: $tablet) {
+      min-width: var(--size-5);
+    }
+    @media (min-width: $laptop) {
+      min-width: var(--size-5);
     }
   }
 }
