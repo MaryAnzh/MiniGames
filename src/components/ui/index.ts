@@ -16,3 +16,4 @@ export { ErrorBanner } from './error-banner/error-banner';
 export { Snackbar } from './snackbar/snackbar';
 export { Spinner } from './spinner/spinner';
 export { SkeletonText } from './skeleton-text/skeleton-text';
+export { Image } from './image/image';
