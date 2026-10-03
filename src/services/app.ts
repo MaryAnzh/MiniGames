@@ -8,8 +8,9 @@ import type {
   LeaderBoardType,
   GameCardParamsType,
   CategoryType,
-  GameDetailsType,
+  GameDetailsResponse,
 } from '@types';
+import type { GameCommentsResponse } from 'src/types/comment';
 
 const { NETWORK } = C.ERROR_GROUP;
 
@@ -63,8 +64,25 @@ export class ApiService {
     return await this.get<ResponseType<CategoryType>>(R.CATEGORIES);
   }
 
-  async getGameDetails(slug: string): Promise<ApiState<ResponseType<GameDetailsType>>> {
-    return await this.get<ResponseType<GameDetailsType>>(`${R.GAMES}/${slug}`);
+  async getGameDetails(slug: string): Promise<ApiState<GameDetailsResponse>> {
+    return await this.get<GameDetailsResponse>(`${R.GAMES}/${slug}`);
+  }
+
+  async getGameComments(
+    gameSlug: string,
+    params?: { limit?: number; sort?: 'newest' | 'oldest'; userEmail?: string },
+  ): Promise<ApiState<GameCommentsResponse>> {
+    const query = new URLSearchParams();
+
+    if (params?.limit) query.set('limit', String(params.limit));
+    if (params?.sort) query.set('sort', params.sort);
+    if (params?.userEmail) query.set('userEmail', params.userEmail);
+
+    const result = await this.get<GameCommentsResponse>(
+      `${R.GAMES}/${gameSlug}/${R.COMMENTS}?${query.toString()}`,
+    );
+    console.log(result);
+    return result;
   }
 
   private handleHttpError(response: Response): string {

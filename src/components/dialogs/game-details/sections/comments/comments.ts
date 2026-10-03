@@ -1,142 +1,235 @@
 import { Component } from '@components';
-import type { ComponentProps } from '@types';
-import { Button, LikeButton } from '@ui';
-import { MOCK_COMMENTS } from './mock';
+import type { ComponentProps, GameComment } from '@types';
+import { Button, LikeButton, Skeleton, SkeletonText } from '@ui';
+import { DARK, LIGHT } from '@constants';
+import { arrayFromNumber, getRandomAvatarColor } from '@utils';
 
-type CommentData = {
-  id: number;
-  avatarColor: string;
-  avatarLetter: string;
-  username: string;
-  timeAgo: string;
-  text: string;
-  likes: number;
-  liked: boolean;
+type CommentsSectionProps = Pick<ComponentProps, 'parentNode'> & {
+  comments: GameComment[];
+  isSkeleton?: boolean;
 };
 
-type CommentsSectionProps = Pick<ComponentProps, 'parentNode'>;
-
 export class CommentsSection extends Component {
-  private comments: CommentData[];
+  private comments: GameComment[];
   private textarea!: HTMLTextAreaElement;
+  private isSkeleton: boolean;
+  private commentsDefaultCount = 3;
 
-  constructor({ parentNode }: CommentsSectionProps) {
+  constructor({ parentNode, comments, isSkeleton }: CommentsSectionProps) {
     super({
       parentNode,
       tagName: 'div',
-      className: 'comments',
+      className: 'game-details-comments',
     });
 
-    this.comments = MOCK_COMMENTS;
+    this.comments = comments;
+    this.isSkeleton = Boolean(isSkeleton);
+
     this.render();
   }
 
   private render() {
     /* TITLE */
-    new Component({
-      parentNode: this.node,
-      tagName: 'h3',
-      className: 'comments_title',
-      content: `Comments (${this.comments.length})`,
-    });
+    if (this.isSkeleton) {
+      new SkeletonText({
+        parentNode: this.node,
+        rows: 1,
+        columns: 2,
+        variant: 'multi',
+        color: LIGHT,
+        className: 'game-details-comments_title-skeleton',
+      });
+    } else {
+      new Component({
+        parentNode: this.node,
+        tagName: 'h3',
+        className: 'game-details-comments_title',
+        content: `Comments (${this.comments.length})`,
+      });
+    }
 
     /* NEW COMMENT */
     const newCommentWrap = new Component({
       parentNode: this.node,
       tagName: 'div',
-      className: 'comments_new',
+      className: 'game-details-comments_new',
     });
 
-    /* Avatar */
-    new Component({
-      parentNode: newCommentWrap.node,
-      tagName: 'div',
-      className: 'comments_new-avatar',
-      content: 'U',
-    });
+    if (this.isSkeleton) {
+      new Skeleton({
+        parentNode: newCommentWrap.node,
+        color: LIGHT,
+        className: 'game-details-comments_new-avatar-skeleton',
+      });
 
-    /* Textarea */
-    const textareaWrap = new Component({
-      parentNode: newCommentWrap.node,
-      tagName: 'div',
-      className: 'comments_new-textarea',
-    });
+      new Skeleton({
+        parentNode: newCommentWrap.node,
+        color: LIGHT,
+        className: 'game-details-comments_new-textarea-skeleton',
+      });
 
-    this.textarea = document.createElement('textarea');
-    this.textarea.className = 'comments_textarea';
-    this.textarea.placeholder = 'Write a comment...';
-    this.textarea.rows = 1;
+      new Skeleton({
+        parentNode: newCommentWrap.node,
+        color: LIGHT,
+        className: 'game-details-comments_new-send-skeleton',
+      });
+    } else {
+      /* Avatar */
+      new Component({
+        parentNode: newCommentWrap.node,
+        tagName: 'div',
+        className: 'game-details-comments_new-avatar',
+        content: 'U',
+      });
 
-    this.textarea.addEventListener('input', () => this.autoGrow());
-    textareaWrap.node.appendChild(this.textarea);
+      /* Textarea */
+      const textareaWrap = new Component({
+        parentNode: newCommentWrap.node,
+        tagName: 'div',
+        className: 'game-details-comments_new-textarea',
+      });
 
-    /* Send button */
-    new Button({
-      parentNode: newCommentWrap.node,
-      className: 'comments_new-send',
-      size: 'icon-md',
-      color: 'dark',
-      leftIcon: 'send',
-      ariaLabel: 'Send comment',
-    });
+      this.textarea = document.createElement('textarea');
+      this.textarea.className = 'game-details-comments_textarea';
+      this.textarea.placeholder = 'Write a comment...';
+      this.textarea.rows = 1;
+
+      this.textarea.addEventListener('input', () => this.autoGrow());
+      textareaWrap.node.appendChild(this.textarea);
+
+      /* Send button */
+      new Button({
+        parentNode: newCommentWrap.node,
+        className: 'game-details-comments_new-send',
+        size: 'icon-md',
+        color: DARK,
+        leftIcon: 'send',
+        ariaLabel: 'Send comment',
+      });
+    }
 
     /* COMMENTS LIST */
     const list = new Component({
       parentNode: this.node,
       tagName: 'div',
-      className: 'comments_list',
+      className: 'game-details-comments_list',
     });
 
-    this.comments.forEach((c) => this.renderComment(list.node, c));
+    if (this.isSkeleton) {
+      arrayFromNumber(this.commentsDefaultCount).forEach(() =>
+        this.renderSkeletonComment(list.node),
+      );
+    } else {
+      this.comments.forEach((c) => this.renderComment(list.node, c));
+    }
   }
 
-  private renderComment(parent: HTMLElement, c: CommentData) {
+  private renderSkeletonComment(parent: HTMLElement) {
     const card = new Component({
       parentNode: parent,
       tagName: 'div',
-      className: 'comments_card',
+      className: ['game-details-comments_card', 'game-details-comments_card-skeleton'],
+    });
+
+    const header = new Component({
+      parentNode: card.node,
+      tagName: 'div',
+      className: 'game-details-comments_card-header',
+    });
+
+    new Skeleton({
+      parentNode: header.node,
+      color: LIGHT,
+      className: 'game-details-comments_card-avatar-skeleton',
+    });
+
+    new SkeletonText({
+      parentNode: header.node,
+      color: LIGHT,
+      className: 'game-details-comments_card-username-skeleton',
+    });
+
+    new Skeleton({
+      parentNode: header.node,
+      color: LIGHT,
+      className: 'game-details-comments_card-time-skeleton',
+    });
+
+    new SkeletonText({
+      parentNode: card.node,
+      rows: 2,
+      columns: 2,
+      variant: 'multi',
+      color: LIGHT,
+      className: 'game-details-comments_card-text-skeleton',
+    });
+
+    const footer = new Component({
+      parentNode: card.node,
+      tagName: 'div',
+      className: 'game-details-comments_card-footer',
+    });
+
+    new Skeleton({
+      parentNode: footer.node,
+      color: LIGHT,
+      className: 'game-details-comments_like-skeleton',
+    });
+
+    new Skeleton({
+      parentNode: footer.node,
+      color: LIGHT,
+      className: 'game-details-comments_like-count-skeleton',
+    });
+  }
+
+  private renderComment(parent: HTMLElement, c: GameComment) {
+    const card = new Component({
+      parentNode: parent,
+      tagName: 'div',
+      className: 'game-details-comments_card',
     });
 
     /* HEADER */
     const header = new Component({
       parentNode: card.node,
       tagName: 'div',
-      className: 'comments_card-header',
+      className: 'game-details-comments_card-header',
     });
 
     const left = new Component({
       parentNode: header.node,
       tagName: 'div',
-      className: 'comments_card-user',
+      className: 'game-details-comments_card-user',
     });
 
     const avatar = new Component({
       parentNode: left.node,
       tagName: 'div',
-      className: 'comments_card-avatar',
-      content: c.avatarLetter,
+      className: 'game-details-comments_card-avatar',
+      content: c.authorName.at(0),
     });
-    avatar.node.style.background = c.avatarColor;
+    avatar.node.style.background = `var(${getRandomAvatarColor().token})`;
 
     new Component({
       parentNode: left.node,
       tagName: 'span',
-      className: 'comments_card-username',
-      content: c.username,
+      className: 'game-details-comments_card-username',
+      content: c.authorName,
     });
 
     new Component({
       parentNode: header.node,
       tagName: 'span',
-      className: 'comments_card-time',
-      content: c.timeAgo,
+      className: 'game-details-comments_card-time',
+      content: c.createdAt,
     });
 
     /* TEXT */
     new Component({
       parentNode: card.node,
       tagName: 'p',
-      className: 'comments_card-text',
+      className: 'game-details-comments_card-text',
       content: c.text,
     });
 
@@ -144,22 +237,16 @@ export class CommentsSection extends Component {
     const footer = new Component({
       parentNode: card.node,
       tagName: 'div',
-      className: 'comments_card-footer',
+      className: 'game-details-comments_card-footer',
     });
 
     const likeWrap = new Component({
       parentNode: footer.node,
       tagName: 'div',
-      className: 'comments_like',
+      className: 'game-details-comments_like',
     });
-    new LikeButton({ parentNode: footer.node, isIcon: true });
 
-    new Component({
-      parentNode: likeWrap.node,
-      tagName: 'span',
-      className: 'comments_like-count',
-      content: String(c.likes),
-    });
+    new LikeButton({ parentNode: likeWrap.node, isIcon: true, value: c.likesCount });
   }
 
   private autoGrow() {
@@ -169,10 +256,6 @@ export class CommentsSection extends Component {
     const newHeight = Math.min(this.textarea.scrollHeight, maxHeight);
     this.textarea.style.height = `${newHeight}px`;
 
-    if (newHeight >= maxHeight) {
-      this.textarea.style.overflowY = 'auto';
-    } else {
-      this.textarea.style.overflowY = 'hidden';
-    }
+    this.textarea.style.overflowY = newHeight >= maxHeight ? 'auto' : 'hidden';
   }
 }

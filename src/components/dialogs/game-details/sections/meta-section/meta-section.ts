@@ -1,7 +1,7 @@
 import { Component } from '@components';
 import { Icon, LikeButton, Skeleton } from '@ui';
 import type { ComponentProps, GameCardItemType } from '@types';
-import { DARK } from '@constants';
+import { LIGHT } from '@constants';
 
 type MetaSectionProps = Pick<ComponentProps, 'parentNode'> &
   Pick<GameCardItemType, 'likesCount' | 'rating'> & {
@@ -25,43 +25,41 @@ export class MetaSection extends Component {
       className: 'game-detail_meta_rating',
     });
 
-    new Icon({
-      parentNode: ratingWrap.node,
-      icon: 'star',
-    });
-
-    new Component({
-      parentNode: ratingWrap.node,
-      tagName: 'span',
-      content: isSkeleton ? '0' : rating.toFixed(1),
-    });
-
-    if (isSkeleton) {
-      new Skeleton({
-        parentNode: ratingWrap.node,
-        color: DARK,
-        className: 'game-detail_meta_rating-skeleton',
-      });
-    }
-
-    const likesWrap = new Component({
+    const likeWrap = new Component({
       parentNode: this.node,
       tagName: 'span',
       className: 'game-detail_meta_likes',
     });
 
-    new LikeButton({
-      parentNode: likesWrap.node,
-      variant: 'empty',
-      value: likesCount,
-      isIcon: true,
-    });
-
     if (isSkeleton) {
       new Skeleton({
-        parentNode: likesWrap.node,
-        color: DARK,
+        parentNode: ratingWrap.node,
+        color: LIGHT,
         className: 'game-detail_meta_rating-skeleton',
+      });
+
+      new Skeleton({
+        parentNode: likeWrap.node,
+        color: LIGHT,
+        className: 'game-detail_meta_likes-skeleton',
+      });
+    } else {
+      new Icon({
+        parentNode: ratingWrap.node,
+        icon: 'star',
+      });
+
+      new Component({
+        parentNode: ratingWrap.node,
+        tagName: 'span',
+        content: rating.toFixed(1),
+      });
+
+      new LikeButton({
+        parentNode: likeWrap.node,
+        variant: 'empty',
+        value: likesCount,
+        isIcon: true,
       });
     }
   }

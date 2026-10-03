@@ -72,6 +72,13 @@ export type CategoryMetaType = {
 
 export type SortTypes = KeysTemplateType<typeof SORT_DATA_KEYS>;
 
+export type TopRecordsType = {
+  position: number;
+  playerName: string;
+  score: number;
+  achievedAt: string;
+};
+
 export type GameDetailsType = {
   slug: string;
   name: string;
@@ -86,12 +93,8 @@ export type GameDetailsType = {
     duration: string;
     price: string;
   };
-  topRecords: Array<{
-    position: number;
-    playerName: string;
-    score: number;
-    achievedAt: string;
-  }>;
+  topRecords: TopRecordsType[];
 };
-
-export type GameDetailsResponse = ResponseType<GameDetailsType>;
+export type GameDetailsResponse = {
+  data: GameDetailsType;
+};

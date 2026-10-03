@@ -2,7 +2,8 @@ import { Component } from '@components';
 import type { ComponentProps, GameCardDataType } from '@types';
 import { MetaSection } from '../meta-section/meta-section';
 import { Button, LikeButton, Skeleton, SkeletonText } from '@ui';
-import { PLAY_NOW, DARK } from '@constants';
+import { PLAY_NOW, LIGHT } from '@constants';
+
 type InfoType = Pick<
   GameCardDataType,
   | 'name'
@@ -60,7 +61,7 @@ export class InfoSection extends Component {
         rows: 1,
         columns: 2,
         variant: 'multi',
-        color: DARK,
+        color: LIGHT,
         className: 'game-detail_info_title-skeleton',
       });
     } else {
@@ -85,7 +86,7 @@ export class InfoSection extends Component {
         rows: 4,
         columns: 3,
         variant: 'multi',
-        color: DARK,
+        color: LIGHT,
         className: 'game-detail_info_desc-skeleton',
       });
     } else {
@@ -114,7 +115,7 @@ export class InfoSection extends Component {
       widgets.forEach(() => {
         new Skeleton({
           parentNode: widgetWrap.node,
-          color: DARK,
+          color: LIGHT,
           className: 'game-detail_info_widget-skeleton',
         });
       });
@@ -152,12 +153,12 @@ export class InfoSection extends Component {
       new Skeleton({
         parentNode: actionsWrap.node,
         className: 'game-detail_info_actions-skeleton',
-        color: 'dark',
+        color: LIGHT,
       });
       new Skeleton({
         parentNode: actionsWrap.node,
         className: 'game-detail_info_actions-skeleton',
-        color: 'dark',
+        color: LIGHT,
       });
     } else {
       const playNowBtn = new Button({

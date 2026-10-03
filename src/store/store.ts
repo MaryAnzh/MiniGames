@@ -30,6 +30,7 @@ class AppStore {
   sort: SortOptionType[] = sortData;
   games: GameCardDataType[] = games.data;
   records: GameRecord[] = records;
+  userEmail: string = '';
 
   routeParams: Record<string, string> = {};
   queryParams: Record<string, string> = {};
@@ -79,6 +80,13 @@ class AppStore {
 
   async getGameDetails(slug: string) {
     return this.api.getGameDetails(slug);
+  }
+
+  async getGameComments(
+    slug: string,
+    params?: { limit?: number; sort?: 'newest' | 'oldest'; userEmail?: string },
+  ) {
+    return this.api.getGameComments(slug, params);
   }
 }
 

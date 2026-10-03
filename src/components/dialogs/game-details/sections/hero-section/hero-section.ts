@@ -1,7 +1,7 @@
-import { Component } from 'src/components/component';
+import { Component } from '@components';
 import type { ComponentProps, GameCardItemType } from '@types';
 import { Button, Image } from '@ui';
-import { CLOSE_BTN, GAME_IMAGE } from '@constants';
+import { CLOSE_BTN, GAME_IMAGE, LIGHT } from '@constants';
 
 type HeroSectionProps = Pick<ComponentProps, 'parentNode'> &
   Pick<GameCardItemType, 'name' | 'cardImage'> & {
@@ -27,7 +27,7 @@ export class HeroSection extends Component {
       className: 'game-detail_hero_img',
       src: url.replace('.jpg', '.webp'),
       alt: `${GAME_IMAGE} ${name}`,
-      skeletonColor: 'dark',
+      skeletonColor: LIGHT,
     });
 
     const closeBtn = new Button({

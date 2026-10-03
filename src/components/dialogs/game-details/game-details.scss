@@ -15,7 +15,6 @@
   outline: var(--border-1) var(--outline-variant, #d2d2d2) solid;
   outline-offset: var(--border-1-neg);
   box-shadow: var(--level-3);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-self: center;
@@ -31,6 +30,5 @@
     display: flex;
     flex-direction: column;
     padding: var(--size-3);
-    gap: var(--size-3);
   }
 }
