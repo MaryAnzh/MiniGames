@@ -8,6 +8,7 @@ import type {
   LeaderBoardType,
   GameCardParamsType,
   CategoryType,
+  GameDetailsType,
 } from '@types';
 
 const { NETWORK } = C.ERROR_GROUP;
@@ -60,6 +61,10 @@ export class ApiService {
 
   async getCategories(): Promise<ApiState<ResponseType<CategoryType>>> {
     return await this.get<ResponseType<CategoryType>>(R.CATEGORIES);
+  }
+
+  async getGameDetails(slug: string): Promise<ApiState<ResponseType<GameDetailsType>>> {
+    return await this.get<ResponseType<GameDetailsType>>(`${R.GAMES}/${slug}`);
   }
 
   private handleHttpError(response: Response): string {

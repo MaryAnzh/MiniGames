@@ -71,3 +71,27 @@ export type CategoryMetaType = {
 };
 
 export type SortTypes = KeysTemplateType<typeof SORT_DATA_KEYS>;
+
+export type GameDetailsType = {
+  slug: string;
+  name: string;
+  heroImage: string;
+  rating: number;
+  likesCount: number;
+  isLikedByCurrentUser: boolean;
+  fullDescription: string;
+  specs: {
+    genre: string;
+    players: string;
+    duration: string;
+    price: string;
+  };
+  topRecords: Array<{
+    position: number;
+    playerName: string;
+    score: number;
+    achievedAt: string;
+  }>;
+};
+
+export type GameDetailsResponse = ResponseType<GameDetailsType>;

@@ -1,9 +1,15 @@
 import { Button, type ButtonProps } from '@ui';
 
+const CountRefactor = (count: number) => {
+  return count >= 1099 ? `${(count / 1000).toFixed(1)} K` : count.toString();
+};
+
 type LikeButtonProps = ButtonProps & {
   withText?: boolean;
   isLight?: boolean;
   isIcon?: boolean;
+  value?: number;
+  isSkeleton?: boolean;
 };
 
 export class LikeButton extends Button {
@@ -11,16 +17,21 @@ export class LikeButton extends Button {
   private withText: boolean = false;
   private isLight: boolean = false;
 
-  constructor({ withText, isLight, isIcon, ...props }: LikeButtonProps) {
+  constructor({ withText, isLight, isIcon, value, ...props }: LikeButtonProps) {
     super({
       ...props,
       leftIcon: 'favorite',
       ariaLabel: props.ariaLabel ?? 'Like this game',
-      text: withText ? 'Add to Favorites' : undefined,
+      text: withText
+        ? 'Add to Favorites'
+        : value !== undefined && value >= -1
+          ? CountRefactor(value)
+          : undefined,
       variant: isIcon ? 'empty' : props.variant,
     });
     this.withText = Boolean(withText);
     this.isLight = Boolean(isLight);
+
     if (isLight) {
       this.node.style.color = 'var(--white)';
     }
@@ -52,8 +63,9 @@ export class LikeButton extends Button {
         }
       } else {
         this.node.style.color = this.isLight ? 'var(--white)' : 'var(--on-primary)';
-
-        super.setText('Add to Favorites');
+        if (this.withText) {
+          super.setText('Add to Favorites');
+        }
       }
     };
   }

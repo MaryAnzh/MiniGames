@@ -6,6 +6,7 @@
   width: 150%;
   height: 100%;
   background-color: var(--gray-400);
+  border-radius: var(--corner-small);
   z-index: 10;
 
   &::after {

@@ -97,10 +97,10 @@ export class Slider extends Component {
         });
       }
       if (this.status === SUCCESS) {
-        const { name, cardImage, likesCount, rating } = game;
+        const { name, cardImage, likesCount, rating, slug } = game;
 
         const node = slide.node;
-        node.onclick = () => this.openDetails();
+        node.onclick = () => this.openDetails(slug);
 
         new Component({
           parentNode: node,
@@ -142,11 +142,11 @@ export class Slider extends Component {
           tagName: 'span',
           className: 'app_slider_body_item_info_count',
         });
-        new LikeButton({ parentNode: likeWrap.node, isIcon: true, isLight: true });
-        new Component({
+        new LikeButton({
           parentNode: likeWrap.node,
-          tagName: 'span',
-          content: likesCount.toString(),
+          isIcon: true,
+          isLight: true,
+          value: likesCount,
         });
 
         this.slidesNode.push(slide.node);
@@ -154,10 +154,11 @@ export class Slider extends Component {
     });
   }
 
-  private openDetails() {
+  private openDetails(slug: string) {
     const dialog = new GameDetailsDialog({
       parentNode: null,
       onClose: () => this.portal.unmount(),
+      slug,
     });
 
     this.portal.mount(dialog.node);

@@ -1,4 +1,4 @@
-import { Component } from '@components';
+import { Component, Portal } from '@components';
 import type { ComponentProps } from '@types';
 import { Pagination } from '@ui';
 import appStore from '@store';
@@ -7,12 +7,17 @@ import { appEvents } from '@utils';
 import { LibraryIntro, LibraryFilters, LibraryCards } from './sections';
 import { ROUTE_CHANGE } from '@constants';
 
+type LibraryPageType = Pick<ComponentProps, 'parentNode'> & {
+  portal: Portal;
+};
+
 export class LibraryPage extends Component {
   private store: typeof appStore;
   private cards!: LibraryCards;
   private pagination!: Pagination;
+  private portal: Portal;
 
-  constructor({ parentNode }: Pick<ComponentProps, 'parentNode'>) {
+  constructor({ parentNode, portal }: LibraryPageType) {
     super({
       parentNode,
       tagName: 'div',
@@ -21,6 +26,7 @@ export class LibraryPage extends Component {
     });
 
     this.store = appStore;
+    this.portal = portal;
 
     this.initListeners();
     this.renderPage();
@@ -65,6 +71,7 @@ export class LibraryPage extends Component {
     this.cards = new LibraryCards({
       parentNode: this.node,
       defaultCardCount: this.store.pageLimit,
+      portal: this.portal,
     });
 
     this.pagination = new Pagination({

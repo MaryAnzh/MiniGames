@@ -1,4 +1,4 @@
-import { Component, Header, Footer } from '@components';
+import { Component, Header, Footer, Portal } from '@components';
 import * as C from '@constants';
 
 import { Router } from '@route';
@@ -8,6 +8,7 @@ export class App {
   private root: HTMLElement;
   private router: Router | null = null;
   store: typeof appStore;
+  private portal!: Portal;
 
   constructor(root: HTMLElement) {
     this.root = root;
@@ -15,6 +16,8 @@ export class App {
   }
 
   init() {
+    this.portal = new Portal({ position: 'top' });
+
     const appContainer = new Component({
       parentNode: this.root,
       attrs: [{ attr: 'id', value: C.APP_ID }],
@@ -26,7 +29,7 @@ export class App {
       attrs: [{ attr: 'id', value: 'page-root' }],
     });
 
-    this.router = new Router(main.node);
+    this.router = new Router(main.node, this.portal);
     this.router.init();
 
     const header = new Header({

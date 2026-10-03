@@ -1,39 +1,33 @@
 import { Component } from 'src/components/component';
-import type { ComponentProps, GameCardDataType } from '@types';
-import { Button } from '@ui';
+import type { ComponentProps, GameCardItemType } from '@types';
+import { Button, Image } from '@ui';
 import { CLOSE_BTN, GAME_IMAGE } from '@constants';
 
 type HeroSectionProps = Pick<ComponentProps, 'parentNode'> &
-  Pick<GameCardDataType, 'name' | 'cardImage'> & {
+  Pick<GameCardItemType, 'name' | 'cardImage'> & {
     onClose: () => void;
   };
 
 export class HeroSection extends Component {
   handleClose: () => void;
 
-  constructor({ parentNode, cardImage, onClose }: HeroSectionProps) {
+  constructor({ parentNode, cardImage, onClose, name }: HeroSectionProps) {
     super({
       parentNode,
       tagName: 'div',
       className: 'game-detail_hero',
     });
     this.handleClose = onClose;
-
-    this.render(cardImage);
+    this.render(cardImage, name);
   }
 
-  private render(url: string) {
-    new Component({
+  private render(url: string, name: string) {
+    new Image({
       parentNode: this.node,
-      tagName: 'img',
       className: 'game-detail_hero_img',
-      attrs: [
-        {
-          attr: 'src',
-          value: url,
-        },
-        { attr: 'alt', value: GAME_IMAGE },
-      ],
+      src: url.replace('.jpg', '.webp'),
+      alt: `${GAME_IMAGE} ${name}`,
+      skeletonColor: 'dark',
     });
 
     const closeBtn = new Button({

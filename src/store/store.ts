@@ -76,6 +76,10 @@ class AppStore {
     const data = await this.api.getCategories();
     return data;
   }
+
+  async getGameDetails(slug: string) {
+    return this.api.getGameDetails(slug);
+  }
 }
 
 const appStore = new AppStore();

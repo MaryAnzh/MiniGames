@@ -1,5 +1,7 @@
+import type { Portal } from '@components';
 import { APP_ROUTES } from '@constants';
 import { HomePage, CommunityPage, LibraryPage, TournamentsPage, NotFoundPage } from '@pages';
+import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
 import appStore from '@store';
 
 const { HOME, COMMUNITY, GAME, LIBRARY, TOURNAMENTS } = APP_ROUTES;
@@ -7,17 +9,19 @@ const { HOME, COMMUNITY, GAME, LIBRARY, TOURNAMENTS } = APP_ROUTES;
 export class Router {
   private root: HTMLElement;
   private store = appStore;
+  private portal: Portal;
 
   private routes = [
     { path: HOME, view: HomePage },
     { path: LIBRARY, view: LibraryPage },
     { path: TOURNAMENTS, view: TournamentsPage },
     { path: COMMUNITY, view: CommunityPage },
-    { path: `${GAME}:id`, view: HomePage },
+    { path: `${GAME}:id`, view: HomePage }, // базовый маршрут для игр
   ];
 
-  constructor(root: HTMLElement) {
+  constructor(root: HTMLElement, portal: Portal) {
     this.root = root;
+    this.portal = portal;
     window.addEventListener('popstate', () => this.handleRoute());
   }
 
@@ -56,7 +60,6 @@ export class Router {
 
   private handleRoute() {
     const url = new URL(window.location.href);
-
     const pathname = url.pathname;
     const searchParams = Object.fromEntries(url.searchParams.entries());
 
@@ -66,11 +69,18 @@ export class Router {
     this.store.routeParams = params;
     this.store.queryParams = searchParams;
 
-    // ToDu
-    // if (pathname.startsWith(`${GAME}`) && this.store.currentPageInstance) {
-    //   openGameDialog(params.id);
-    //   return;
-    // }
+    if (pathname.startsWith(GAME)) {
+      const slug = params.id;
+
+      const dialog = new GameDetailsDialog({
+        parentNode: null,
+        slug,
+        onClose: () => this.portal.unmount(),
+      });
+
+      this.portal.mount(dialog.node);
+      return;
+    }
 
     if (this.store.currentPageInstance?.destroy) {
       this.store.currentPageInstance.destroy();
@@ -78,7 +88,11 @@ export class Router {
 
     this.root.innerHTML = '';
 
-    const pageInstance = new view({ parentNode: this.root });
+    const pageInstance = new view({
+      parentNode: this.root,
+      portal: this.portal, // пробрасываем портал в страницы
+    });
+
     this.store.currentPageInstance = pageInstance;
   }
 }

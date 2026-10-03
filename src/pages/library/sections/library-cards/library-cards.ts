@@ -5,23 +5,25 @@ import { arrayFromNumber } from '@utils';
 import { LIGHT } from '@constants';
 
 import { EMPTY_CARD } from './constants';
+import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
 
 type LibraryCardsProps = Pick<ComponentProps, 'parentNode'> & {
   defaultCardCount: number;
+  portal: Portal;
 };
 
 export class LibraryCards extends Component {
   private portal: Portal;
   private defaultCardCount: number;
 
-  constructor({ parentNode, defaultCardCount }: LibraryCardsProps) {
+  constructor({ parentNode, defaultCardCount, portal }: LibraryCardsProps) {
     super({
       parentNode,
       tagName: 'section',
       className: 'library_cards',
     });
 
-    this.portal = new Portal({ position: 'top' });
+    this.portal = portal;
     this.defaultCardCount = defaultCardCount;
 
     this.renderSkeletons();
@@ -187,17 +189,12 @@ export class LibraryCards extends Component {
   }
 
   private openDetails(game: GameCardItemType) {
-    // const dialog = new GameDetailsDialog({
-    //   parentNode: null,
-    //   game,
-    //   onClose: () => this.portal.unmount(),
-    // });
-    const mock = new Component({
+    const dialog = new GameDetailsDialog({
       parentNode: null,
-      tagName: 'p',
-      content: `mock data gor ${game.name}`,
+      slug: game.slug,
+      onClose: () => this.portal.unmount(),
     });
-    this.portal.mount(mock.node);
+    this.portal.mount(dialog.node);
   }
 
   public renderAllCards(list: GameCardItemType[]) {
