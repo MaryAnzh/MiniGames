@@ -62,9 +62,9 @@ export class HomePage extends Component {
     const result = await this.store.getGames({ featured: true });
     if (result.status === SUCCESS) {
       const games = result.data.data;
-      this.sliderSection.updateSlides(games); // ✔ используем this.sliderSection
+      this.sliderSection.updateSlides(games);
     } else {
-      this.sliderSection.updateSlides([]); // ✔ если ошибка или пусто
+      this.sliderSection.updateSlides([]);
     }
   };
 

@@ -25,7 +25,7 @@ export class Snackbar extends Component {
       parentNode: this.node,
       leftIcon: 'close',
       color: 'dark',
-      size: 'icon-sm',
+      variant: 'empty',
       ariaLabel: 'Close Snackbar',
       className: 'app-snackbar_close-btn',
     });

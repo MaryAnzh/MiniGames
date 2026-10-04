@@ -2,26 +2,35 @@
   width: var(--dialog-width-sm);
   display: grid;
   grid-template-columns: min-content auto var(--size-3);
-  padding: var(--size-3);
-  gap: var(--size-2);
-  background-color: var(--on-bg);
+  padding: var(--size-2);
+  gap: var(--size-1);
+  background-color: var(--on-primary);
   outline: var(--border-1) solid var(--primary);
   offset: var(--border-1-neg);
+  border-radius: var(--corner-medium);
+  align-items: center;
 
   &_close-btn {
     grid-column: 3;
+    width: var(--size2);
+    height: var(--size-2);
   }
 
   &_icon {
     grid-row: 2;
     grid-column: 1;
+    align-self: center;
+    svg {
+      width: var(--size-3);
+      height: var(--size-3);
+    }
   }
 
   &_text {
     grid-row: 2;
     grid-column: 2/3;
     font-size: var(--body-small);
-    color: var(--white);
+    color: var(--on-bg-footer);
     font-weight: var(--weight-regular);
   }
 }

@@ -8,13 +8,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
   background: var(--pop-up-bg);
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.3s ease;
   overflow: hidden;
-  align-items: flex-start;
+  z-index: 100;
 
   &_open {
     opacity: 1;
