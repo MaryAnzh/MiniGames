@@ -3,13 +3,14 @@ import type { ComponentProps } from '@types';
 
 import { HeroSection, SliderSection, GameDeveloperSection, TableSection } from './components';
 import appStore from '@store';
-import { LOADING, SUCCESS } from '@constants';
+import { EMPTY, ERROR, LOADING, SUCCESS } from '@constants';
 
 type HomePageProps = Pick<ComponentProps, 'parentNode'> & { portal: Portal };
 
 export class HomePage extends Component {
   private store: typeof appStore;
   private sliderSection: SliderSection;
+  private tableSection: TableSection;
   children: Component[] = [];
 
   constructor({ parentNode, portal }: HomePageProps) {
@@ -33,28 +34,38 @@ export class HomePage extends Component {
       onRetry: this.onRetry,
     });
 
-    const table = new TableSection({
+    this.tableSection = new TableSection({
       parentNode: this.node,
       status: LOADING,
       leaderBoard: [],
+      onRetry: this.retryTableData,
     });
 
     const gameDev = new GameDeveloperSection({
       parentNode: this.node,
     });
 
-    this.children = [heroSection, this.sliderSection, table, gameDev];
+    this.children = [heroSection, this.sliderSection, this.tableSection, gameDev];
 
     this.store.getGames({ featured: true }).then((result) => {
-      if (result.status === SUCCESS) {
+      const respStatus = result.status;
+      if (respStatus === SUCCESS) {
         const games = result.data.data;
         this.sliderSection.updateSlides(games);
       }
+      if (respStatus === ERROR) {
+        this.sliderSection.updateSlides([], ERROR);
+      }
     });
     this.store.getLeaderboard().then((result) => {
-      if (result.status === SUCCESS) {
-        table.updateRows(result.data.data);
+      const respStatus = result.status;
+
+      if (respStatus === SUCCESS) {
+        const data = result.data.data;
+        this.tableSection.updateRows(data, data.length === 0 ? EMPTY : SUCCESS);
+        return;
       }
+      this.tableSection.updateRows([], respStatus);
     });
   }
 
@@ -64,7 +75,17 @@ export class HomePage extends Component {
       const games = result.data.data;
       this.sliderSection.updateSlides(games);
     } else {
-      this.sliderSection.updateSlides([]);
+      this.sliderSection.updateSlides([], result.status);
+    }
+  };
+
+  public retryTableData = async () => {
+    const result = await this.store.getLeaderboard();
+    if (result.status === SUCCESS) {
+      const leaders = result.data.data;
+      this.tableSection.updateRows(leaders, SUCCESS);
+    } else {
+      this.tableSection.updateRows([], result.status);
     }
   };
 

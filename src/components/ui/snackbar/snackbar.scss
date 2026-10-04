@@ -9,6 +9,7 @@
   offset: var(--border-1-neg);
   border-radius: var(--corner-medium);
   align-items: center;
+  height: fit-content;
 
   &_close-btn {
     grid-column: 3;

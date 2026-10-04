@@ -1,12 +1,13 @@
 import { Component } from '@components';
-import { LIGHT, SUCCESS } from '@constants';
+import { DARK, EMPTY, ERROR, LIGHT, SUCCESS } from '@constants';
 import type { ComponentProps, LeaderBoardType, ResponseStatusType } from '@types';
-import { Skeleton, SkeletonText } from '@ui';
+import { Button, ErrorBanner, Skeleton, SkeletonText } from '@ui';
 import { arrayFromNumber, getAvatarLetters } from '@utils';
 
 type TableSectionProps = Pick<ComponentProps, 'parentNode'> & {
   status: ResponseStatusType;
   leaderBoard: LeaderBoardType[];
+  onRetry: () => Promise<void>;
 };
 
 type RowType = {
@@ -29,6 +30,16 @@ const EMPTY_ROW: LeaderBoardType = {
   totalScore: 0,
 };
 
+const EMPTY_DATA_ROW: LeaderBoardType = {
+  favoriteGameName: '*---*',
+  favoriteGameSlug: '*---*',
+  gamesPlayed: 0,
+  playerName: '*---*',
+  rank: 0,
+  streakDays: 0,
+  totalScore: 0,
+};
+
 const ROWS_COUNT = 5;
 
 export class TableSection extends Component {
@@ -44,8 +55,12 @@ export class TableSection extends Component {
     favorite: 'Favorite Game',
   };
   rows: Component | null = null;
+  errorBoner: Component;
+  retryBtn: Button;
 
-  constructor({ parentNode, status, leaderBoard }: TableSectionProps) {
+  onRetry: () => Promise<void>;
+
+  constructor({ parentNode, status, leaderBoard, onRetry }: TableSectionProps) {
     super({
       parentNode,
       tagName: 'section',
@@ -54,6 +69,24 @@ export class TableSection extends Component {
 
     this.status = status;
     this.leaderboard = leaderBoard;
+    this.onRetry = onRetry;
+
+    this.retryBtn = new Button({
+      parentNode: null,
+      ariaLabel: 'Retry',
+      color: DARK,
+      leftIcon: 'empty_table',
+      size: 'md',
+      className: 'table-section_title-wrap_retry-brn',
+      text: 'Retry',
+    });
+    this.retryBtn.node.onclick = () => this.handleRetry();
+
+    this.errorBoner = new ErrorBanner({
+      parentNode: null,
+      message: 'Server response error, check your connection or proxy',
+      className: 'table-section-error',
+    });
 
     this.renderTitle();
     this.renderTable();
@@ -78,6 +111,8 @@ export class TableSection extends Component {
       className: 'table-section_title-wrap_title',
       content: '',
     });
+    wrap.append(this.retryBtn.node);
+    this.retryBtn.node.style.display = 'none';
   }
 
   private renderTable() {
@@ -86,6 +121,11 @@ export class TableSection extends Component {
       tagName: 'table',
       className: 'table-section_table',
     });
+    table.append(this.errorBoner.node);
+
+    if (this.status !== ERROR) {
+      this.errorBoner.node.style.display = 'none';
+    }
 
     this.renderHeader(table.node, this.tableHeader);
 
@@ -162,74 +202,58 @@ export class TableSection extends Component {
   }
 
   private renderRow(parentNode: HTMLElement, row: LeaderBoardType) {
-    const tr = new Component({
-      parentNode,
-      tagName: 'tr',
-      className: 'table-section_row',
-    });
+    const tr = new Component({ parentNode, tagName: 'tr', className: 'table-section_row' });
     const ceilClass = 'home_table-ceil';
-    // Rank
+
     const rank = new Component({
       parentNode: tr.node,
       tagName: 'td',
       content: row.rank ? `#${row.rank}` : '',
       className: ['col-rank', ceilClass],
     });
-
-    // Player cell
     const playerCell = new Component({
       parentNode: tr.node,
       tagName: 'td',
       className: ['col-player'],
     });
-
     const avatar = new Component({
       parentNode: playerCell.node,
       tagName: 'div',
       className: 'player-avatar',
-      content: row.playerName ? getAvatarLetters(row.playerName) : '',
+      content: row.playerName ? getAvatarLetters(row.playerName) : '*',
     });
-
     const playerName = new Component({
       parentNode: playerCell.node,
       tagName: 'span',
       className: 'player-name',
-      content: row.playerName || ' ',
+      content: row.playerName,
     });
-
-    // Games
     const games = new Component({
       parentNode: tr.node,
       tagName: 'td',
-      content: row.gamesPlayed ? row.gamesPlayed.toString() : '',
+      content: row.gamesPlayed.toString(),
       className: ['col-games', ceilClass],
     });
-
-    // Score
     const score = new Component({
       parentNode: tr.node,
       tagName: 'td',
-      content: row.totalScore ? row.totalScore.toString() : '',
+      content: row.totalScore.toString(),
       className: ['col-score', ceilClass],
     });
-
-    // Streak
     const streakDays = new Component({
       parentNode: tr.node,
       tagName: 'td',
-      content: row.streakDays ? `🔥 ${row.streakDays}` : ' ',
+      content: row.streakDays ? `🔥 ${row.streakDays}` : '*',
       className: ['col-streak', ceilClass],
     });
-
-    // Favorite
     const favorite = new Component({
       parentNode: tr.node,
       tagName: 'td',
-      content: row.favoriteGameSlug || ' ',
+      content: row.favoriteGameSlug,
       className: ['col-favorite', ceilClass],
     });
 
-    if (this.leaderboard.length === 0) {
+    if (row === EMPTY_ROW) {
       [favorite, avatar].forEach((el) => new Skeleton({ parentNode: el.node, color: LIGHT }));
       [rank, score, streakDays, games, playerName].forEach(
         (el) => new SkeletonText({ parentNode: el.node, color: LIGHT }),
@@ -237,13 +261,32 @@ export class TableSection extends Component {
     }
   }
 
-  public updateRows(data: LeaderBoardType[]) {
-    this.leaderboard = data;
-    this.status = SUCCESS;
+  private handleRetry = async () => {
+    try {
+      await this.onRetry();
+    } catch {
+      this.updateRows([], ERROR);
+    }
+  };
 
+  public updateRows(data: LeaderBoardType[], status: ResponseStatusType) {
+    this.leaderboard = data;
+    this.status = status;
     if (this.rows) {
       this.rows.node.innerHTML = '';
-      data.forEach((row) => this.renderRow(this.rows!.node, row));
+
+      if (status === SUCCESS) {
+        data.forEach((row) => this.renderRow(this.rows!.node, row));
+        this.errorBoner.node.style.display = 'none';
+        this.retryBtn.node.style.display = 'none';
+      }
+      if (status === EMPTY || status === ERROR) {
+        arrayFromNumber(5).forEach(() => this.renderRow(this.rows!.node, EMPTY_DATA_ROW));
+        this.retryBtn.node.style.display = 'flex';
+      }
+      if (status === ERROR) {
+        this.errorBoner.node.style.display = 'flex';
+      }
     }
   }
 }

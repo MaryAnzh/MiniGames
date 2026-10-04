@@ -2,12 +2,21 @@
 @use '../../../styles/mixins/common.scss' as *;
 
 .app_slider {
+  position: relative;
   width: 100%;
   height: var(--layout-slider-sm);
   display: flex;
   padding: 0 var(--size-05);
   align-items: center;
   overflow: hidden;
+
+  &-error {
+    position: absolute;
+    width: fit-content;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 150;
+  }
 
   &_body {
     width: 100%;
