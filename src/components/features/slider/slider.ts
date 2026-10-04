@@ -3,8 +3,8 @@ import type { SliderProps } from './types';
 import type { GameCardItemType, ResponseStatusType } from '@types';
 import { Icon, Image, LikeButton, Skeleton } from '@ui';
 import { SliderController } from './slider-controller';
-import { ERROR, LIGHT, LOADING, SUCCESS } from '@constants';
-import { replaceImageToWebp } from '@utils';
+import { EMPTY, ERROR, LIGHT, LOADING, SUCCESS } from '@constants';
+import { arrayFromNumber, replaceImageToWebp } from '@utils';
 
 export class Slider extends Component {
   private portal: Portal;
@@ -18,13 +18,29 @@ export class Slider extends Component {
   // private isTimerOn = true;
   status: ResponseStatusType;
 
-  constructor({ parentNode, slides, status }: SliderProps) {
+  constructor({ parentNode, slides, status, portal }: SliderProps) {
     super({ parentNode, tagName: 'div', className: 'app_slider' });
-    this.portal = new Portal();
+    this.portal = portal;
     this.status = status;
+    const data =
+      slides.length === 0
+        ? arrayFromNumber(7).map(
+            () =>
+              ({
+                cardImage: '',
+                category: '',
+                likesCount: 0,
+                name: '*-----*',
+                price: '',
+                rating: 0,
+                shortDescription: '',
+                slug: '',
+              }) as GameCardItemType,
+          )
+        : slides;
 
     this.controller = new SliderController({
-      slides,
+      slides: data,
       onUpdateSlides: (visibleSlides) => {
         this.render(visibleSlides);
       },
@@ -64,6 +80,7 @@ export class Slider extends Component {
 
   private render(visibleSlides: GameCardItemType[]) {
     if (this.isAnimating) return;
+
     this.node.innerHTML = '';
     this.sliderBody = null;
     this.slidesNode = [];
@@ -96,7 +113,7 @@ export class Slider extends Component {
           color: 'light',
         });
       }
-      if (this.status === SUCCESS) {
+      if (this.status === SUCCESS || this.status === EMPTY) {
         const { name, cardImage, likesCount, rating, slug } = game;
 
         const node = slide.node;

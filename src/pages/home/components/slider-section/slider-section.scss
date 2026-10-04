@@ -34,7 +34,7 @@
       font-weight: var(--weight-bold);
     }
 
-    button:nth-of-type(1) {
+    &_retry-brn {
       svg {
         width: var(--size-3);
         height: var(--size-3);

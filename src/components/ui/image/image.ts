@@ -51,6 +51,7 @@ export class Image extends Component {
 
   private renderEmptyIcon() {
     this.node.innerHTML = '';
+    this.node.classList.add('app-image-empty');
     new Icon({
       parentNode: this.node,
       icon: 'empty_img',

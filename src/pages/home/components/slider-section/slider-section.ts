@@ -1,26 +1,47 @@
-import { Component } from '@components';
-import { SUCCESS } from '@constants';
+import { Component, Portal, Slider } from '@components';
+import { DARK, EMPTY, LOADING, SUCCESS } from '@constants';
 import type { ComponentProps, GameCardItemType, ResponseStatusType } from '@types';
 import { Button } from '@ui';
-import { Slider } from 'src/components/features/slider/slider';
 
 type SliderSectionProps = Pick<ComponentProps, 'parentNode'> & {
   slides: GameCardItemType[];
   status: ResponseStatusType;
+  portal: Portal;
+  onRetry: () => Promise<void>;
 };
 
 export class SliderSection extends Component {
   slides: GameCardItemType[];
   status: ResponseStatusType;
-  slider: Slider;
-  prevBtn: Button;
-  nextBtn: Button;
+  slider: Slider | null = null;
+  prevBtn: Button | null = null;
+  nextBtn: Button | null = null;
+  retryBtn: Button;
+  portal: Portal;
+  onRetry: () => Promise<void>;
 
-  constructor({ parentNode, slides, status }: SliderSectionProps) {
+  constructor({ parentNode, slides, status, portal, onRetry }: SliderSectionProps) {
     super({ parentNode, tagName: 'section', className: 'home-page_slider' });
+    this.portal = portal;
     this.slides = slides;
     this.status = status;
+    this.onRetry = onRetry;
 
+    this.retryBtn = new Button({
+      parentNode: null,
+      ariaLabel: 'Retry',
+      color: DARK,
+      leftIcon: 'empty_img',
+      size: 'md',
+      className: 'slider_title-wrap_retry-brn',
+      text: 'Retry',
+    });
+    this.retryBtn.node.onclick = () => this.handleRetry();
+
+    this.render();
+  }
+
+  private render() {
     const titleWrap = new Component({
       parentNode: this.node,
       tagName: 'div',
@@ -39,7 +60,12 @@ export class SliderSection extends Component {
       className: 'slider_title-wrap_title',
       content: 'New Games',
     });
-    this.prevBtn = new Button({
+    titleWrap.append(this.retryBtn.node);
+    if (this.status !== EMPTY) {
+      this.retryBtn.node.style.display = 'none';
+    }
+
+    const prevBtn = new Button({
       parentNode: titleWrap.node,
       size: 'icon-lg',
       corner: 'circle',
@@ -47,9 +73,10 @@ export class SliderSection extends Component {
       googleIcon: 'arrow_back',
       ariaLabel: 'back slider',
     });
-    this.prevBtn.setAttributes([{ attr: 'role', value: 'button' }]);
+    prevBtn.setAttributes([{ attr: 'role', value: 'button' }]);
+    this.prevBtn = prevBtn;
 
-    this.nextBtn = new Button({
+    const nextBtn = new Button({
       parentNode: titleWrap.node,
       size: 'icon-lg',
       corner: 'circle',
@@ -57,32 +84,65 @@ export class SliderSection extends Component {
       googleIcon: 'arrow_forward',
       ariaLabel: 'forward slider',
     });
-    this.nextBtn.setAttributes([{ attr: 'role', value: 'button' }]);
+    nextBtn.setAttributes([{ attr: 'role', value: 'button' }]);
+    this.nextBtn = nextBtn;
 
     this.slider = new Slider({
       parentNode: this.node,
-      slides,
-      status,
+      slides: [],
+      status: LOADING,
+      portal: this.portal,
     });
-
-    this.prevBtn.node.onclick = () => this.slider.animatePrev();
-    this.nextBtn.node.onclick = () => this.slider.animateNext();
   }
 
   public updateSlides(slides: GameCardItemType[]) {
-    this.status = SUCCESS;
+    const isEmptyData = slides.length === 0;
 
-    this.slider.destroy();
+    this.status = isEmptyData ? EMPTY : SUCCESS;
+    if (this.slider) {
+      this.slider.destroy();
+    }
 
-    this.slider = new Slider({
+    const slider = new Slider({
       parentNode: this.node,
       slides,
       status: this.status,
+      portal: this.portal,
     });
+    this.slider = slider;
+    if (this.prevBtn && this.nextBtn && !isEmptyData) {
+      this.prevBtn.node.onclick = () => slider.animatePrev();
+      this.nextBtn.node.onclick = () => slider.animateNext();
+      this.prevBtn.setAttributes([{ attr: 'disable', value: null }]);
+      this.nextBtn.setAttributes([{ attr: 'disable', value: null }]);
+    }
 
-    this.prevBtn.node.onclick = () => this.slider.animatePrev();
-    this.nextBtn.node.onclick = () => this.slider.animateNext();
+    if (this.prevBtn && this.nextBtn && isEmptyData) {
+      this.prevBtn.setAttributes([{ attr: 'disable', value: 'true' }]);
+      this.nextBtn.setAttributes([{ attr: 'disable', value: 'true' }]);
+    }
+    if (this.status !== EMPTY) {
+      this.retryBtn.node.style.display = 'none';
+    }
+    if (this.status === EMPTY) {
+      this.retryBtn.node.style.display = 'flex';
+    }
   }
+
+  private handleRetry = async () => {
+    this.slider?.destroy();
+    this.slider = new Slider({
+      parentNode: this.node,
+      slides: [],
+      status: LOADING,
+      portal: this.portal,
+    });
+    try {
+      await this.onRetry();
+    } catch {
+      this.updateSlides([]); // если ошибка → EMPTY
+    }
+  };
 
   destroy(): void {
     if (this.prevBtn) {
@@ -90,6 +150,9 @@ export class SliderSection extends Component {
     }
     if (this.nextBtn) {
       this.nextBtn.node.onclick = null;
+    }
+    if (this.prevBtn) {
+      this.retryBtn.node.onclick = null;
     }
     super.destroy();
   }

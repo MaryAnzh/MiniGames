@@ -1,17 +1,18 @@
-import { Component } from '@components';
+import { Component, Portal } from '@components';
 import type { ComponentProps } from '@types';
 
 import { HeroSection, SliderSection, GameDeveloperSection, TableSection } from './components';
 import appStore from '@store';
 import { LOADING, SUCCESS } from '@constants';
 
-type HomePageProps = Pick<ComponentProps, 'parentNode'>;
+type HomePageProps = Pick<ComponentProps, 'parentNode'> & { portal: Portal };
 
 export class HomePage extends Component {
   private store: typeof appStore;
+  private sliderSection: SliderSection;
   children: Component[] = [];
 
-  constructor({ parentNode }: HomePageProps) {
+  constructor({ parentNode, portal }: HomePageProps) {
     super({
       parentNode,
       tagName: 'div',
@@ -24,10 +25,12 @@ export class HomePage extends Component {
       parentNode: this.node,
     });
 
-    const sliderSection = new SliderSection({
+    this.sliderSection = new SliderSection({
       parentNode: this.node,
       slides: [],
       status: LOADING,
+      portal,
+      onRetry: this.onRetry,
     });
 
     const table = new TableSection({
@@ -40,11 +43,12 @@ export class HomePage extends Component {
       parentNode: this.node,
     });
 
-    this.children = [heroSection, sliderSection, table, gameDev];
+    this.children = [heroSection, this.sliderSection, table, gameDev];
 
     this.store.getGames({ featured: true }).then((result) => {
       if (result.status === SUCCESS) {
-        sliderSection.updateSlides(result.data.data);
+        const games = result.data.data;
+        this.sliderSection.updateSlides(games);
       }
     });
     this.store.getLeaderboard().then((result) => {
@@ -53,6 +57,16 @@ export class HomePage extends Component {
       }
     });
   }
+
+  public onRetry = async () => {
+    const result = await this.store.getGames({ featured: true });
+    if (result.status === SUCCESS) {
+      const games = result.data.data;
+      this.sliderSection.updateSlides(games); // ✔ используем this.sliderSection
+    } else {
+      this.sliderSection.updateSlides([]); // ✔ если ошибка или пусто
+    }
+  };
 
   destroy(): void {
     this.children.forEach((ch) => ch.destroy());
