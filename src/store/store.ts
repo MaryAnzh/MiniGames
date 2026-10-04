@@ -13,7 +13,7 @@ import type {
   SortOptionType,
   SortTypes,
 } from '@types';
-import { api } from '../services/app';
+import { api } from '@services';
 
 import categories from '../data/categories.json';
 import sortData from '../data/sort.json';

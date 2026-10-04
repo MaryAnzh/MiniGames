@@ -16,7 +16,7 @@ export class Router {
     { path: LIBRARY, view: LibraryPage },
     { path: TOURNAMENTS, view: TournamentsPage },
     { path: COMMUNITY, view: CommunityPage },
-    { path: `${GAME}:id`, view: HomePage }, // базовый маршрут для игр
+    { path: `${GAME}:id`, view: HomePage },
   ];
 
   constructor(root: HTMLElement, portal: Portal) {
@@ -90,7 +90,7 @@ export class Router {
 
     const pageInstance = new view({
       parentNode: this.root,
-      portal: this.portal, // пробрасываем портал в страницы
+      portal: this.portal,
     });
 
     this.store.currentPageInstance = pageInstance;

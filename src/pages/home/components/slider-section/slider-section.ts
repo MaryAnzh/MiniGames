@@ -140,7 +140,7 @@ export class SliderSection extends Component {
     try {
       await this.onRetry();
     } catch {
-      this.updateSlides([]); // если ошибка → EMPTY
+      this.updateSlides([]);
     }
   };
 
