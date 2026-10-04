@@ -28,7 +28,7 @@ export function replaceImageToWebp(url: string): string {
   return u.toString();
 }
 
-export function capitalizeFirst(str) {
+export function capitalizeFirst(str: string) {
   if (!str) return '';
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
