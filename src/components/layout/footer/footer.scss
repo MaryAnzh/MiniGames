@@ -13,7 +13,7 @@
     gap: var(--size-7);
   }
 
-  @media (min-width: $laptop) {
+  @media (min-width: $pc) {
     padding: var(--size-5) var(--size-15);
     gap: var(--size-11);
   }
@@ -31,7 +31,7 @@
       gap: var(--size-3) var(--size-5);
     }
 
-    @media (min-width: $laptop) {
+    @media (min-width: $pc) {
       gap: var(--size-4) var(--size-5);
       grid-template-columns: 1fr auto auto;
     }
@@ -44,7 +44,7 @@
     align-items: center;
     gap: var(--size-3) var(--size-1);
 
-    @media (min-width: $laptop) {
+    @media (min-width: $pc) {
       width: var(--layout-footer-text-max-width);
       grid-column: 1;
     }
@@ -64,7 +64,7 @@
       @media (max-width: $tablet) {
         font-size: var(--headline-small);
       }
-      @media (min-width: $laptop) {
+      @media (min-width: $pc) {
         font-size: var(--display-small);
       }
     }
@@ -86,7 +86,7 @@
     @media (min-width: $tablet) {
       gap: var(--size-5);
     }
-    @media (min-width: $laptop) {
+    @media (min-width: $pc) {
       grid-column: 2/3;
       grid-row: 1;
     }
@@ -155,7 +155,7 @@
     flex-direction: column;
     gap: var(--size-2);
 
-    @media (min-width: $laptop) {
+    @media (min-width: $pc) {
       grid-column: 3/4;
       grid-row: 1;
     }
@@ -172,7 +172,7 @@
 
       &_icon {
         font-size: var(--body-medium);
-        @media (min-width: $laptop) {
+        @media (min-width: $pc) {
           font-size: var(--headline-small);
         }
       }
@@ -191,7 +191,7 @@
       gap: var(--size-2);
     }
 
-    @media (min-width: $laptop) {
+    @media (min-width: $pc) {
       justify-content: space-between;
     }
 

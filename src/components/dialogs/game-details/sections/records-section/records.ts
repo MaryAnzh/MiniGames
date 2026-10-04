@@ -1,41 +1,55 @@
 import { Component } from '@components';
-import type { ComponentProps, GameRecord } from '@types';
+import type { ComponentProps, GameRecord, TopRecordsType } from '@types';
+import { Skeleton } from '@ui';
+import { LIGHT } from '@constants';
+import { arrayFromNumber } from '@utils';
 
 type RecordsSectionProps = Pick<ComponentProps, 'parentNode'> & {
-  records: GameRecord[];
+  records: TopRecordsType[];
+  isSkeleton?: boolean;
 };
 
 export class RecordsSection extends Component {
-  constructor({ parentNode, records }: RecordsSectionProps) {
+  recordsRowCount = 4;
+
+  constructor({ parentNode, records, isSkeleton = false }: RecordsSectionProps) {
     super({
       parentNode,
       tagName: 'div',
       className: 'game-detail_records',
     });
 
-    this.render(records);
+    this.render(records, isSkeleton);
   }
 
-  private render(records: GameRecord[]) {
+  private render(records: GameRecord[], isSkeleton: boolean) {
     const titleRow = new Component({
       parentNode: this.node,
       tagName: 'div',
       className: 'game-detail_records_title-row',
     });
 
-    new Component({
-      parentNode: titleRow.node,
-      tagName: 'span',
-      className: 'game-detail_records_icon',
-      content: '🏆',
-    });
+    if (isSkeleton) {
+      new Skeleton({
+        parentNode: titleRow.node,
+        color: LIGHT,
+        className: 'game-detail_records_title-skeleton',
+      });
+    } else {
+      new Component({
+        parentNode: titleRow.node,
+        tagName: 'span',
+        className: 'game-detail_records_icon',
+        content: '🏆',
+      });
 
-    new Component({
-      parentNode: titleRow.node,
-      tagName: 'h3',
-      className: 'game-detail_records_title',
-      content: 'Top Records',
-    });
+      new Component({
+        parentNode: titleRow.node,
+        tagName: 'h3',
+        className: 'game-detail_records_title',
+        content: 'Top Records',
+      });
+    }
 
     const table = new Component({
       parentNode: this.node,
@@ -47,10 +61,54 @@ export class RecordsSection extends Component {
       parentNode: table.node,
       tagName: 'tbody',
     });
+    if (isSkeleton) {
+      arrayFromNumber(this.recordsRowCount).map(() => {
+        const tr = new Component({
+          parentNode: tbody.node,
+          tagName: 'tr',
+          className: 'game-detail_records_row',
+        });
 
-    const randomRecords = [...records].sort(() => Math.random() - 0.5).slice(0, 4);
+        const leftTd = new Component({
+          parentNode: tr.node,
+          tagName: 'td',
+          className: 'game-detail_records_left',
+        });
 
-    randomRecords.forEach((record) => {
+        new Skeleton({
+          parentNode: leftTd.node,
+          className: 'game-detail_records_medal-skeleton',
+          color: LIGHT,
+        });
+
+        new Skeleton({
+          parentNode: leftTd.node,
+          className: 'game-detail_records_player-skeleton',
+          color: LIGHT,
+        });
+
+        const rightTd = new Component({
+          parentNode: tr.node,
+          tagName: 'td',
+          className: 'game-detail_records_right',
+        });
+
+        new Skeleton({
+          parentNode: rightTd.node,
+          className: 'game-detail_records_score-skeleton',
+          color: LIGHT,
+        });
+
+        new Skeleton({
+          parentNode: rightTd.node,
+          className: 'game-detail_records_time-skeleton',
+          color: LIGHT,
+        });
+      });
+      return;
+    }
+
+    records.forEach((record) => {
       const tr = new Component({
         parentNode: tbody.node,
         tagName: 'tr',

@@ -1,15 +1,33 @@
+@use '../../../../../styles/variable' as *;
+
 .game-detail_meta {
+  width: 100%;
   display: flex;
   gap: var(--size-2);
+  align-items: center;
+  justify-content: flex-start;
 
   &_rating,
   &_likes {
+    position: relative;
     display: flex;
     align-items: center;
     gap: var(--size-05);
+
     span {
       font-size: var(--body-small);
       font-weight: var(--weight-bold);
     }
+
+    &-skeleton {
+      position: relative;
+      width: var(--size-6);
+      height: var(--size-3);
+      border-radius: var(--corner-small);
+    }
+  }
+
+  @media (min-width: $tablet) {
+    justify-content: flex-end;
   }
 }

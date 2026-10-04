@@ -1,49 +1,102 @@
 import { Component } from '@components';
 import type { ComponentProps, GameCardDataType } from '@types';
 import { MetaSection } from '../meta-section/meta-section';
-import { Button, LikeButton } from '@ui';
-import { PLAY_NOW } from '@constants';
+import { Button, LikeButton, Skeleton, SkeletonText } from '@ui';
+import { PLAY_NOW, LIGHT } from '@constants';
 
-type InfoSectionProps = Pick<ComponentProps, 'parentNode'> & { game: GameCardDataType };
+type InfoType = Pick<
+  GameCardDataType,
+  | 'name'
+  | 'shortDescription'
+  | 'category'
+  | 'duration'
+  | 'players'
+  | 'price'
+  | 'likesCount'
+  | 'rating'
+>;
+
+type InfoSectionProps = Pick<ComponentProps, 'parentNode'> &
+  InfoType & {
+    isSkeleton?: boolean;
+  };
 
 export class InfoSection extends Component {
-  constructor({ parentNode, game }: InfoSectionProps) {
+  info: InfoType;
+
+  constructor({
+    parentNode,
+    category,
+    duration,
+    name,
+    players,
+    price,
+    shortDescription,
+    rating,
+    likesCount,
+    isSkeleton = false,
+  }: InfoSectionProps) {
     super({
       parentNode,
       tagName: 'div',
       className: 'game-detail_info',
     });
+    this.info = { category, duration, name, players, price, shortDescription, rating, likesCount };
 
-    this.render(game);
+    this.render(this.info, isSkeleton);
   }
 
-  private render(game: GameCardDataType) {
-    const { name, shortDescription, category, duration, players, price } = game;
+  private render(info: InfoType, isSkeleton: boolean) {
+    const { name, shortDescription, category, duration, players, price, rating, likesCount } = info;
 
-    const titleWWap = new Component({
+    const titleWrap = new Component({
       parentNode: this.node,
       tagName: 'div',
       className: 'game-detail_info_title-wrap',
     });
 
-    new Component({
-      parentNode: titleWWap.node,
-      tagName: 'h2',
-      className: 'game-detail_info_title-wrap_title',
-      content: name,
-    });
+    if (isSkeleton) {
+      new SkeletonText({
+        parentNode: titleWrap.node,
+        rows: 1,
+        columns: 2,
+        variant: 'multi',
+        color: LIGHT,
+        className: 'game-detail_info_title-skeleton',
+      });
+    } else {
+      new Component({
+        parentNode: titleWrap.node,
+        tagName: 'h2',
+        className: 'game-detail_info_title-wrap_title',
+        content: name,
+      });
+    }
 
     new MetaSection({
-      parentNode: titleWWap.node,
-      game,
+      parentNode: titleWrap.node,
+      rating,
+      likesCount,
+      isSkeleton,
     });
 
-    new Component({
-      parentNode: this.node,
-      tagName: 'p',
-      className: 'game-detail_info_desc',
-      content: shortDescription,
-    });
+    if (isSkeleton) {
+      new SkeletonText({
+        parentNode: this.node,
+        rows: 4,
+        columns: 3,
+        variant: 'multi',
+        color: LIGHT,
+        className: 'game-detail_info_desc-skeleton',
+      });
+    } else {
+      new Component({
+        parentNode: this.node,
+        tagName: 'p',
+        className: 'game-detail_info_desc',
+        content: shortDescription,
+      });
+    }
 
     const widgets = [
       { key: 'Genre', value: category },
@@ -57,62 +110,90 @@ export class InfoSection extends Component {
       tagName: 'div',
       className: 'game-detail_info_widgets-wrap',
     });
-    widgets.forEach(({ key, value }) => {
-      const tag = new Component({
-        parentNode: widgetWrap.node,
-        tagName: 'div',
-        className: 'game-detail_info_widgets-wrap_widget',
-      });
-      new Component({
-        parentNode: tag.node,
-        tagName: 'span',
-        content: key,
-        className: 'game-detail_info_widgets-wrap_widget_title',
-      });
 
-      new Component({
-        parentNode: tag.node,
-        tagName: 'span',
-        content: value,
-        className: 'game-detail_info_widgets-wrap_widget_value',
+    if (isSkeleton) {
+      widgets.forEach(() => {
+        new Skeleton({
+          parentNode: widgetWrap.node,
+          color: LIGHT,
+          className: 'game-detail_info_widget-skeleton',
+        });
       });
-    });
+    } else {
+      widgets.forEach(({ key, value }) => {
+        const tag = new Component({
+          parentNode: widgetWrap.node,
+          tagName: 'div',
+          className: 'game-detail_info_widgets-wrap_widget',
+        });
+
+        new Component({
+          parentNode: tag.node,
+          tagName: 'span',
+          content: key,
+          className: 'game-detail_info_widgets-wrap_widget_title',
+        });
+
+        new Component({
+          parentNode: tag.node,
+          tagName: 'span',
+          content: value,
+          className: 'game-detail_info_widgets-wrap_widget_value',
+        });
+      });
+    }
 
     const actionsWrap = new Component({
       parentNode: this.node,
       tagName: 'div',
       className: 'game-detail_info_actions-wrap',
     });
-    const playNowBtn = new Button({
-      parentNode: actionsWrap.node,
-      color: 'primary',
-      size: 'lg',
-      shadow: 'hard',
-      text: PLAY_NOW,
-      fullWidth: true,
-      corner: 'sm-x',
-      ariaLabel: PLAY_NOW,
-    });
-    playNowBtn.setAttributes([
-      { attr: 'role', value: 'button' },
-      { attr: 'aria-label', value: PLAY_NOW },
-      { attr: 'tabindex', value: '0' },
-    ]);
 
-    new LikeButton({
-      parentNode: actionsWrap.node,
-      shadow: 'hard',
-      className: 'game-detail_info_actions-wrap_like',
-      corner: 'sm-x',
-    });
-    new LikeButton({
-      parentNode: actionsWrap.node,
-      shadow: 'hard',
-      className: 'game-detail_info_actions-wrap_like-desktop',
-      corner: 'sm-x',
-      withText: true,
-      fullWidth: true,
-      size: 'lg',
-    });
+    if (isSkeleton) {
+      new Skeleton({
+        parentNode: actionsWrap.node,
+        className: 'game-detail_info_actions-skeleton',
+        color: LIGHT,
+      });
+      new Skeleton({
+        parentNode: actionsWrap.node,
+        className: 'game-detail_info_actions-skeleton',
+        color: LIGHT,
+      });
+    } else {
+      const playNowBtn = new Button({
+        parentNode: actionsWrap.node,
+        color: 'primary',
+        size: 'lg',
+        shadow: 'hard',
+        text: PLAY_NOW,
+        fullWidth: true,
+        corner: 'sm-x',
+        ariaLabel: PLAY_NOW,
+      });
+
+      playNowBtn.setAttributes([
+        { attr: 'role', value: 'button' },
+        { attr: 'aria-label', value: PLAY_NOW },
+        { attr: 'tabindex', value: '0' },
+      ]);
+
+      new LikeButton({
+        parentNode: actionsWrap.node,
+        shadow: 'hard',
+        className: 'game-detail_info_actions-wrap_like',
+        corner: 'sm-x',
+      });
+
+      new LikeButton({
+        parentNode: actionsWrap.node,
+        shadow: 'hard',
+        className: 'game-detail_info_actions-wrap_like-desktop',
+        corner: 'sm-x',
+        withText: true,
+        fullWidth: true,
+        size: 'lg',
+      });
+    }
   }
 }

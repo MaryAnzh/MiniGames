@@ -1,4 +1,4 @@
-import type { GameCardDataType } from '@types';
+import type { GameCardItemType } from '@types';
 import { DESKTOP_SLIDE_COUNT, MOBILE_SLIDE_COUNT } from './constants';
 
 export type SliderState = {
@@ -11,15 +11,15 @@ export type SliderState = {
 };
 
 type SliderControllerProps = {
-  slides: GameCardDataType[];
-  onUpdateSlides: (slides: GameCardDataType[]) => void;
+  slides: GameCardItemType[];
+  onUpdateSlides: (slides: GameCardItemType[]) => void;
 };
 
 export class SliderController {
-  slides: GameCardDataType[];
+  slides: GameCardItemType[];
   state: SliderState;
 
-  private onUpdateSlides: (slides: GameCardDataType[]) => void;
+  private onUpdateSlides: (slides: GameCardItemType[]) => void;
 
   constructor({ slides, onUpdateSlides }: SliderControllerProps) {
     this.slides = slides;
@@ -52,10 +52,10 @@ export class SliderController {
     this.onUpdateSlides(visible);
   }
 
-  public getVisibleSlides(): GameCardDataType[] {
+  public getVisibleSlides(): GameCardItemType[] {
     const { centerIndex, visibleCount } = this.state;
 
-    const visible: GameCardDataType[] = [];
+    const visible: GameCardItemType[] = [];
 
     for (let i = 0; i < visibleCount; i++) {
       const idx = (centerIndex + i) % this.slides.length;
@@ -63,6 +63,19 @@ export class SliderController {
     }
 
     return visible;
+  }
+
+  public setSlides(slides: GameCardItemType[]) {
+    this.slides = slides;
+    this.state = {
+      centerIndex: 0,
+      visibleCount: DESKTOP_SLIDE_COUNT,
+      isDragging: false,
+      dragStartX: 0,
+      dragDeltaX: 0,
+      autoplayPaused: false,
+    };
+    this.init();
   }
 
   next() {

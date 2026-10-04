@@ -1,4 +1,4 @@
-@use '../../../../../styles/mixims/common.scss' as *;
+@use '../../../../../styles/mixins/common.scss' as *;
 
 .game-detail_records {
   display: flex;
@@ -7,6 +7,7 @@
   width: 100%;
 
   &_title-row {
+    position: relative;
     display: flex;
     align-items: center;
     gap: var(--size-1);
@@ -21,6 +22,13 @@
     color: var(--on-primary);
     font-size: var(--body-medium);
     font-weight: var(--weight-bold);
+  }
+
+  &_title-skeleton {
+    position: relative;
+    width: 40%;
+    height: var(--body-large);
+    border-radius: var(--corner-extra-small);
   }
 
   &_table {
@@ -40,6 +48,7 @@
   }
 
   &_row td {
+    position: relative;
     display: flex;
     align-items: center;
     gap: var(--size-2);
@@ -51,6 +60,7 @@
 
   &_left,
   &_right {
+    position: relative;
     display: flex;
     align-items: center;
     gap: var(--size-2);
@@ -62,6 +72,12 @@
     color: var(--on-primary);
   }
 
+  &_medal-skeleton {
+    position: relative;
+    height: var(--body-large);
+    width: var(--size-3);
+  }
+
   &_player {
     width: 100%;
     color: var(--on-primary);
@@ -70,14 +86,34 @@
     @include truncate(1);
   }
 
+  &_player-skeleton {
+    position: relative;
+    height: var(--size-3);
+    width: var(--size-10);
+    border-radius: var(--corner-extra-small);
+  }
+
   &_score {
     font-size: var(--body-small);
     font-weight: var(--weight-bold);
+  }
+
+  &_score-skeleton {
+    position: relative;
+    height: var(--size-3);
+    width: var(--size-6);
+    border-radius: var(--corner-extra-small);
   }
 
   &_time {
     color: var(--on-bg);
     font-size: var(--label-medium);
     font-weight: var(--weight-regular);
+  }
+  &_time-skeleton {
+    position: relative;
+    height: var(--size-3);
+    width: var(--size-8);
+    border-radius: var(--corner-extra-small);
   }
 }

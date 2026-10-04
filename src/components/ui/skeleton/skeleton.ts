@@ -1,17 +1,16 @@
-import type { ComponentProps } from '@types';
+import type { ColorVariantType, ComponentProps } from '@types';
 import { Component } from '../../component';
-
-type SkeletonColor = 'light' | 'dark';
+import { LIGHT } from '@constants';
 
 type SkeletonProps = Pick<ComponentProps, 'parentNode'> & {
   width?: string;
   height?: string;
-  color?: SkeletonColor;
+  color?: ColorVariantType;
   className?: string;
 };
 
 export class Skeleton extends Component {
-  constructor({ parentNode, width, height, color = 'light', className }: SkeletonProps) {
+  constructor({ parentNode, width, height, color = LIGHT, className }: SkeletonProps) {
     super({
       parentNode,
       tagName: 'div',

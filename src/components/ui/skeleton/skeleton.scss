@@ -1,24 +1,27 @@
 .app-skeleton {
   position: absolute;
+  top: 0;
+  left: 0;
   overflow: hidden;
-  width: 100%;
+  width: 150%;
   height: 100%;
-  background-color: var(--surface-low);
-  z-index: 100;
+  background-color: var(--gray-400);
+  border-radius: var(--corner-small);
+  z-index: 10;
 
   &::after {
     content: '';
     position: absolute;
     inset: 0;
     transform: translateX(-100%);
-    background: linear-gradient(90deg, transparent, var(--on-bg), transparent);
+    background-image: var(--skeleton-light);
     animation: shimmer 1.6s infinite;
   }
 
   &[data-color='dark'] {
-    background-color: var(--black);
+    background-color: var(--on-bg);
     &::after {
-      background: linear-gradient(90deg, transparent, var(--on-bg), transparent);
+      background-image: var(--skeleton-dark);
     }
   }
 }

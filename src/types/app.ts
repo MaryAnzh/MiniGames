@@ -1,46 +1,100 @@
-import { Component, Footer, Header } from '@components';
-import { APP_ID } from '@constants';
-import { Router } from '@route';
-import appStore from '@store';
+import type { ERROR_GROUP, RESPONSE_STATUS, SORT_DATA_KEYS } from '@constants';
+import type { KeysTemplateType } from './common';
 
-export class App {
-  private root: HTMLElement;
-  private router: Router | null = null;
-  store: typeof appStore;
+export type ErrorGropeType = KeysTemplateType<typeof ERROR_GROUP>;
 
-  constructor(root: HTMLElement) {
-    this.root = root;
-    this.store = appStore;
-  }
+export type MetaType = {
+  page: number;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
+  appliedFilter: Record<string, boolean>;
+};
 
-  init() {
-    const appContainer = new Component({
-      parentNode: this.root,
-      attrs: [{ attr: 'id', value: APP_ID }],
-    });
+export type ResponseType<T> = {
+  data: T[];
+  meta: MetaType;
+};
 
-    const main = new Component({
-      parentNode: null,
-      tagName: 'main',
-      attrs: [{ attr: 'id', value: 'page-root' }],
-    });
+export type ApiSuccess<T> = {
+  status: 'success';
+  data: T;
+};
 
-    this.router = new Router(main.node);
-    this.router.init();
+export type ApiError = {
+  status: 'error';
+  error: string;
+};
 
-    const header = new Header({
-      parentNode: null,
-      isAuth: this.store.isAuth,
-      router: this.router,
-    });
+export type ApiState<T> = ApiSuccess<T> | ApiError;
 
-    const footer = new Footer({
-      parentNode: null,
-      router: this.router,
-    });
+export type GameCardItemType = {
+  slug: string;
+  name: string;
+  category: string;
+  price: string;
+  shortDescription: string;
+  rating: number;
+  likesCount: number;
+  cardImage: string;
+};
 
-    appContainer.append(header.node);
-    appContainer.append(main.node);
-    appContainer.append(footer.node);
-  }
-}
+export type GameCardParamsType = {
+  featured?: boolean;
+  page?: number;
+  limit?: number;
+  category?: string;
+  sort?: string;
+};
+
+export type ResponseStatusType = KeysTemplateType<typeof RESPONSE_STATUS>;
+
+export type LeaderBoardType = {
+  rank: number;
+  playerName: string;
+  gamesPlayed: number;
+  totalScore: number;
+  streakDays: number;
+  favoriteGameSlug: string;
+  favoriteGameName: string;
+};
+
+export type CategoryType = {
+  slug: string;
+  label: string;
+  isDefault: boolean;
+};
+
+export type CategoryMetaType = {
+  totalItems: number;
+  description: string;
+};
+
+export type SortTypes = KeysTemplateType<typeof SORT_DATA_KEYS>;
+
+export type TopRecordsType = {
+  position: number;
+  playerName: string;
+  score: number;
+  achievedAt: string;
+};
+
+export type GameDetailsType = {
+  slug: string;
+  name: string;
+  heroImage: string;
+  rating: number;
+  likesCount: number;
+  isLikedByCurrentUser: boolean;
+  fullDescription: string;
+  specs: {
+    genre: string;
+    players: string;
+    duration: string;
+    price: string;
+  };
+  topRecords: TopRecordsType[];
+};
+export type GameDetailsResponse = {
+  data: GameDetailsType;
+};

@@ -1,4 +1,5 @@
-.comments {
+.game-details-comments {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--size-2);
@@ -9,10 +10,15 @@
     font-weight: var(--weight-bold);
     color: var(--on-primary);
   }
+  &_title-skeleton {
+    position: relative;
+    width: 100%;
+    height: var(--size-3);
+  }
 
-  /* NEW COMMENT */
   &_new {
-    display: flex;
+    display: grid;
+    grid-template-columns: var(--size-5) auto var(--size-5);
     align-items: flex-start;
     gap: var(--size-2);
   }
@@ -36,7 +42,7 @@
     flex: 1;
   }
 
-  .comments_textarea {
+  .game-details-comments_textarea {
     width: 100%;
     min-height: var(--size-6);
     max-height: var(--size-11);
@@ -54,14 +60,12 @@
     }
   }
 
-  /* COMMENTS LIST */
   &_list {
     display: flex;
     flex-direction: column;
     gap: var(--size-2);
   }
 
-  /* CARD */
   &_card {
     padding: var(--size-2);
     background: var(--white);
@@ -70,6 +74,11 @@
     display: flex;
     flex-direction: column;
     gap: var(--size-1);
+
+    &-skeleton {
+      border-color: var(--surface);
+      box-shadow: var(--border-3) var(--border-3) 0 var(--surface);
+    }
   }
 
   &_card-header {
@@ -87,7 +96,7 @@
   &_card-avatar {
     width: var(--size-3-1);
     height: var(--size-3-1);
-    border-radius: var(--corner-medium);
+    border-radius: var(--corner-full);
     outline: var(--border-1) solid var(--on-primary);
     outline-offset: var(--border-1-neg);
     display: flex;
@@ -118,9 +127,10 @@
   &_card-footer {
     display: flex;
     align-items: center;
+    gap: var(--size-1);
   }
 
-  .comments_like {
+  .game-details-comments_like {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -128,11 +138,70 @@
     background: none;
     border: none;
     cursor: pointer;
+
+    svg {
+      height: var(--size-2);
+    }
   }
 
-  .comments_like-count {
+  .game-details-comments_like-count {
     font-size: var(--label-medium);
     font-weight: var(--weight-bold);
     color: var(--on-primary);
+  }
+
+  &_title-skeleton {
+    width: 40%;
+    height: var(--size-3);
+  }
+
+  &_new-avatar-skeleton {
+    align-self: center;
+    position: relative;
+    width: var(--size-5);
+    height: var(--size-5);
+    border-radius: var(--corner-full);
+  }
+
+  &_new-textarea-skeleton {
+    position: relative;
+    width: 100%;
+    height: var(--size-6);
+  }
+
+  &_new-send-skeleton {
+    align-self: center;
+    position: relative;
+    width: var(--size-5);
+    height: var(--size-5);
+    border-radius: var(--corner-small);
+  }
+
+  &_card-avatar-skeleton {
+    position: relative;
+    width: var(--size-3-1);
+    height: var(--size-3-1);
+    border-radius: var(--corner-full);
+  }
+
+  &_card-username-skeleton,
+  &_card-time-skeleton {
+    position: relative;
+    width: 40%;
+    height: var(--size-3);
+  }
+
+  &_card-text-skeleton {
+    position: relative;
+    width: 100%;
+    height: var(--size-5);
+  }
+
+  &_like-skeleton,
+  &_like-count-skeleton {
+    position: relative;
+    width: var(--size-3);
+    height: var(--size-2);
+    border-radius: var(--corner-small);
   }
 }
