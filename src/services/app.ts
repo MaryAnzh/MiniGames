@@ -81,7 +81,6 @@ export class ApiService {
     const result = await this.get<GameCommentsResponse>(
       `${R.GAMES}/${gameSlug}/${R.COMMENTS}?${query.toString()}`,
     );
-    console.log(result);
     return result;
   }
 

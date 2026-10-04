@@ -8,6 +8,7 @@
   padding: var(--size-2);
   gap: var(--size-2);
   overflow: hidden;
+
   button {
     display: none;
   }
@@ -32,6 +33,13 @@
       font-family: var(--font-inter);
       font-weight: var(--weight-bold);
     }
+
+    button:nth-of-type(1) {
+      svg {
+        width: var(--size-3);
+        height: var(--size-3);
+      }
+    }
   }
 
   @media (min-width: $tablet) {
@@ -41,12 +49,13 @@
       display: flex;
     }
 
-    button:nth-of-type(2) {
+    button:nth-of-type(2),
+    button:nth-of-type(3) {
       margin-left: var(--size-1);
     }
     .slider_title-wrap {
       display: grid;
-      grid-template-columns: min-content 1fr auto auto;
+      grid-template-columns: min-content 1fr auto auto auto;
       align-items: center;
 
       .slider_title-wrap_title {

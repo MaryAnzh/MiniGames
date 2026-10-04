@@ -1,10 +1,10 @@
-import { Component, Portal } from '@components';
+import { Component, Portal, GameDetailsDialog } from '@components';
 import type { SliderProps } from './types';
 import type { GameCardItemType, ResponseStatusType } from '@types';
-import { Icon, LikeButton, Skeleton } from '@ui';
-import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
+import { Icon, Image, LikeButton, Skeleton } from '@ui';
 import { SliderController } from './slider-controller';
-import { ERROR, LOADING, SUCCESS } from '@constants';
+import { ERROR, LIGHT, LOADING, SUCCESS } from '@constants';
+import { replaceImageToWebp } from '@utils';
 
 export class Slider extends Component {
   private portal: Portal;
@@ -102,14 +102,12 @@ export class Slider extends Component {
         const node = slide.node;
         node.onclick = () => this.openDetails(slug);
 
-        new Component({
+        new Image({
           parentNode: node,
-          tagName: 'img',
+          src: replaceImageToWebp(cardImage),
+          alt: name,
           className: 'app_slider_body_item_img',
-          attrs: [
-            { attr: 'src', value: cardImage.replace('.jpg', '.webp') },
-            { attr: 'alt', value: name },
-          ],
+          skeletonColor: LIGHT,
         });
 
         const infoWrap = new Component({

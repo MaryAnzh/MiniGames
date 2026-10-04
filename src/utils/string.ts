@@ -19,3 +19,11 @@ export function getAvatarLetters(name: string) {
 
   return clean.slice(0, 2).toUpperCase();
 }
+
+export function replaceImageToWebp(url: string): string {
+  const u = new URL(url, window.location.origin);
+  const parts = u.pathname.split('.');
+  parts[parts.length - 1] = 'webp';
+  u.pathname = parts.join('.');
+  return u.toString();
+}

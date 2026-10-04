@@ -8,6 +8,5 @@ const AVATAR_COLORS_MAP = [
 
 export function getRandomAvatarColor() {
   const color = AVATAR_COLORS_MAP[Math.floor(Math.random() * AVATAR_COLORS_MAP.length)];
-  console.log(color.token);
   return color;
 }

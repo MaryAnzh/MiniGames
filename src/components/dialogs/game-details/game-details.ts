@@ -118,9 +118,8 @@ export class GameDetailsDialog extends Component {
       this.node.innerHTML = '';
 
       this.render(game, comments);
-    } catch (e) {
+    } catch {
       // TODO: render error state
-      console.error(e);
     }
   }
 }

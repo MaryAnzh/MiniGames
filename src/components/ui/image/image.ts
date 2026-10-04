@@ -1,6 +1,6 @@
 import type { ColorVariantType, ComponentProps } from '@types';
 import { Component } from 'src/components/component';
-import { Skeleton } from '../skeleton/skeleton';
+import { Skeleton, Icon } from '@ui';
 import { DARK } from '@constants';
 
 type ImageProps = Pick<ComponentProps, 'parentNode'> & {
@@ -11,7 +11,8 @@ type ImageProps = Pick<ComponentProps, 'parentNode'> & {
 };
 
 export class Image extends Component {
-  img: Component;
+  private img!: HTMLImageElement;
+  private skeleton: Skeleton;
 
   constructor({ parentNode, src, alt, skeletonColor = DARK, className }: ImageProps) {
     super({
@@ -19,26 +20,47 @@ export class Image extends Component {
       tagName: 'div',
       className: ['app-image', className ?? ''],
     });
-    this.img = new Component({
-      parentNode: this.node,
-      tagName: 'img',
-      className: 'app-image_img',
-      attrs: [
-        { attr: 'src', value: src },
-        { attr: 'alt', value: alt },
-      ],
-    });
-    const skeleton = new Skeleton({
+
+    this.skeleton = new Skeleton({
       parentNode: this.node,
       color: skeletonColor,
     });
-    this.img.node.onload = () => {
-      skeleton.destroy();
+
+    // Image element
+    this.img = document.createElement('img');
+    this.img.className = 'app-image_img';
+    this.img.alt = alt;
+
+    if (!src) {
+      this.renderEmptyIcon();
+      return;
+    }
+
+    this.img.src = src;
+    this.node.appendChild(this.img);
+
+    this.img.onload = () => {
+      this.skeleton.destroy();
+    };
+
+    this.img.onerror = () => {
+      this.skeleton.destroy();
+      this.renderEmptyIcon();
     };
   }
 
+  private renderEmptyIcon() {
+    this.node.innerHTML = '';
+    new Icon({
+      parentNode: this.node,
+      icon: 'empty_img',
+      className: 'app-image_empty',
+    });
+  }
+
   destroy(): void {
-    this.img.node.onload = null;
+    this.img.onload = null;
+    this.img.onerror = null;
     super.destroy();
   }
 }

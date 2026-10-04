@@ -12,9 +12,10 @@ export const RESPONSE_STATUS = {
   LOADING: 'loading',
   SUCCESS: 'success',
   ERROR: 'error',
+  EMPTY: 'empty',
 } as const;
 
-export const { ERROR, LOADING, SUCCESS } = RESPONSE_STATUS;
+export const { ERROR, LOADING, SUCCESS, EMPTY } = RESPONSE_STATUS;
 
 export const SORT_DATA_KEYS = {
   RATING_DESC: 'rating-desc',
