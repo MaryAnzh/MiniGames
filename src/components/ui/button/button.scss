@@ -1,6 +1,7 @@
 @use '../../../styles/variable' as *;
 
 .app_button {
+  position: relative;
   width: fit-content;
   display: inline-flex;
   align-items: center;
@@ -14,9 +15,10 @@
   outline-offset: var(--border-2-neg);
   border: none;
   background: transparent;
-
+  overflow: hidden;
   &[disabled] {
     pointer-events: none;
+    opacity: 0.7;
   }
 
   &[data-full='true'] {
@@ -149,12 +151,34 @@
   height: var(--size-6);
 }
 
+.app_button[data-size='icon-md'] {
+  width: var(--size-3);
+  height: var(--size-3);
+  font-size: var(--body-small);
+  padding: var(--size-025);
+  outline-width: var(--border-1);
+  offset: var(--border-1-neg);
+
+  .google-icons {
+    font-size: var(--body-small);
+  }
+
+  @media (min-width: $laptop) {
+    width: var(--size-5);
+    height: var(--size-5);
+    .google-icons {
+      font-size: var(--headline-small);
+    }
+  }
+}
+
 /* round icon size */
 .app_button[data-size='icon-md'] {
   width: var(--icon-size-lg);
   height: var(--icon-size-lg);
   font-size: var(--body-medium);
   padding: var(--size-1-4);
+
   .google-icons {
     font-size: var(--body-medium);
   }
@@ -224,6 +248,10 @@
   outline: none;
   border-radius: 0;
   padding: 0;
+}
+
+.app_button[data-variant='skeleton'] {
+  pointer-events: none;
 }
 
 .app_button[data-font] {

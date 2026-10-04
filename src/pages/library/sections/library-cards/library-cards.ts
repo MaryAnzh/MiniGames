@@ -1,62 +1,69 @@
 import { Component, Portal } from '@components';
-import type { ComponentProps, GameCardDataType } from '@types';
-import { Button, LikeButton } from '@ui';
+import type { ComponentProps, GameCardItemType } from '@types';
+import { Button, Image, LikeButton, Skeleton, SkeletonText } from '@ui';
+import { arrayFromNumber } from '@utils';
+import { LIGHT } from '@constants';
+
+import { EMPTY_CARD } from './constants';
 import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
 
 type LibraryCardsProps = Pick<ComponentProps, 'parentNode'> & {
-  list: GameCardDataType[];
+  defaultCardCount: number;
+  portal: Portal;
 };
 
 export class LibraryCards extends Component {
   private portal: Portal;
+  private defaultCardCount: number;
 
-  constructor({ parentNode, list }: LibraryCardsProps) {
+  constructor({ parentNode, defaultCardCount, portal }: LibraryCardsProps) {
     super({
       parentNode,
       tagName: 'section',
       className: 'library_cards',
     });
-    this.portal = new Portal({ position: 'top' });
 
-    list.forEach((game) => {
-      this.renderCard(game);
-    });
+    this.portal = portal;
+    this.defaultCardCount = defaultCardCount;
+
+    this.renderSkeletons();
   }
 
-  private renderCard(game: GameCardDataType) {
+  private renderSkeletons() {
+    this.node.innerHTML = '';
+    arrayFromNumber(this.defaultCardCount).forEach(() => this.renderCard(EMPTY_CARD));
+  }
+
+  private renderCard(game: GameCardItemType) {
     const { cardImage, name, category, likesCount, price, rating, shortDescription } = game;
+
     const card = new Component({
       parentNode: this.node,
       tagName: 'article',
       className: 'library_game-card',
     });
 
-    // IMAGE
-    new Component({
+    new Image({
       parentNode: card.node,
-      tagName: 'img',
       className: 'library_game-card_img',
-      attrs: [
-        { attr: 'src', value: cardImage },
-        { attr: 'alt', value: name },
-      ],
+      src: cardImage.replace('.jpg', '.webp'),
+      alt: name,
+      skeletonColor: LIGHT,
     });
 
-    // BODY
     const body = new Component({
       parentNode: card.node,
       tagName: 'div',
       className: 'library_game-card_body',
     });
 
-    // HEADER
     const header = new Component({
       parentNode: body.node,
       tagName: 'div',
       className: 'library_game-card_header',
     });
 
-    new Component({
+    const title = new Component({
       parentNode: header.node,
       tagName: 'h3',
       className: 'library_game-card_header_title',
@@ -64,44 +71,66 @@ export class LibraryCards extends Component {
       attrs: [{ attr: 'title', value: name }],
     });
 
-    new Component({
+    if (!name) {
+      new SkeletonText({ parentNode: title.node, columns: 2, variant: 'multi' });
+    }
+
+    const tag = new Component({
       parentNode: header.node,
       tagName: 'span',
       className: 'library_game-card_header_category',
       content: category,
     });
 
-    const priceSpan = (parentName: string) =>
-      new Component({
+    if (!category) {
+      new Skeleton({ parentNode: tag.node });
+    }
+
+    const priceSpan = (parentName: string) => {
+      const pr = new Component({
         parentNode: null,
         tagName: 'span',
         className: `library_game-card_${parentName}_price`,
         content: price === 'free' ? 'free' : `${price}`,
       });
 
+      if (likesCount === -1) {
+        new Skeleton({ parentNode: pr.node });
+      }
+
+      return pr;
+    };
+
     header.node.append(priceSpan('header').node);
 
-    // DESCRIPTION
-    new Component({
+    const desc = new Component({
       parentNode: body.node,
       tagName: 'p',
       className: 'library_game-card_desc',
       content: shortDescription,
     });
 
-    // FOOTER
+    if (!shortDescription) {
+      new SkeletonText({
+        parentNode: desc.node,
+        variant: 'multi',
+        rows: 2,
+        columns: 3,
+      });
+    }
+
     const footer = new Component({
       parentNode: body.node,
       tagName: 'div',
       className: 'library_game-card_footer',
     });
 
-    // rating
     const ratingWrap = new Component({
       parentNode: footer.node,
       tagName: 'span',
       className: 'library_game-card_footer_rating',
     });
+
     new Button({
       parentNode: ratingWrap.node,
       leftIcon: 'star',
@@ -116,12 +145,16 @@ export class LibraryCards extends Component {
       content: rating.toFixed(1),
     });
 
-    // likes
+    if (rating === -1) {
+      new Skeleton({ parentNode: ratingWrap.node });
+    }
+
     const likesWrap = new Component({
       parentNode: footer.node,
       tagName: 'span',
       className: 'library_game-card_footer_likes',
     });
+
     new LikeButton({
       parentNode: likesWrap.node,
       variant: 'empty',
@@ -131,12 +164,15 @@ export class LibraryCards extends Component {
       parentNode: likesWrap.node,
       tagName: 'span',
       className: 'library_game-card_footer_likes-value',
-      content: `${(likesCount / 1000).toFixed(1)}K`,
+      content: likesCount !== -1 ? `${(likesCount / 1000).toFixed(1)}K` : '',
     });
+
+    if (likesCount === -1) {
+      new Skeleton({ parentNode: likesWrap.node });
+    }
 
     footer.append(priceSpan('footer').node);
 
-    // DETAILS BUTTON
     const detailsBtn = new Button({
       parentNode: footer.node,
       text: 'Details',
@@ -145,30 +181,28 @@ export class LibraryCards extends Component {
       className: 'library_game-card_footer_details',
       ariaLabel: `Details for ${name}`,
       fullWidth: true,
+      variant: likesCount === -1 ? 'skeleton' : undefined,
     });
-    detailsBtn.node.onclick = () => this.openDetails(game);
 
+    detailsBtn.node.onclick = () => this.openDetails(game);
     detailsBtn.setAttributes([{ attr: 'role', value: 'card-dialog' }]);
-    //test
-    // if (i === 11) {
-    //   this.openDetails(game);
-    // }
   }
 
-  private openDetails(game: GameCardDataType) {
+  private openDetails(game: GameCardItemType) {
     const dialog = new GameDetailsDialog({
       parentNode: null,
-      game,
+      slug: game.slug,
       onClose: () => this.portal.unmount(),
     });
-
     this.portal.mount(dialog.node);
   }
 
-  public renderAllCards(list: GameCardDataType[]) {
+  public renderAllCards(list: GameCardItemType[]) {
     this.node.innerHTML = '';
-    list.forEach((game) => {
-      this.renderCard(game);
-    });
+    list.forEach((game) => this.renderCard(game));
+  }
+
+  public showSkeletons() {
+    this.renderSkeletons();
   }
 }

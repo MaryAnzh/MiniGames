@@ -30,11 +30,11 @@
   --outline-variant: #d2d2d2;
 
   /* Additional */
-  --avatar-random-1: #e9e9f6;
-  --avatar-random-2: #a3e2c9;
-  --avatar-random-3: #bce3ff;
-  --avatar-random-4: #ffc6ff;
-  --avatar-random-5: #e8dff5;
+  --avatar-color-1: #ffd02b; /* Alex_Pro99 */
+  --avatar-color-2: #a3e2c9; /* CozyGamer_x */
+  --avatar-color-3: #bce3ff; /* MatchMaster */
+  --avatar-color-4: #ffc6ff; /* BubblePop */
+  --avatar-color-5: #e8dff5; /* SudokuGod */
 
   /* Shadows */
   --level-05: 2px 2px 0px var(--on-primary);
@@ -45,6 +45,12 @@
   --level-3: 8px 8px 0 var(--on-primary);
 
   /* CUSTOM */
+  --gray-100: #f5f5f5;
+  --gray-200: #f9f9f9;
+  --gray-300: #f0f0f0;
+  --gray-400: #ecdbdb;
+  --gray-800: #49454f;
+
   --button-shadow: 0px 10px 20px -10px rgba(0, 0, 0, 0.1);
   --card-shadow: 0px 14px 30px -10px rgba(0, 0, 0, 0.08), 0px 2px 8px -4px rgba(0, 0, 0, 0.04);
 
@@ -54,13 +60,28 @@
     rgba(0, 0, 0, 0.4) 17%,
     rgba(0, 0, 0, 0.85) 46%
   );
+  --skeleton-light: linear-gradient(
+    120deg,
+    var(--gray-400) 0%,
+    color-mix(in srgb, var(--gray-200) 40%, transparent) 5%,
+    color-mix(in srgb, var(--gray-200) 80%, transparent) 40%,
+    var(--white) 50%,
+    color-mix(in srgb, var(--gray-200) 90%, transparent) 60%,
+    color-mix(in srgb, var(--gray-200) 20%, transparent) 95%,
+    var(--gray-400) 100%
+  );
+  --skeleton-dark: linear-gradient(
+    120deg,
+    color-mix(in srgb, var(--gray-300) 10%, transparent) 0%,
+    color-mix(in srgb, var(--gray-300) 50%, transparent) 40%,
+    color-mix(in srgb, var(--white) 70%, transparent) 50%,
+    color-mix(in srgb, var(--gray-300) 50%, transparent) 60%,
+    color-mix(in srgb, var(--gray-300) 10%, transparent) 100%
+  );
 
   --hero-bg: rgba(30, 27, 58, 0.65);
   --transparent: #0000;
   --pop-up-bg: rgba(0, 0, 0, 0.3);
-
-  --gray-100: #f5f5f5;
-  --gray-800: #49454f;
 
   --dialog-title-tag-shadow: 3px 3px 0px var(--on-primary);
 }

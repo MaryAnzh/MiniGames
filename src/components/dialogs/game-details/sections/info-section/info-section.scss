@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--dialog-section-gap);
+  padding-bottom: var(--size-3);
 
   &_title-wrap {
     width: 100%;
@@ -18,6 +19,12 @@
     }
   }
 
+  &_title-skeleton {
+    position: relative;
+    width: 60%;
+    height: var(--display-medium);
+  }
+
   &_desc {
     color: var(--on-bg);
     font-size: var(--body-medium);
@@ -25,40 +32,46 @@
     line-height: 122%;
   }
 
+  &_desc-skeleton {
+    position: relative;
+    width: 100%;
+    height: var(--size-10);
+  }
+
   &_widgets-wrap {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    justify-content: center;
-    align-items: center;
     gap: var(--size-2);
 
     &_widget {
-      max-width: 100%;
-      display: inline-flex;
+      display: flex;
+      flex-direction: column;
+      gap: var(--size-1);
       padding: var(--size-1) var(--size-2);
       background: var(--white);
       box-shadow: var(--dialog-title-tag-shadow);
       border-radius: var(--corner-small);
       outline: var(--border-1) var(--outline-variant) solid;
       outline-offset: var(--border-1-neg);
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
-      gap: var(--size-1);
 
       &_title {
-        color: var(--on-bg);
         font-size: var(--label-medium);
-        font-weight: var(--weight-regular);
+        color: var(--on-bg);
       }
 
       &_value {
-        color: var(--on-primary);
         font-size: var(--body-small);
         font-weight: var(--weight-bold);
+        color: var(--on-primary);
       }
     }
+  }
+
+  &_widget-skeleton {
+    position: relative;
+    width: 100%;
+    height: var(--size-8);
   }
 
   &_actions-wrap {
@@ -77,6 +90,12 @@
     }
   }
 
+  &_actions-skeleton {
+    position: relative;
+    width: 100%;
+    height: var(--size-7);
+  }
+
   @media (min-width: $tablet) {
     &_title-wrap {
       flex-direction: row;
@@ -89,16 +108,16 @@
     }
 
     &_widgets-wrap {
-      width: 100%;
-      display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
     &_actions-wrap {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+
       &_like {
         display: none;
       }
+
       &_like-desktop {
         display: flex;
       }

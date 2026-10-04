@@ -7,6 +7,7 @@
   --size-1-4: 10px;
   --size-2: 16px;
   --size-2-1: 18px;
+  --size-2-2: 20px;
   --size-3: 24px;
   --size-3-1: 28px;
   --size-4: 32px;
@@ -95,4 +96,6 @@
   --dialog-text: var(--on-bg);
   --dialog-heading: var(--on-primary);
   --dialog-btn-height: var(--size-5);
+
+  --dialog-width-sm: 320px;
 }

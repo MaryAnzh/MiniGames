@@ -17,6 +17,7 @@ export const APP_ROUTES = {
   LIBRARY: '/library',
   TOURNAMENTS: '/tournaments',
   COMMUNITY: '/community',
+  GAME: '/game/',
 } as const;
 
 export const APP_COMPANY = [

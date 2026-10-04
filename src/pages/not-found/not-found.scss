@@ -1,0 +1,9 @@
+.app-not-found {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--size-3);
+  gap: var(--size-2);
+}

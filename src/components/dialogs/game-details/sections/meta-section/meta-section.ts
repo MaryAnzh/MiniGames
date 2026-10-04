@@ -1,59 +1,66 @@
 import { Component } from '@components';
-import { Button, LikeButton } from '@ui';
-import type { ComponentProps, GameCardDataType } from '@types';
+import { Icon, LikeButton, Skeleton } from '@ui';
+import type { ComponentProps, GameCardItemType } from '@types';
+import { LIGHT } from '@constants';
 
-type MetaSectionProps = Pick<ComponentProps, 'parentNode'> & {
-  game: GameCardDataType;
-};
+type MetaSectionProps = Pick<ComponentProps, 'parentNode'> &
+  Pick<GameCardItemType, 'likesCount' | 'rating'> & {
+    isSkeleton?: boolean;
+  };
 
 export class MetaSection extends Component {
-  constructor({ parentNode, game }: MetaSectionProps) {
+  constructor({ parentNode, likesCount, rating, isSkeleton = false }: MetaSectionProps) {
     super({
       parentNode,
       tagName: 'div',
       className: 'game-detail_meta',
     });
-
-    this.render(game);
+    this.render({ rating, likesCount, isSkeleton });
   }
 
-  private render({ rating, likesCount }: GameCardDataType) {
-    // rating
+  private render({ rating, likesCount, isSkeleton }: Omit<MetaSectionProps, 'parentNode'>) {
     const ratingWrap = new Component({
       parentNode: this.node,
       tagName: 'span',
       className: 'game-detail_meta_rating',
     });
 
-    new Button({
-      parentNode: ratingWrap.node,
-      leftIcon: 'star',
-      variant: 'empty',
-      ariaLabel: 'Game stars',
-    });
-
-    new Component({
-      parentNode: ratingWrap.node,
-      tagName: 'span',
-      content: rating.toFixed(1),
-    });
-
-    // likes
-    const likesWrap = new Component({
+    const likeWrap = new Component({
       parentNode: this.node,
       tagName: 'span',
       className: 'game-detail_meta_likes',
     });
 
-    new LikeButton({
-      parentNode: likesWrap.node,
-      variant: 'empty',
-    });
+    if (isSkeleton) {
+      new Skeleton({
+        parentNode: ratingWrap.node,
+        color: LIGHT,
+        className: 'game-detail_meta_rating-skeleton',
+      });
 
-    new Component({
-      parentNode: likesWrap.node,
-      tagName: 'span',
-      content: `${(likesCount / 1000).toFixed(1)}K`,
-    });
+      new Skeleton({
+        parentNode: likeWrap.node,
+        color: LIGHT,
+        className: 'game-detail_meta_likes-skeleton',
+      });
+    } else {
+      new Icon({
+        parentNode: ratingWrap.node,
+        icon: 'star',
+      });
+
+      new Component({
+        parentNode: ratingWrap.node,
+        tagName: 'span',
+        content: rating.toFixed(1),
+      });
+
+      new LikeButton({
+        parentNode: likeWrap.node,
+        variant: 'empty',
+        value: likesCount,
+        isIcon: true,
+      });
+    }
   }
 }

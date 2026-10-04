@@ -1,54 +1,98 @@
+import type { Portal } from '@components';
 import { APP_ROUTES } from '@constants';
-import { HomePage, CommunityPage, LibraryPage, TournamentsPage } from '@pages';
-import appStore from '@state';
+import { HomePage, CommunityPage, LibraryPage, TournamentsPage, NotFoundPage } from '@pages';
+import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
+import appStore from '@store';
 
-type PageViewType =
-  typeof HomePage | typeof CommunityPage | typeof LibraryPage | typeof TournamentsPage;
-
-type RouteType = {
-  path: string;
-  view: PageViewType;
-};
+const { HOME, COMMUNITY, GAME, LIBRARY, TOURNAMENTS } = APP_ROUTES;
 
 export class Router {
-  private routes: RouteType[];
   private root: HTMLElement;
   private store = appStore;
+  private portal: Portal;
 
-  constructor(root: HTMLElement) {
+  private routes = [
+    { path: HOME, view: HomePage },
+    { path: LIBRARY, view: LibraryPage },
+    { path: TOURNAMENTS, view: TournamentsPage },
+    { path: COMMUNITY, view: CommunityPage },
+    { path: `${GAME}:id`, view: HomePage },
+  ];
+
+  constructor(root: HTMLElement, portal: Portal) {
     this.root = root;
-
-    this.routes = [
-      { path: APP_ROUTES.HOME, view: HomePage },
-      { path: APP_ROUTES.LIBRARY, view: LibraryPage },
-      { path: APP_ROUTES.TOURNAMENTS, view: TournamentsPage },
-      { path: APP_ROUTES.COMMUNITY, view: CommunityPage },
-    ];
-
-    window.addEventListener('hashchange', () => this.handleRoute());
+    this.portal = portal;
+    window.addEventListener('popstate', () => this.handleRoute());
   }
 
   init() {
-    if (!window.location.hash) {
-      window.location.hash = APP_ROUTES.HOME;
-    }
-
-    this.store.currentRoute = window.location.hash.slice(1);
     this.handleRoute();
   }
 
   navigate(path: string) {
-    window.location.hash = path;
-    this.store.currentRoute = path;
+    history.pushState({}, '', path);
     this.handleRoute();
   }
 
-  private handleRoute() {
-    const currentPath = window.location.hash.slice(1) || APP_ROUTES.HOME;
+  private matchRoute(pathname: string) {
+    for (const route of this.routes) {
+      const routeParts = route.path.split('/');
+      const pathParts = pathname.split('/');
 
-    const route = this.routes.find((r) => r.path === currentPath) || this.routes[0];
+      if (routeParts.length !== pathParts.length) continue;
+
+      const params: Record<string, string> = {};
+      let matched = true;
+
+      routeParts.forEach((part, i) => {
+        if (part.startsWith(':')) {
+          params[part.slice(1)] = pathParts[i];
+        } else if (part !== pathParts[i]) {
+          matched = false;
+        }
+      });
+
+      if (matched) return { view: route.view, params };
+    }
+
+    return { view: NotFoundPage, params: {} };
+  }
+
+  private handleRoute() {
+    const url = new URL(window.location.href);
+    const pathname = url.pathname;
+    const searchParams = Object.fromEntries(url.searchParams.entries());
+
+    const { view, params } = this.matchRoute(pathname);
+
+    this.store.currentRoute = pathname;
+    this.store.routeParams = params;
+    this.store.queryParams = searchParams;
+
+    if (pathname.startsWith(GAME)) {
+      const slug = params.id;
+
+      const dialog = new GameDetailsDialog({
+        parentNode: null,
+        slug,
+        onClose: () => this.portal.unmount(),
+      });
+
+      this.portal.mount(dialog.node);
+      return;
+    }
+
+    if (this.store.currentPageInstance?.destroy) {
+      this.store.currentPageInstance.destroy();
+    }
 
     this.root.innerHTML = '';
-    new route.view({ parentNode: this.root });
+
+    const pageInstance = new view({
+      parentNode: this.root,
+      portal: this.portal,
+    });
+
+    this.store.currentPageInstance = pageInstance;
   }
 }

@@ -1,0 +1,42 @@
+.app-spinner {
+  border-radius: var(--corner-full);
+  border-style: dashed;
+  border-width: var(--size-05);
+  animation: spin 0.8s linear infinite;
+
+  &[data-size='sm'] {
+    width: var(--size-4);
+    height: var(--size-4);
+  }
+
+  &[data-size='md'] {
+    width: var(--size-5);
+    height: var(--size-5);
+  }
+
+  &[data-size='lg'] {
+    width: var(--size-6);
+    height: var(--size-6);
+  }
+
+  &[data-color='primary'] {
+    border-color: var(--primary);
+    border-top-color: var(--on-bg-low);
+  }
+
+  &[data-color='dark'] {
+    border-color: var(--on-bg);
+    border-top-color: var(--on-bg-low);
+  }
+
+  &[data-color='light'] {
+    border-color: var(--surface-low);
+    border-top-color: var(--accent);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
