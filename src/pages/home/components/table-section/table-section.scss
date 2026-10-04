@@ -2,11 +2,20 @@
 @use '../../../../styles/mixins/tag.scss' as *;
 
 .table-section {
+  position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
   padding: var(--size-2);
   gap: var(--size-2);
+
+  &-error {
+    position: absolute;
+    width: fit-content;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%);
+  }
 
   @media (min-width: $tablet) {
     padding: var(--size-3) var(--size-5);
@@ -17,7 +26,8 @@
   }
 
   &_title-wrap {
-    display: flex;
+    display: grid;
+    grid-template-columns: min-content 1fr auto;
     align-items: center;
     gap: var(--size-1);
 
@@ -40,6 +50,10 @@
       @media (min-width: $laptop) {
         font-size: var(--headline-large);
       }
+    }
+    &_retry-brn {
+      height: var(--size-5);
+      align-self: center;
     }
   }
 

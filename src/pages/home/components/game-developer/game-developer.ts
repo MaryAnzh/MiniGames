@@ -1,6 +1,7 @@
 import { Component } from '@components';
+import { LIGHT } from '@constants';
 import type { ComponentProps } from '@types';
-import { Button } from '@ui';
+import { Button, Image } from '@ui';
 
 type GameDeveloperSectionProps = Pick<ComponentProps, 'parentNode'>;
 
@@ -8,14 +9,12 @@ export class GameDeveloperSection extends Component {
   constructor({ parentNode }: GameDeveloperSectionProps) {
     super({ parentNode, tagName: 'section', className: 'home-page_game-developer' });
 
-    new Component({
+    new Image({
       parentNode: this.node,
-      tagName: 'img',
+      src: 'img/game-developer.webp',
+      alt: 'Game developer img',
       className: 'game-developer_img',
-      attrs: [
-        { attr: 'src', value: 'img/game-developer.webp' },
-        { attr: 'alt', value: 'game developer img' },
-      ],
+      skeletonColor: LIGHT,
     });
 
     const info = new Component({

@@ -6,6 +6,7 @@ import close from '/svg/close.svg?raw';
 import checked from '/svg/checked.svg?raw';
 import download from '/svg/download.svg?raw';
 import empty from '/svg/empty.svg?raw';
+import empty_table from '/svg/empty-table.svg?raw';
 import empty_comments from '/svg/empty-comment.svg?raw';
 import empty_img from '/svg/empty-img.svg?raw';
 import error from '/svg/error.svg?raw';
@@ -33,6 +34,7 @@ export const ICON_PICKER = {
   close,
   download,
   empty,
+  empty_table,
   empty_comments,
   empty_img,
   error,

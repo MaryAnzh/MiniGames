@@ -14,7 +14,8 @@
   }
 
   .slider_title-wrap {
-    display: flex;
+    display: grid;
+    grid-template-columns: min-content 1fr auto;
     gap: var(--size-1);
     align-items: flex-end;
 

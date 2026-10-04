@@ -1,5 +1,5 @@
 import { Component, Portal, Slider } from '@components';
-import { DARK, EMPTY, LOADING, SUCCESS } from '@constants';
+import { DARK, EMPTY, ERROR, LOADING, SUCCESS } from '@constants';
 import type { ComponentProps, GameCardItemType, ResponseStatusType } from '@types';
 import { Button } from '@ui';
 
@@ -95,10 +95,11 @@ export class SliderSection extends Component {
     });
   }
 
-  public updateSlides(slides: GameCardItemType[]) {
+  public updateSlides(slides: GameCardItemType[], status?: ResponseStatusType) {
     const isEmptyData = slides.length === 0;
+    const isError = status === ERROR;
 
-    this.status = isEmptyData ? EMPTY : SUCCESS;
+    this.status = isError ? ERROR : isEmptyData ? EMPTY : SUCCESS;
     if (this.slider) {
       this.slider.destroy();
     }
@@ -110,21 +111,18 @@ export class SliderSection extends Component {
       portal: this.portal,
     });
     this.slider = slider;
-    if (this.prevBtn && this.nextBtn && !isEmptyData) {
+    if (this.prevBtn && this.nextBtn && status === SUCCESS) {
       this.prevBtn.node.onclick = () => slider.animatePrev();
       this.nextBtn.node.onclick = () => slider.animateNext();
       this.prevBtn.setAttributes([{ attr: 'disable', value: null }]);
       this.nextBtn.setAttributes([{ attr: 'disable', value: null }]);
-    }
 
-    if (this.prevBtn && this.nextBtn && isEmptyData) {
-      this.prevBtn.setAttributes([{ attr: 'disable', value: 'true' }]);
-      this.nextBtn.setAttributes([{ attr: 'disable', value: 'true' }]);
-    }
-    if (this.status !== EMPTY) {
       this.retryBtn.node.style.display = 'none';
     }
-    if (this.status === EMPTY) {
+
+    if (this.prevBtn && this.nextBtn && (isEmptyData || isError)) {
+      this.prevBtn.setAttributes([{ attr: 'disable', value: 'true' }]);
+      this.nextBtn.setAttributes([{ attr: 'disable', value: 'true' }]);
       this.retryBtn.node.style.display = 'flex';
     }
   }
@@ -140,7 +138,7 @@ export class SliderSection extends Component {
     try {
       await this.onRetry();
     } catch {
-      this.updateSlides([]);
+      this.updateSlides([], EMPTY);
     }
   };
 

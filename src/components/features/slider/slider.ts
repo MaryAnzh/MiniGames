@@ -1,7 +1,7 @@
 import { Component, Portal, GameDetailsDialog } from '@components';
 import type { SliderProps } from './types';
 import type { GameCardItemType, ResponseStatusType } from '@types';
-import { Icon, Image, LikeButton, Skeleton } from '@ui';
+import { ErrorBanner, Icon, Image, LikeButton, Skeleton } from '@ui';
 import { SliderController } from './slider-controller';
 import { EMPTY, ERROR, LIGHT, LOADING, SUCCESS } from '@constants';
 import { arrayFromNumber, replaceImageToWebp } from '@utils';
@@ -23,7 +23,7 @@ export class Slider extends Component {
     this.portal = portal;
     this.status = status;
     const data =
-      slides.length === 0
+      slides.length === 0 || status === ERROR
         ? arrayFromNumber(7).map(
             () =>
               ({
@@ -84,6 +84,14 @@ export class Slider extends Component {
     this.node.innerHTML = '';
     this.sliderBody = null;
     this.slidesNode = [];
+
+    if (this.status === ERROR) {
+      new ErrorBanner({
+        parentNode: this.node,
+        message: 'Server response error, check your connection or proxy',
+        className: 'app_slider-error',
+      });
+    }
 
     const sliderBody = new Component({
       parentNode: this.node,
@@ -180,7 +188,7 @@ export class Slider extends Component {
   }
 
   private animate(direction: 'next' | 'prev') {
-    if (this.isAnimating) return; // блокируем повторный вызов
+    if (this.isAnimating) return;
     this.isAnimating = true;
     const plan = this.getAnimationPlan();
     if (!plan.length) {
@@ -201,7 +209,7 @@ export class Slider extends Component {
       const toX = neighbor.x;
       const toWidth = neighbor.width;
 
-      const deltaX = direction === 'next' ? toX - fromX : toX - fromX; // ВСЕГДА влево
+      const deltaX = direction === 'next' ? toX - fromX : toX - fromX;
 
       const animation = node.animate(
         [
