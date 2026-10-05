@@ -5,6 +5,7 @@ import type {
   LOGIN,
   REGISTER,
   COLOR_VARIANT,
+  AUTH_TAGS,
 } from '@constants';
 import type { KeysTemplateType } from './common';
 
@@ -27,6 +28,7 @@ export type AuthFormType = typeof LOGIN | typeof REGISTER;
 export type AlignType = KeysTemplateType<typeof COMPONENT_ALIGN>;
 
 export type ColorVariantType = KeysTemplateType<typeof COLOR_VARIANT>;
+export type AuthTabType = KeysTemplateType<typeof AUTH_TAGS>;
 
 export type GoogleIconsType =
   | 'mail'

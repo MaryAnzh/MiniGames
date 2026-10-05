@@ -1,8 +1,9 @@
 import { AuthDialog, type Portal } from '@components';
-import { APP_ROUTES } from '@constants';
+import { APP_ROUTES, LOGIN } from '@constants';
 import { HomePage, CommunityPage, LibraryPage, TournamentsPage, NotFoundPage } from '@pages';
 import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
 import appStore from '@store';
+import type { AuthTabType } from '@types';
 
 const { HOME, COMMUNITY, GAME, LIBRARY, TOURNAMENTS, AUTH } = APP_ROUTES;
 
@@ -64,6 +65,10 @@ export class Router {
     const pathname = url.pathname;
     const searchParams = Object.fromEntries(url.searchParams.entries());
 
+    if (!pathname.startsWith(GAME) && pathname !== AUTH) {
+      this.portal.unmount();
+    }
+
     if (pathname.startsWith(GAME)) {
       const slug = pathname.replace(GAME, '').replace(/^\/+/, '');
 
@@ -77,8 +82,7 @@ export class Router {
         onClose: this.closePortal,
       });
 
-      this.portal.mount(dialog.node);
-
+      this.portal.mount(dialog.node, dialog);
       return;
     }
 
@@ -92,13 +96,17 @@ export class Router {
         return;
       }
 
+      const tab = (searchParams.tab as AuthTabType) ?? LOGIN;
+
       const dialog = new AuthDialog({
         parentNode: null,
-        tab: searchParams.tab === 'register' ? 'Register' : 'Login',
+        tab,
+        onOpenAuthDialog: (nextTab) => {
+          this.navigate(`${AUTH}?tab=${nextTab}`);
+        },
       });
 
-      this.portal.mount(dialog.node);
-
+      this.portal.mount(dialog.node, dialog);
       return;
     }
 
@@ -131,6 +139,5 @@ export class Router {
 
   closePortal = () => {
     this.portal.unmount();
-    history.back();
   };
 }

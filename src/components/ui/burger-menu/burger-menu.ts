@@ -1,4 +1,4 @@
-import { ICON_PICKER, APP_PAGES } from '@constants';
+import { ICON_PICKER, APP_PAGES, REGISTER, LOGIN } from '@constants';
 import { Component } from '@components';
 import { Button } from '@ui';
 import type { AuthFormType, ComponentProps } from '@types';
@@ -18,6 +18,7 @@ export class BurgerMenu extends Component {
   onClose: () => void;
   onOpenAuth: (tab: AuthFormType) => void;
   store = appStore;
+  children: Component[] = [];
 
   items: Component[] = [];
   highlightClass = 'is-active';
@@ -68,7 +69,7 @@ export class BurgerMenu extends Component {
       corner: 'sm',
       ariaLabel: 'Close button',
     });
-    this.closeBtn.node.addEventListener('click', this.onClose);
+    this.closeBtn.node.onclick = () => this.onClose();
 
     /* ROUTES */
     const linksWrap = new Component({
@@ -91,10 +92,10 @@ export class BurgerMenu extends Component {
         content: name,
       });
 
-      item.node.addEventListener('click', () => {
+      item.node.onclick = () => {
         this.router.navigate(path);
         this.onClose();
-      });
+      };
 
       this.items.push(item);
     });
@@ -108,23 +109,47 @@ export class BurgerMenu extends Component {
       className: 'burger_bottom',
     });
 
-    new Button({
-      parentNode: bottom.node,
-      text: isAuth ? 'Log Out' : 'Log In',
-      size: 'md',
-      color: 'ghost',
-      className: isAuth ? 'burger_logout_btn' : 'burger_login_btn',
-      fullWidth: true,
-    }).node.addEventListener('click', () => this.onOpenAuth('Login'));
+    if (!isAuth) {
+      const loginBtn = new Button({
+        parentNode: bottom.node,
+        text: isAuth ? 'Log Out' : 'Log In',
+        size: 'md',
+        color: 'ghost',
+        className: isAuth ? 'burger_logout_btn' : 'burger_login_btn',
+        fullWidth: true,
+      });
+      loginBtn.node.onclick = () => {
+        this.onClose();
+        this.onOpenAuth(LOGIN);
+      };
 
-    new Button({
-      parentNode: bottom.node,
-      text: 'Sign Up',
-      size: 'md',
-      color: 'primary',
-      className: 'burger_signup_btn',
-      fullWidth: true,
-    }).node.addEventListener('click', () => this.onOpenAuth('Register'));
+      const signupBtn = new Button({
+        parentNode: bottom.node,
+        text: 'Sign Up',
+        size: 'md',
+        color: 'primary',
+        className: 'burger_signup_btn',
+        fullWidth: true,
+      });
+      signupBtn.node.onclick = () => {
+        this.onClose();
+        this.onOpenAuth(REGISTER);
+      };
+      this.children.push(loginBtn, signupBtn);
+    } else {
+      const logoutBtn = new Button({
+        parentNode: bottom.node,
+        className: 'burger_bottom_btn',
+        text: 'Log Out',
+        color: 'ghost',
+      });
+      logoutBtn.node.onclick = () => {
+        // this.store.logout();
+        // this.router.navigate('/');
+        // this.onClose();
+      };
+      this.children.push(logoutBtn);
+    }
   }
 
   highlight(path: string) {
@@ -140,8 +165,16 @@ export class BurgerMenu extends Component {
 
   destroy(): void {
     if (this.closeBtn) {
-      this.closeBtn.node.removeEventListener('click', this.onClose);
+      this.closeBtn.node.onclick = null;
     }
+    this.items.forEach((item) => {
+      item.node.onclick = null;
+    });
+    this.children.forEach((child) => {
+      if (child instanceof Button) {
+        child.node.onclick = null;
+      }
+    });
     super.destroy();
   }
 }

@@ -1,5 +1,6 @@
-import { Component, Portal } from '@components';
-import type { AuthFormType, ComponentProps, GoogleIconsType } from '@types';
+import { Component } from '@components';
+import { LOGIN, REGISTER } from '@constants';
+import type { AuthTabType, ComponentProps, GoogleIconsType } from '@types';
 import { Input, Button, Switcher } from '@ui';
 
 type FieldType = {
@@ -27,7 +28,7 @@ const LOGIN_FIELDS: FieldType[] = [
     type: 'password',
     leftIcon: 'lock',
     rightIcon: 'visibility',
-    id: 'loginEPass',
+    id: 'loginPass',
     name: 'login-pass',
   },
 ];
@@ -67,14 +68,21 @@ const REGISTER_FIELDS: FieldType[] = [
 ];
 
 type AuthPopupProps = Pick<ComponentProps, 'parentNode'> & {
-  tab: AuthFormType;
+  tab: AuthTabType;
+  onOpenAuthDialog?: (tag: AuthTabType) => void;
 };
 
 export class AuthDialog extends Component {
-  public activeTab: AuthFormType = 'Login';
-  private portal: Portal;
+  public activeTab: AuthTabType;
+  private onOpenAuthDialog?: (tag: AuthTabType) => void;
 
-  constructor({ parentNode, tab }: AuthPopupProps) {
+  //buttons
+  private loginBtn!: Button;
+  private switcher!: Switcher;
+  private googleBtn!: Button;
+  private bottomLink!: Component;
+
+  constructor({ parentNode, tab, onOpenAuthDialog }: AuthPopupProps) {
     super({
       parentNode,
       tagName: 'div',
@@ -82,55 +90,43 @@ export class AuthDialog extends Component {
     });
 
     this.activeTab = tab;
+    this.onOpenAuthDialog = onOpenAuthDialog;
 
-    this.portal = new Portal({});
-
-    this.render();
-  }
-
-  open() {
-    this.portal.mount(this.node);
-  }
-
-  close() {
-    this.node.innerHTML = '';
-    this.portal.unmount();
-  }
-
-  setTab(tab: AuthFormType) {
-    this.activeTab = tab;
     this.render();
   }
 
   public render() {
     this.node.innerHTML = '';
-    const isLogin = this.activeTab === 'Login';
-    new Switcher({
+
+    const isLogin = this.activeTab === LOGIN;
+
+    this.switcher = new Switcher({
       parentNode: this.node,
-      tabs: ['Login', 'Register'],
+      tabs: [LOGIN, REGISTER],
       active: this.activeTab,
       onChange: (tab) => {
-        this.setTab(tab as AuthFormType);
+        this.onOpenAuthDialog?.(tab);
       },
     });
 
-    const title = this.activeTab === 'Login' ? 'Welcome Back!' : 'Create Account';
+    const title = isLogin ? 'Welcome Back!' : 'Create Account';
     const subtitle = isLogin
       ? 'Sign in to resume your games and progress.'
       : 'Join MiniGames to track your score & streak.';
 
-    //Heading
     const heading = new Component({
       parentNode: this.node,
       tagName: 'div',
       className: 'auth_heading',
     });
+
     new Component({
       parentNode: heading.node,
       tagName: 'h2',
       className: 'auth_heading_title',
       content: title,
     });
+
     new Component({
       parentNode: heading.node,
       tagName: 'p',
@@ -138,7 +134,6 @@ export class AuthDialog extends Component {
       content: subtitle,
     });
 
-    // FORM
     const authForm = new Component({
       parentNode: this.node,
       tagName: 'form',
@@ -151,16 +146,10 @@ export class AuthDialog extends Component {
 
     const fields = isLogin ? LOGIN_FIELDS : REGISTER_FIELDS;
 
-    fields.forEach(({ label, placeholder, type, leftIcon, rightIcon, id, name }) => {
+    fields.forEach((field) => {
       new Input({
         parentNode: authForm.node,
-        label,
-        placeholder,
-        type,
-        leftIcon,
-        rightIcon,
-        id,
-        name,
+        ...field,
       });
     });
 
@@ -172,20 +161,22 @@ export class AuthDialog extends Component {
         className: 'auth_form_forgot',
       });
     }
+
     const buttonWrap = new Component({
       parentNode: authForm.node,
       tagName: 'div',
       className: 'auth_button-wrap',
     });
 
-    new Button({
+    this.loginBtn = new Button({
       parentNode: buttonWrap.node,
-      text: isLogin ? 'Login' : 'Create Account',
+      text: isLogin ? LOGIN : 'Create Account',
       size: 'lg',
       color: 'primary',
       fullWidth: true,
       shadow: 'hard',
       className: 'auth_main_btn',
+      ariaLabel: isLogin ? LOGIN : REGISTER,
     });
 
     new Component({
@@ -195,7 +186,7 @@ export class AuthDialog extends Component {
       content: 'OR',
     });
 
-    new Button({
+    this.googleBtn = new Button({
       parentNode: buttonWrap.node,
       text: isLogin ? 'Continue with Google' : 'Sign up with Google',
       size: 'lg',
@@ -203,31 +194,41 @@ export class AuthDialog extends Component {
       fullWidth: true,
       className: 'auth_google_btn',
       leftIcon: 'google',
+      ariaLabel: isLogin ? 'Continue with Google' : 'Sign up with Google',
     });
-
-    const footerText = isLogin ? "Don't have an account?" : 'Already have an account?';
 
     const footer = new Component({
       parentNode: this.node,
       tagName: 'div',
       className: 'auth_footer',
     });
+
     new Component({
       parentNode: footer.node,
       tagName: 'span',
       className: 'auth_footer_text',
-      content: footerText,
+      content: isLogin ? "Don't have an account?" : 'Already have an account?',
     });
-    const bottomLink = new Component({
+
+    this.bottomLink = new Component({
       parentNode: footer.node,
       tagName: 'span',
       className: 'auth_footer_link',
-      content: isLogin ? 'Register' : 'Login',
+      content: isLogin ? REGISTER : LOGIN,
     });
 
-    bottomLink.node.addEventListener('click', () => {
-      this.activeTab = isLogin ? 'Register' : 'Login';
-      this.render();
-    });
+    this.bottomLink.node.onclick = () => {
+      this.onOpenAuthDialog?.(isLogin ? REGISTER : LOGIN);
+    };
+  }
+
+  destroy() {
+    this.switcher.destroy();
+
+    this.loginBtn.node.onclick = null;
+    this.googleBtn.node.onclick = null;
+    this.bottomLink.node.onclick = null;
+
+    super.destroy();
   }
 }

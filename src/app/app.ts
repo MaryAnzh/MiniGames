@@ -1,8 +1,10 @@
 import { Component, Header, Footer, Portal } from '@components';
 import * as C from '@constants';
+import { APP_ROUTES } from '@constants';
 
 import { Router } from '@route';
 import appStore from '@store';
+import type { AuthTabType } from '@types';
 
 export class App {
   private root: HTMLElement;
@@ -36,6 +38,8 @@ export class App {
       parentNode: null,
       isAuth: this.store.isAuth,
       router: this.router,
+      portal: this.portal,
+      onOpenAuthDialog: this.openAuthDialog,
     });
 
     const footer = new Footer({
@@ -47,4 +51,13 @@ export class App {
     appContainer.append(main.node);
     appContainer.append(footer.node);
   }
+
+  openAuthDialog = (tab: AuthTabType) => {
+    const path = `${APP_ROUTES.AUTH}?tab=${tab}`;
+    if (!this.router) {
+      return;
+    }
+    this.store.currentRoute = path;
+    this.router.navigate(path);
+  };
 }

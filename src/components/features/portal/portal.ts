@@ -7,10 +7,9 @@ type PortalProps = {
 
 export class Portal extends Component {
   private timeout: number | null = null;
-  _onClose: (() => void) | null = null;
-  set onClose(callback: () => void) {
-    this._onClose = callback;
-  }
+  private activeComponent: Component | null = null;
+
+  onClose: (() => void) | null = null;
 
   constructor({ className, position }: PortalProps = {}) {
     super({
@@ -24,16 +23,29 @@ export class Portal extends Component {
     document.addEventListener('keydown', this.handleEsc);
   }
 
-  private closePortal = () => {
-    if (this._onClose) {
-      this._onClose();
+  mount(content: HTMLElement, component?: Component) {
+    this.activeComponent = component ?? null;
+
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+      this.timeout = null;
     }
+
+    document.body.style.overflow = 'hidden';
+    this.node.innerHTML = '';
+
+    document.body.appendChild(this.node);
+    this.node.appendChild(content);
+
+    this.node.classList.add('app_portal_open');
+  }
+
+  private closePortal = () => {
+    this.onClose?.();
   };
 
   private handleOutsideClick = (event: Event) => {
-    const target = event.target as HTMLElement;
-
-    if (target.id === 'appPortal') {
+    if ((event.target as HTMLElement).id === 'appPortal') {
       this.closePortal();
     }
   };
@@ -44,47 +56,18 @@ export class Portal extends Component {
     }
   };
 
-  mount(content: HTMLElement) {
-    if (this.timeout) {
-      clearTimeout(this.timeout);
-      this.timeout = null;
-    }
-    document.body.style.overflow = 'hidden';
-    this.node.innerHTML = '';
-
-    document.body.appendChild(this.node);
-
-    this.node.appendChild(content);
-
-    this.node.classList.add('app_portal_open');
-  }
-
   unmount() {
     this.node.classList.remove('app_portal_open');
 
     this.timeout = window.setTimeout(() => {
+      this.activeComponent?.destroy();
+      this.activeComponent = null;
+
       this.node.innerHTML = '';
       if (this.node.parentNode) {
         this.node.parentNode.removeChild(this.node);
         document.body.style.overflow = 'auto';
       }
     }, 300);
-  }
-
-  destroy() {
-    this.node.innerHTML = '';
-    if (this._onClose) {
-      this._onClose = null;
-    }
-
-    if (this.timeout) {
-      clearTimeout(this.timeout);
-    }
-    this.node.removeEventListener('click', this.handleOutsideClick);
-
-    this.node.removeEventListener('click', this.handleOutsideClick);
-    document.removeEventListener('keydown', this.handleEsc);
-
-    super.destroy();
   }
 }

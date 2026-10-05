@@ -104,6 +104,11 @@
     font-weight: var(--weight-bold);
     text-decoration: underline;
     cursor: pointer;
+
+    &::first-letter {
+      text-decoration: underline;
+    }
+
     &:hover {
       color: var(--tertiary);
     }

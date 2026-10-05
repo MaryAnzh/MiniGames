@@ -1,27 +1,32 @@
 import type { Router } from '@route';
 
-import { Component, Portal, AuthDialog } from '@components';
+import { Component, Portal } from '@components';
 import { BurgerMenu, Button, Logo, Navigate } from '@ui';
-import type { AuthFormType } from '@types';
+import type { AuthTabType } from '@types';
+import { LIGHT, LOGIN, REGISTER } from '@constants';
 
 type HeaderProps = {
   parentNode: HTMLElement | null;
   isAuth: boolean;
   router: Router;
+  portal: Portal;
+  onOpenAuthDialog?: (tag: AuthTabType) => void;
 };
 
 export class Header extends Component {
-  private portal: Portal;
   private burgerMenu: BurgerMenu;
   private burgerBtn: Component;
-  private authPopup: AuthDialog;
+  private portal: Portal;
+  private onOpenAuthDialog?: (tag: AuthTabType) => void;
 
   public isAuth: boolean = false;
   private handleOpen: () => void;
 
-  constructor({ parentNode, isAuth, router }: HeaderProps) {
+  constructor({ parentNode, isAuth, router, onOpenAuthDialog, portal }: HeaderProps) {
     super({ parentNode, tagName: 'header', className: 'header' });
     this.isAuth = isAuth;
+    this.portal = portal;
+    this.onOpenAuthDialog = onOpenAuthDialog;
 
     /** BRAND */
     new Logo({
@@ -37,28 +42,15 @@ export class Header extends Component {
       router,
     });
 
-    /** PORTAL */
-    this.portal = new Portal({});
-
-    this.authPopup = new AuthDialog({
-      parentNode: this.portal.node,
-      tab: 'Login',
-    });
-
     /** LOGIN BUTTON */
     const loginButton = new Button({
       parentNode: this.node,
       className: 'header_login_btn',
       text: 'Log In',
       response: 'md',
-      color: 'light',
+      color: LIGHT,
     });
-
-    loginButton.node.addEventListener('click', () => {
-      this.authPopup.activeTab = 'Login';
-      this.authPopup.render();
-      this.portal.mount(this.authPopup.node);
-    });
+    loginButton.node.onclick = () => onOpenAuthDialog?.(LOGIN);
 
     /** SIGNUP BUTTON */
     const signinButton = new Button({
@@ -68,12 +60,7 @@ export class Header extends Component {
       response: 'md',
       color: 'primary',
     });
-
-    signinButton.node.addEventListener('click', () => {
-      this.authPopup.activeTab = 'Register';
-      this.authPopup.render();
-      this.portal.mount(this.authPopup.node);
-    });
+    signinButton.node.onclick = () => onOpenAuthDialog?.(REGISTER);
 
     /** BURGER MENU */
     this.burgerMenu = new BurgerMenu({
@@ -81,10 +68,9 @@ export class Header extends Component {
       router,
       isAuth: this.isAuth,
       onClose: () => this.portal.unmount(),
-      onOpenAuth: (tab: AuthFormType) => {
-        this.authPopup.activeTab = tab;
-        this.authPopup.render();
-        this.portal.mount(this.authPopup.node);
+      onOpenAuth: (tab: AuthTabType) => {
+        this.onOpenAuthDialog?.(tab);
+        this.portal.unmount();
       },
     });
 
@@ -96,8 +82,8 @@ export class Header extends Component {
       className: 'header_burger_btn',
     });
 
-    this.handleOpen = () => this.portal.mount(this.burgerMenu.node);
-    this.burgerBtn.node.addEventListener('click', this.handleOpen);
+    this.handleOpen = () => portal.mount(this.burgerMenu.node, this.burgerMenu);
+    this.burgerBtn.node.onclick = this.handleOpen;
   }
 
   destroy(): void {
