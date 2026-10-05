@@ -107,15 +107,13 @@ export class GameDetailsDialog extends Component {
       ]);
 
       if (gameRes.status !== SUCCESS) {
-        // TODO: render error state
         return;
       }
 
       const game = gameRes.data.data;
-
       const comments = commentsRes.status === SUCCESS ? commentsRes.data.data : [];
 
-      this.node.innerHTML = '';
+      this.node.replaceChildren();
 
       this.render(game, comments);
     } catch {

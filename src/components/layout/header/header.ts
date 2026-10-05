@@ -1,8 +1,7 @@
 import type { Router } from '@route';
 
-import { Component, Portal } from '@components';
+import { Component, Portal, AuthDialog } from '@components';
 import { BurgerMenu, Button, Logo, Navigate } from '@ui';
-import { AuthPopup } from 'src/components/pop-up/auth-form/auth-form';
 import type { AuthFormType } from '@types';
 
 type HeaderProps = {
@@ -15,7 +14,7 @@ export class Header extends Component {
   private portal: Portal;
   private burgerMenu: BurgerMenu;
   private burgerBtn: Component;
-  private authPopup: AuthPopup;
+  private authPopup: AuthDialog;
 
   public isAuth: boolean = false;
   private handleOpen: () => void;
@@ -41,7 +40,7 @@ export class Header extends Component {
     /** PORTAL */
     this.portal = new Portal({});
 
-    this.authPopup = new AuthPopup({
+    this.authPopup = new AuthDialog({
       parentNode: this.portal.node,
       tab: 'Login',
     });

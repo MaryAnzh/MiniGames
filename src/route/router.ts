@@ -1,10 +1,10 @@
-import type { Portal } from '@components';
+import { AuthDialog, type Portal } from '@components';
 import { APP_ROUTES } from '@constants';
 import { HomePage, CommunityPage, LibraryPage, TournamentsPage, NotFoundPage } from '@pages';
 import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
 import appStore from '@store';
 
-const { HOME, COMMUNITY, GAME, LIBRARY, TOURNAMENTS } = APP_ROUTES;
+const { HOME, COMMUNITY, GAME, LIBRARY, TOURNAMENTS, AUTH } = APP_ROUTES;
 
 export class Router {
   private root: HTMLElement;
@@ -16,12 +16,13 @@ export class Router {
     { path: LIBRARY, view: LibraryPage },
     { path: TOURNAMENTS, view: TournamentsPage },
     { path: COMMUNITY, view: CommunityPage },
-    { path: `${GAME}:id`, view: HomePage },
   ];
 
   constructor(root: HTMLElement, portal: Portal) {
     this.root = root;
     this.portal = portal;
+    this.portal.onClose = this.closePortal;
+
     window.addEventListener('popstate', () => this.handleRoute());
   }
 
@@ -63,24 +64,49 @@ export class Router {
     const pathname = url.pathname;
     const searchParams = Object.fromEntries(url.searchParams.entries());
 
+    if (pathname.startsWith(GAME)) {
+      const slug = pathname.replace(GAME, '').replace(/^\/+/, '');
+
+      this.store.currentRoute = pathname;
+      this.store.routeParams = { id: slug };
+      this.store.queryParams = searchParams;
+
+      const dialog = new GameDetailsDialog({
+        parentNode: null,
+        slug,
+        onClose: this.closePortal,
+      });
+
+      this.portal.mount(dialog.node);
+
+      return;
+    }
+
+    if (pathname === AUTH) {
+      this.store.currentRoute = pathname;
+      this.store.routeParams = {};
+      this.store.queryParams = searchParams;
+
+      if (this.store.isAuth) {
+        this.navigate(HOME);
+        return;
+      }
+
+      const dialog = new AuthDialog({
+        parentNode: null,
+        tab: searchParams.tab === 'register' ? 'Register' : 'Login',
+      });
+
+      this.portal.mount(dialog.node);
+
+      return;
+    }
+
     const { view, params } = this.matchRoute(pathname);
 
     this.store.currentRoute = pathname;
     this.store.routeParams = params;
     this.store.queryParams = searchParams;
-
-    if (pathname.startsWith(GAME)) {
-      const slug = params.id;
-
-      const dialog = new GameDetailsDialog({
-        parentNode: null,
-        slug,
-        onClose: () => this.portal.unmount(),
-      });
-
-      this.portal.mount(dialog.node);
-      return;
-    }
 
     if (this.store.currentPageInstance?.destroy) {
       this.store.currentPageInstance.destroy();
@@ -88,11 +114,23 @@ export class Router {
 
     this.root.innerHTML = '';
 
-    const pageInstance = new view({
+    const updateView = view as
+      | typeof HomePage
+      | typeof CommunityPage
+      | typeof LibraryPage
+      | typeof TournamentsPage
+      | typeof NotFoundPage;
+
+    const pageInstance = new updateView({
       parentNode: this.root,
-      portal: this.portal,
+      navigate: (path: string) => this.navigate(path),
     });
 
     this.store.currentPageInstance = pageInstance;
   }
+
+  closePortal = () => {
+    this.portal.unmount();
+    history.back();
+  };
 }

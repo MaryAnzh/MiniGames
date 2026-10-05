@@ -70,7 +70,7 @@ type AuthPopupProps = Pick<ComponentProps, 'parentNode'> & {
   tab: AuthFormType;
 };
 
-export class AuthPopup extends Component {
+export class AuthDialog extends Component {
   public activeTab: AuthFormType = 'Login';
   private portal: Portal;
 

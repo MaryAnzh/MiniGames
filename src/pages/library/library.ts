@@ -1,23 +1,23 @@
-import { Component, Portal } from '@components';
+import { Component } from '@components';
 import type { ComponentProps } from '@types';
 import { Pagination } from '@ui';
 import appStore from '@store';
 import { appEvents } from '@utils';
 
 import { LibraryIntro, LibraryFilters, LibraryCards } from './sections';
-import { ROUTE_CHANGE } from '@constants';
+import { APP_ROUTES, ROUTE_CHANGE } from '@constants';
 
 type LibraryPageType = Pick<ComponentProps, 'parentNode'> & {
-  portal: Portal;
+  navigate: (path: string) => void;
 };
 
 export class LibraryPage extends Component {
   private store: typeof appStore;
   private cards!: LibraryCards;
   private pagination!: Pagination;
-  private portal: Portal;
+  private navigate: (path: string) => void;
 
-  constructor({ parentNode, portal }: LibraryPageType) {
+  constructor({ parentNode, navigate }: LibraryPageType) {
     super({
       parentNode,
       tagName: 'div',
@@ -26,7 +26,7 @@ export class LibraryPage extends Component {
     });
 
     this.store = appStore;
-    this.portal = portal;
+    this.navigate = navigate;
 
     this.initListeners();
     this.renderPage();
@@ -71,7 +71,7 @@ export class LibraryPage extends Component {
     this.cards = new LibraryCards({
       parentNode: this.node,
       defaultCardCount: this.store.pageLimit,
-      portal: this.portal,
+      openDetails: this.openDetails,
     });
 
     this.pagination = new Pagination({
@@ -113,5 +113,17 @@ export class LibraryPage extends Component {
       }
     } else {
     }
+  }
+
+  public openDetails = (slug: string) => {
+    const gamePath = APP_ROUTES.GAME + slug;
+    this.store.currentRoute = gamePath;
+    this.navigate(gamePath);
+  };
+
+  public destroy() {
+    this.cards.destroy();
+    this.pagination.destroy();
+    super.destroy();
   }
 }

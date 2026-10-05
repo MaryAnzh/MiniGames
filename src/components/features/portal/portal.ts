@@ -7,6 +7,10 @@ type PortalProps = {
 
 export class Portal extends Component {
   private timeout: number | null = null;
+  _onClose: (() => void) | null = null;
+  set onClose(callback: () => void) {
+    this._onClose = callback;
+  }
 
   constructor({ className, position }: PortalProps = {}) {
     super({
@@ -20,17 +24,23 @@ export class Portal extends Component {
     document.addEventListener('keydown', this.handleEsc);
   }
 
-  handleOutsideClick = (event: Event) => {
-    const target = event.target as HTMLElement;
-
-    if (target.id === 'appPortal') {
-      this.unmount();
+  private closePortal = () => {
+    if (this._onClose) {
+      this._onClose();
     }
   };
 
-  handleEsc = (event: KeyboardEvent) => {
+  private handleOutsideClick = (event: Event) => {
+    const target = event.target as HTMLElement;
+
+    if (target.id === 'appPortal') {
+      this.closePortal();
+    }
+  };
+
+  private handleEsc = (event: KeyboardEvent) => {
     if (event.key === 'Escape') {
-      this.unmount();
+      this.closePortal();
     }
   };
 
@@ -63,6 +73,9 @@ export class Portal extends Component {
 
   destroy() {
     this.node.innerHTML = '';
+    if (this._onClose) {
+      this._onClose = null;
+    }
 
     if (this.timeout) {
       clearTimeout(this.timeout);
