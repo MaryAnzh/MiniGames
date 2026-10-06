@@ -33,6 +33,12 @@ export type AlignType = KeysTemplateType<typeof COMPONENT_ALIGN>;
 export type ColorVariantType = KeysTemplateType<typeof COLOR_VARIANT>;
 export type AuthTabType = KeysTemplateType<typeof AUTH_TAGS>;
 
+export type SortOptionType = {
+  label: string;
+  value: string;
+  selected?: boolean;
+};
+
 export type GoogleIconsType =
   | 'mail'
   | 'lock'

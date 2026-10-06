@@ -25,7 +25,10 @@ export type ApiError = {
   status: 'error';
   error: string;
 };
-export type ErrorMessageType = {
+
+export type ErrorMessageType = { message: string };
+
+export type AirbaseErrorType = {
   message: string;
 };
 
@@ -98,6 +101,7 @@ export type GameDetailsType = {
   };
   topRecords: TopRecordsType[];
 };
+
 export type GameDetailsResponse = {
   data: GameDetailsType;
 };

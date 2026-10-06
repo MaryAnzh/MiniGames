@@ -10,8 +10,8 @@ import type {
   GameCardParamsType,
   CategoryType,
   GameDetailsResponse,
+  GameCommentsResponse,
 } from '@types';
-import type { GameCommentsResponse } from 'src/types/comment';
 import { capitalizeFirst } from '@utils';
 
 const { NETWORK } = C.ERROR_GROUP;
