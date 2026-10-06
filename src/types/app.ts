@@ -25,6 +25,9 @@ export type ApiError = {
   status: 'error';
   error: string;
 };
+export type ErrorMessageType = {
+  message: string;
+};
 
 export type ApiState<T> = ApiSuccess<T> | ApiError;
 
