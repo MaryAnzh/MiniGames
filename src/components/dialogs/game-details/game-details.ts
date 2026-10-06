@@ -1,8 +1,9 @@
 import { Component } from '@components';
-import type { GameComment, GameDetailsType } from '@types';
-import { CommentsSection, HeroSection, InfoSection, RecordsSection } from './sections';
-import appStore from '@store';
 import { SUCCESS } from '@constants';
+import appStore from '@store';
+import type { GameComment, GameDetailsType } from '@types';
+
+import { CommentsSection, HeroSection, InfoSection, RecordsSection } from './sections';
 
 type GameDetailsProps = {
   parentNode: HTMLElement | null;
@@ -69,6 +70,7 @@ export class GameDetailsDialog extends Component {
       rating,
       specs: { players, duration, price, genre: category },
       fullDescription: shortDescription,
+      topRecords: records,
     } = game;
 
     new HeroSection({ parentNode: this.node, name, cardImage, onClose: this.handleClose });
@@ -90,7 +92,7 @@ export class GameDetailsDialog extends Component {
     });
     new RecordsSection({
       parentNode: bodyWrap.node,
-      records: this.store.records,
+      records,
     });
     new CommentsSection({ parentNode: this.node, comments });
   }
