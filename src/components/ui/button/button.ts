@@ -26,10 +26,12 @@ export type ButtonProps = Pick<ComponentProps, 'parentNode'> & {
   ariaLabel?: string;
   isRoboto?: boolean;
   role?: string;
+  type?: 'button' | 'submit';
 };
 
 export class Button extends Component {
   private textNode: Component | null = null;
+  private googleIcon: GoogleIcon | null = null;
 
   constructor({
     parentNode,
@@ -50,12 +52,14 @@ export class Button extends Component {
     response,
     isRoboto,
     role,
+    type = 'button',
   }: ButtonProps) {
     super({
       parentNode,
       tagName: 'button',
       className: ['app_button', className ?? ''],
       attrs: [
+        { attr: 'type', value: type },
         { attr: 'data-variant', value: variant },
         { attr: 'role', value: role ?? 'button' },
         { attr: 'data-shadow', value: shadow },
@@ -84,7 +88,7 @@ export class Button extends Component {
     }
 
     if (googleIcon) {
-      new GoogleIcon({ parentNode: this.node, iconName: googleIcon });
+      this.googleIcon = new GoogleIcon({ parentNode: this.node, iconName: googleIcon });
     }
 
     if (leftIcon) {
@@ -130,5 +134,17 @@ export class Button extends Component {
 
   public setDisabled(isDisabled: boolean) {
     this.setAttributes([{ attr: 'disabled', value: isDisabled ? 'true' : null }]);
+  }
+
+  public setGoogleIcon(iconName: GoogleIconsType) {
+    if (this.googleIcon) {
+      this.googleIcon.destroy();
+    }
+    this.googleIcon = this.googleIcon = new GoogleIcon({ parentNode: this.node, iconName });
+  }
+
+  destroy() {
+    this.node.onclick = null;
+    super.destroy();
   }
 }

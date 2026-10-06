@@ -23,7 +23,7 @@ export class SliderSection extends Component {
     this.openDetails = openDetails;
 
     this.renderHeader();
-    this.slider = this.createSlider(); // ← создаём один раз
+    this.slider = this.createSlider();
   }
 
   private renderHeader() {

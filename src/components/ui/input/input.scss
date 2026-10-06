@@ -4,18 +4,30 @@
   flex-direction: column;
   gap: var(--size-1);
 
+  /* LABEL */
   &_label {
     font-size: var(--body-small);
     color: var(--on-primary);
     font-weight: var(--weight-bold);
   }
 
+  /* WRAPPER */
   &_wrap {
     position: relative;
     width: 100%;
     height: var(--input-height-md);
+    background: var(--white);
+    border-radius: var(--corner-small);
+    outline: var(--border-2) var(--black) solid;
+    outline-offset: var(--border-2-neg);
+    display: flex;
+    align-items: center;
     overflow: hidden;
+    transition:
+      background 0.2s ease,
+      outline-color 0.2s ease;
 
+    /* FOCUSED */
     &:focus-within {
       background: var(--surface-low);
       outline-color: var(--on-primary);
@@ -23,26 +35,31 @@
       .app_input_icon,
       .app_input_right-icon {
         color: var(--on-primary);
+        height: var(--size-3);
+      }
+    }
+
+    /* ERROR STATE */
+    &.has-error {
+      outline-color: var(--error);
+
+      .app_input_icon {
+        color: var(--error);
       }
     }
   }
 
+  /* INPUT FIELD */
   &_field {
     width: 100%;
     height: 100%;
-    display: flex;
     padding: 0 var(--size-2);
-    background: var(--white);
-    border-radius: var(--corner-small);
-    outline: var(--border-2) var(--black) solid;
-    outline-offset: var(--border-2-neg);
-    gap: var(--size-2);
+    background: transparent;
+    border: none;
+    outline: none;
     color: var(--on-primary);
     font-size: var(--body-small);
-    &:focus {
-      background: var(--surface-low);
-      outline-color: var(--on-primary);
-    }
+    font-weight: var(--weight-medium);
 
     &::placeholder {
       color: var(--on-bg);
@@ -51,22 +68,33 @@
     }
   }
 
-  .input-with-icon {
-    padding-left: var(--size-6);
-  }
-  .input-right-icon {
-    padding-right: var(--size-6);
+  /* ERROR MESSAGE */
+  &_error {
+    color: var(--error);
+    font-size: var(--body-small);
+    font-weight: var(--weight-regular);
+    min-height: 16px;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+
+    /* visible */
+    &.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
+  /* ICONS */
   &_icon,
   &_right-icon {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
     color: var(--on-bg);
     font-size: var(--headline-small);
     font-weight: var(--weight-regular);
+    transition: color 0.2s ease;
   }
 
   &_icon {
@@ -75,5 +103,14 @@
 
   &_right-icon {
     right: var(--size-2);
+  }
+
+  /* PADDING WITH ICONS */
+  .input-with-icon {
+    padding-left: var(--size-6);
+  }
+
+  .input-right-icon {
+    padding-right: var(--size-6);
   }
 }

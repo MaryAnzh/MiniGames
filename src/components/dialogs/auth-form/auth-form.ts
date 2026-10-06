@@ -1,82 +1,21 @@
 import { Component } from '@components';
-import { LOGIN, REGISTER } from '@constants';
-import type { AuthTabType, ComponentProps, GoogleIconsType } from '@types';
+import { LIGHT, LOGIN, REGISTER, INPUT_TYPES } from '@constants';
+import type { AuthTabType } from '@types';
 import { Input, Button, Switcher } from '@ui';
 
-type FieldType = {
-  label: string;
-  placeholder: string;
-  leftIcon: GoogleIconsType;
-  rightIcon?: GoogleIconsType;
-  type?: string;
-  id: string;
-  name: string;
-};
+import type { AuthPopupProps } from './types';
+import { LOGIN_FIELDS, REGISTER_FIELDS } from './constants';
 
-const LOGIN_FIELDS: FieldType[] = [
-  {
-    label: 'Email Address',
-    placeholder: 'e.g. alex@minigames.com',
-    type: 'email',
-    leftIcon: 'mail',
-    id: 'loginEmail',
-    name: 'login-email',
-  },
-  {
-    label: 'Password',
-    placeholder: '••••••••',
-    type: 'password',
-    leftIcon: 'lock',
-    rightIcon: 'visibility',
-    id: 'loginPass',
-    name: 'login-pass',
-  },
-];
-
-const REGISTER_FIELDS: FieldType[] = [
-  {
-    label: 'Username',
-    placeholder: 'e.g. CozyGamer_99',
-    leftIcon: 'person',
-    id: 'registerUserName',
-    name: 'register-user-name',
-  },
-  {
-    label: 'Email Address',
-    placeholder: 'your.email@domain.com',
-    type: 'email',
-    leftIcon: 'mail',
-    id: 'registerEmail',
-    name: 'register-email',
-  },
-  {
-    label: 'Password',
-    placeholder: 'Min. 8 characters',
-    type: 'password',
-    leftIcon: 'lock',
-    id: 'registerPass',
-    name: 'register-pass',
-  },
-  {
-    label: 'Confirm Password',
-    placeholder: 'Repeat your password',
-    type: 'password',
-    leftIcon: 'lock',
-    id: 'registerPassRepeat',
-    name: 'register-pass-repeat',
-  },
-];
-
-type AuthPopupProps = Pick<ComponentProps, 'parentNode'> & {
-  tab: AuthTabType;
-  onOpenAuthDialog?: (tag: AuthTabType) => void;
-};
+const { PASSWORD, EMAIL } = INPUT_TYPES;
 
 export class AuthDialog extends Component {
   public activeTab: AuthTabType;
-  private onOpenAuthDialog?: (tag: AuthTabType) => void;
+  private onOpenAuthDialog?: (tab: AuthTabType) => void;
 
-  //buttons
+  private fields: Record<string, string> = {};
+  private errors: Record<string, string> = {};
+  private inputs: Record<string, Input> = {};
+
   private loginBtn!: Button;
   private switcher!: Switcher;
   private googleBtn!: Button;
@@ -86,13 +25,100 @@ export class AuthDialog extends Component {
     super({
       parentNode,
       tagName: 'div',
-      className: 'auth_popup',
+      className: 'app-auth-dialog',
     });
 
     this.activeTab = tab;
     this.onOpenAuthDialog = onOpenAuthDialog;
 
+    this.resetState();
     this.render();
+  }
+
+  private resetState() {
+    this.fields = {};
+    this.errors = {};
+    this.inputs = {};
+  }
+
+  private validateField(name: string, value: string) {
+    // EMAIL
+    if (name === EMAIL) {
+      if (!value) return 'Email is required';
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) return 'Invalid email format';
+      return '';
+    }
+
+    // USERNAME
+    if (name === 'username') {
+      if (!value) return 'Username is required';
+      if (value.length < 2 || value.length > 30) return '2–30 characters required';
+      if (!/^[A-Z][A-Za-z0-9]*$/.test(value))
+        return 'Must start with uppercase and contain only letters/digits';
+      return '';
+    }
+
+    // PASSWORD (login)
+    if (name === PASSWORD && this.activeTab === LOGIN) {
+      if (!value) return 'Password is required';
+      if (value.length < 6) return 'Minimum 6 characters';
+      return '';
+    }
+
+    // PASSWORD (register)
+    if (name === PASSWORD && this.activeTab === REGISTER) {
+      if (!value) return 'Password is required';
+      if (value.length < 6) return 'Minimum 6 characters';
+      if (!/[A-Z]/.test(value)) return 'Must contain uppercase letter';
+      if (!/[0-9]/.test(value)) return 'Must contain a digit';
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) return 'Must contain a special character';
+      return '';
+    }
+
+    // CONFIRM PASSWORD
+    if (name === 'confirm') {
+      if (!value) return 'Confirm your password';
+      if (value !== this.fields.password) return 'Passwords do not match';
+      return '';
+    }
+
+    return '';
+  }
+
+  private validateForm() {
+    const fields = this.activeTab === LOGIN ? LOGIN_FIELDS : REGISTER_FIELDS;
+
+    fields.forEach((f) => {
+      const value = this.fields[f.name] ?? '';
+      const error = this.validateField(f.name, value);
+      this.errors[f.name] = error;
+
+      const input = this.inputs[f.name];
+      input?.setError(error);
+    });
+
+    const hasErrors = Object.values(this.errors).some((e) => e);
+    this.loginBtn.setDisabled(hasErrors);
+  }
+
+  private attachValidation(input: Input, name: string) {
+    const inputElement = input.getInput().node as HTMLInputElement;
+
+    inputElement.addEventListener('input', () => {
+      this.fields[name] = inputElement.value;
+      const error = this.validateField(name, inputElement.value);
+      this.errors[name] = error;
+      input.setError(error);
+      this.validateForm();
+    });
+
+    inputElement.addEventListener('blur', () => {
+      const error = this.validateField(name, inputElement.value);
+      this.errors[name] = error;
+      input.setError(error);
+      this.validateForm();
+    });
   }
 
   public render() {
@@ -117,27 +143,27 @@ export class AuthDialog extends Component {
     const heading = new Component({
       parentNode: this.node,
       tagName: 'div',
-      className: 'auth_heading',
+      className: 'app-auth-dialog_heading',
     });
 
     new Component({
       parentNode: heading.node,
       tagName: 'h2',
-      className: 'auth_heading_title',
+      className: 'app-auth-dialog_heading_title',
       content: title,
     });
 
     new Component({
       parentNode: heading.node,
       tagName: 'p',
-      className: 'auth_heading_subtitle',
+      className: 'app-auth-dialog_heading_subtitle',
       content: subtitle,
     });
 
     const authForm = new Component({
       parentNode: this.node,
       tagName: 'form',
-      className: 'auth_form',
+      className: 'app-auth-dialog_form',
       attrs: [
         { attr: 'novalidate', value: '' },
         { attr: 'id', value: isLogin ? 'loginForm' : 'registerForm' },
@@ -147,25 +173,20 @@ export class AuthDialog extends Component {
     const fields = isLogin ? LOGIN_FIELDS : REGISTER_FIELDS;
 
     fields.forEach((field) => {
-      new Input({
+      const input = new Input({
         parentNode: authForm.node,
         ...field,
       });
-    });
 
-    if (isLogin) {
-      new Component({
-        parentNode: authForm.node,
-        tagName: 'span',
-        content: 'Forgot Password?',
-        className: 'auth_form_forgot',
-      });
-    }
+      this.inputs[field.name] = input;
+
+      this.attachValidation(input, field.name);
+    });
 
     const buttonWrap = new Component({
       parentNode: authForm.node,
       tagName: 'div',
-      className: 'auth_button-wrap',
+      className: 'app-auth-dialog_button-wrap',
     });
 
     this.loginBtn = new Button({
@@ -175,14 +196,16 @@ export class AuthDialog extends Component {
       color: 'primary',
       fullWidth: true,
       shadow: 'hard',
-      className: 'auth_main_btn',
+      className: 'app-auth-dialog_main_btn',
       ariaLabel: isLogin ? LOGIN : REGISTER,
     });
+
+    this.loginBtn.setDisabled(true);
 
     new Component({
       parentNode: buttonWrap.node,
       tagName: 'div',
-      className: 'auth_divider',
+      className: 'app-auth-dialog_divider',
       content: 'OR',
     });
 
@@ -190,9 +213,9 @@ export class AuthDialog extends Component {
       parentNode: buttonWrap.node,
       text: isLogin ? 'Continue with Google' : 'Sign up with Google',
       size: 'lg',
-      color: 'light',
+      color: LIGHT,
       fullWidth: true,
-      className: 'auth_google_btn',
+      className: 'app-auth-dialog_google_btn',
       leftIcon: 'google',
       ariaLabel: isLogin ? 'Continue with Google' : 'Sign up with Google',
     });
@@ -200,20 +223,20 @@ export class AuthDialog extends Component {
     const footer = new Component({
       parentNode: this.node,
       tagName: 'div',
-      className: 'auth_footer',
+      className: 'app-auth-dialog_footer',
     });
 
     new Component({
       parentNode: footer.node,
       tagName: 'span',
-      className: 'auth_footer_text',
+      className: 'app-auth-dialog_footer_text',
       content: isLogin ? "Don't have an account?" : 'Already have an account?',
     });
 
     this.bottomLink = new Component({
       parentNode: footer.node,
       tagName: 'span',
-      className: 'auth_footer_link',
+      className: 'app-auth-dialog_footer_link',
       content: isLogin ? REGISTER : LOGIN,
     });
 
@@ -224,10 +247,11 @@ export class AuthDialog extends Component {
 
   destroy() {
     this.switcher.destroy();
-
     this.loginBtn.node.onclick = null;
     this.googleBtn.node.onclick = null;
     this.bottomLink.node.onclick = null;
+
+    Object.values(this.inputs).forEach((input) => input.destroy());
 
     super.destroy();
   }

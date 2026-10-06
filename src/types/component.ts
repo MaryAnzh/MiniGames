@@ -6,6 +6,7 @@ import type {
   REGISTER,
   COLOR_VARIANT,
   AUTH_TAGS,
+  INPUT_TYPES,
 } from '@constants';
 import type { KeysTemplateType } from './common';
 
@@ -13,6 +14,8 @@ export type ComponentAttributesType = {
   attr: string;
   value: string | null;
 };
+
+export type InputType = KeysTemplateType<typeof INPUT_TYPES>;
 
 export type ComponentProps = {
   parentNode: HTMLElement | null;
@@ -34,6 +37,7 @@ export type GoogleIconsType =
   | 'mail'
   | 'lock'
   | 'visibility'
+  | 'visibility_off'
   | 'person'
   | 'arrow_back'
   | 'arrow_forward'
