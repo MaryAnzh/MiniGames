@@ -104,6 +104,7 @@ export class Router {
         onOpenAuthDialog: (nextTab) => {
           this.navigate(`${AUTH}?tab=${nextTab}`);
         },
+        onClose: this.closePortal,
       });
 
       this.portal.mount(dialog.node, dialog);
@@ -139,5 +140,11 @@ export class Router {
 
   closePortal = () => {
     this.portal.unmount();
+    if (history.length <= 1) {
+      this.navigate(HOME);
+      return;
+    }
+
+    // history.back();
   };
 }

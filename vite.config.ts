@@ -1,6 +1,8 @@
 import path from 'node:path';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env' });
 
 export default defineConfig({
   base: '/',

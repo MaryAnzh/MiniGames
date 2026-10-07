@@ -5,31 +5,36 @@ import { Input, Button, Switcher } from '@ui';
 
 import type { AuthPopupProps } from './types';
 import { LOGIN_FIELDS, REGISTER_FIELDS } from './constants';
+import appStore from '@store';
 
 const { PASSWORD, EMAIL } = INPUT_TYPES;
 
 export class AuthDialog extends Component {
+  private store: typeof appStore;
+
   public activeTab: AuthTabType;
   private onOpenAuthDialog?: (tab: AuthTabType) => void;
+  private onClose: () => void;
 
   private fields: Record<string, string> = {};
   private errors: Record<string, string> = {};
   private inputs: Record<string, Input> = {};
 
-  private loginBtn!: Button;
+  private authBtn!: Button;
   private switcher!: Switcher;
   private googleBtn!: Button;
   private bottomLink!: Component;
 
-  constructor({ parentNode, tab, onOpenAuthDialog }: AuthPopupProps) {
+  constructor({ parentNode, tab, onOpenAuthDialog, onClose }: AuthPopupProps) {
     super({
       parentNode,
       tagName: 'div',
       className: 'app-auth-dialog',
     });
-
+    this.store = appStore;
     this.activeTab = tab;
     this.onOpenAuthDialog = onOpenAuthDialog;
+    this.onClose = onClose;
 
     this.resetState();
     this.render();
@@ -99,7 +104,7 @@ export class AuthDialog extends Component {
     });
 
     const hasErrors = Object.values(this.errors).some((e) => e);
-    this.loginBtn.setDisabled(hasErrors);
+    this.authBtn.setDisabled(hasErrors);
   }
 
   private attachValidation(input: Input, name: string) {
@@ -189,7 +194,7 @@ export class AuthDialog extends Component {
       className: 'app-auth-dialog_button-wrap',
     });
 
-    this.loginBtn = new Button({
+    this.authBtn = new Button({
       parentNode: buttonWrap.node,
       text: isLogin ? LOGIN : 'Create Account',
       size: 'lg',
@@ -198,9 +203,10 @@ export class AuthDialog extends Component {
       shadow: 'hard',
       className: 'app-auth-dialog_main_btn',
       ariaLabel: isLogin ? LOGIN : REGISTER,
+      type: 'submit',
     });
-
-    this.loginBtn.setDisabled(true);
+    this.authBtn.setDisabled(true);
+    this.authBtn.node.onclick = (e) => this.handleSubmit(e);
 
     new Component({
       parentNode: buttonWrap.node,
@@ -245,9 +251,26 @@ export class AuthDialog extends Component {
     };
   }
 
+  private async handleSubmit(e: PointerEvent) {
+    e.preventDefault();
+
+    const email = this.fields[EMAIL];
+    const password = this.fields[PASSWORD];
+
+    if (this.activeTab === LOGIN) {
+      await this.store.login(email, password);
+      this.onClose();
+    } else {
+      const name = this.fields.username;
+
+      await this.store.register(email, password, name);
+      this.onClose();
+    }
+  }
+
   destroy() {
     this.switcher.destroy();
-    this.loginBtn.node.onclick = null;
+    this.authBtn.node.onclick = null;
     this.googleBtn.node.onclick = null;
     this.bottomLink.node.onclick = null;
 

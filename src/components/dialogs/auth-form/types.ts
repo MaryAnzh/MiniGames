@@ -13,4 +13,5 @@ export type FieldType = {
 export type AuthPopupProps = Pick<ComponentProps, 'parentNode'> & {
   tab: AuthTabType;
   onOpenAuthDialog?: (tab: AuthTabType) => void;
+  onClose: () => void;
 };
