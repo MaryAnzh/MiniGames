@@ -1,7 +1,7 @@
 import { Component } from '@components';
 import { LIGHT, LOGIN, REGISTER, INPUT_TYPES } from '@constants';
 import type { AuthTabType } from '@types';
-import { Input, Button, Switcher, Spinner, ErrorBanner } from '@ui';
+import { Input, Button, Switcher, ErrorBanner } from '@ui';
 
 import type { AuthPopupProps } from './types';
 import { LOGIN_FIELDS, REGISTER_FIELDS } from './constants';
@@ -28,7 +28,6 @@ export class AuthDialog extends Component {
 
   private isPending = false;
   private errorMessage = '';
-  private spinner!: Spinner;
   private errorBanner: ErrorBanner | null = null;
   private errorTimeout: number | null = null;
 
@@ -173,14 +172,6 @@ export class AuthDialog extends Component {
     this.authBtn.setDisabled(true);
     this.authBtn.node.onclick = (e) => this.handleSubmit(e);
 
-    this.spinner = new Spinner({
-      parentNode: this.authBtn.node,
-      size: 'sm',
-      color: 'dark',
-      className: 'auth-spinner',
-    });
-    this.spinner.hide();
-
     new Component({
       parentNode: buttonWrap.node,
       tagName: 'div',
@@ -240,18 +231,10 @@ export class AuthDialog extends Component {
   public setPending(value: boolean) {
     this.isPending = value;
 
-    if (value) {
-      this.spinner.show();
-      this.authBtn.setText('Loading...');
-    } else {
-      this.spinner.hide();
-      this.authBtn.setText(this.activeTab === LOGIN ? 'Login' : 'Register');
-    }
-
     Object.values(this.inputs).forEach((input) => input.setDisabled(value));
-    this.authBtn.setDisabled(value);
     this.switcher.setDisabled(value);
-    this.googleBtn.setDisabled(value);
+    this.authBtn.setLoading(value);
+    this.googleBtn.setLoading(value);
   }
 
   public setError(message: string) {
