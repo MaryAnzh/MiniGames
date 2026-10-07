@@ -111,6 +111,9 @@ export class Router {
         onSubmit: (email, password, username) => {
           this.handleAuthSubmit(tab, email, password, username, dialog);
         },
+        onGoogleSubmit: () => {
+          this.handleGoogleSubmit(dialog);
+        },
         onClose: this.closePortal,
       });
 
@@ -180,6 +183,24 @@ export class Router {
 
     if (!result.ok) {
       dialog?.setError(`${result.error.name}: ${result.error.code}`);
+      return;
+    }
+
+    this.closePortal();
+    this.navigate(HOME);
+  }
+
+  private async handleGoogleSubmit(dialog: AuthDialog) {
+    dialog.setPending(true);
+    this.portal.lock();
+
+    const res = await this.store.loginWithGoogle();
+
+    dialog.setPending(false);
+    this.portal.unlock();
+
+    if (!res.ok) {
+      dialog.setError(res.error.message);
       return;
     }
 

@@ -14,5 +14,6 @@ export type AuthPopupProps = Pick<ComponentProps, 'parentNode'> & {
   tab: AuthTabType;
   onOpenAuthDialog?: (tab: AuthTabType) => void;
   onClose: () => void;
+  onGoogleSubmit: () => void;
   onSubmit: (email: string, password: string, username?: string) => void;
 };

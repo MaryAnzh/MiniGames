@@ -3,6 +3,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from 'firebase/auth';
 
 import { firebaseAuth } from '../../firebaseConfig';
@@ -16,7 +18,25 @@ import type {
 import { snackbar } from './snackbar';
 import type { FirebaseError } from 'firebase/app';
 
+const googleProvider = new GoogleAuthProvider();
+
 export class AuthService {
+  async loginWithGoogle(): Promise<FirebaseUserResponseType> {
+    try {
+      const cred = await signInWithPopup(firebaseAuth, googleProvider);
+
+      return {
+        ok: true,
+        user: cred.user as FirebaseUserDataType,
+      };
+    } catch (e) {
+      const err = e as FirebaseAuthError;
+      const message = err ? `${err.name}: ${err.code}` : 'Auth with Google failed';
+      snackbar.show(message, 'error');
+      return { ok: false, error: err };
+    }
+  }
+
   async register(
     email: string,
     password: string,

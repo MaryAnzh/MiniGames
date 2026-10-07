@@ -156,6 +156,16 @@ class AppStore {
   }
 
   /** AUTH */
+  async loginWithGoogle() {
+    const res = await this.auth.loginWithGoogle();
+
+    if (res.ok) {
+      this.saveSession(res.user.email ?? '', res.user.displayName ?? '');
+    }
+
+    return res;
+  }
+
   async login(email: string, password: string): Promise<T.FirebaseUserResponseType> {
     const res = await this.auth.login(email, password);
     if (res.ok) {

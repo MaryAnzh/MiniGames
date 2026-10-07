@@ -15,6 +15,7 @@ export class AuthDialog extends Component {
 
   private onOpenAuthDialog?: (tab: AuthTabType) => void;
   private onSubmit: (email: string, password: string, username?: string) => void;
+  private onGoogleSubmit: () => void;
 
   private fields: Record<string, string> = {};
   private errors: Record<string, string> = {};
@@ -31,7 +32,7 @@ export class AuthDialog extends Component {
   private errorBanner: ErrorBanner | null = null;
   private errorTimeout: number | null = null;
 
-  constructor({ parentNode, tab, onOpenAuthDialog, onSubmit }: AuthPopupProps) {
+  constructor({ parentNode, tab, onOpenAuthDialog, onSubmit, onGoogleSubmit }: AuthPopupProps) {
     super({
       parentNode,
       tagName: 'div',
@@ -41,6 +42,7 @@ export class AuthDialog extends Component {
     this.activeTab = tab;
     this.onOpenAuthDialog = onOpenAuthDialog;
     this.onSubmit = onSubmit;
+    this.onGoogleSubmit = onGoogleSubmit;
 
     this.resetState();
     this.render();
@@ -174,7 +176,7 @@ export class AuthDialog extends Component {
     this.spinner = new Spinner({
       parentNode: this.authBtn.node,
       size: 'sm',
-      color: 'light',
+      color: 'dark',
       className: 'auth-spinner',
     });
     this.spinner.hide();
@@ -196,6 +198,9 @@ export class AuthDialog extends Component {
       leftIcon: 'google',
       ariaLabel: isLogin ? 'Continue with Google' : 'Sign up with Google',
     });
+    this.googleBtn.node.onclick = () => {
+      this.onGoogleSubmit?.();
+    };
 
     const footer = new Component({
       parentNode: this.node,
@@ -246,6 +251,7 @@ export class AuthDialog extends Component {
     Object.values(this.inputs).forEach((input) => input.setDisabled(value));
     this.authBtn.setDisabled(value);
     this.switcher.setDisabled(value);
+    this.googleBtn.setDisabled(value);
   }
 
   public setError(message: string) {
