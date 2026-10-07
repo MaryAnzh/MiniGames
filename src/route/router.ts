@@ -62,8 +62,12 @@ export class Router {
 
   private handleRoute() {
     const url = new URL(window.location.href);
-    const pathname = url.pathname;
+    let pathname = url.pathname.replace(/\/+$/, '');
     const searchParams = Object.fromEntries(url.searchParams.entries());
+
+    if (pathname === '' || pathname === '/index.html') {
+      pathname = '/';
+    }
 
     if (!pathname.startsWith(GAME) && pathname !== AUTH) {
       this.portal.unmount();
@@ -140,11 +144,12 @@ export class Router {
 
   closePortal = () => {
     this.portal.unmount();
-    if (history.length <= 1) {
-      this.navigate(HOME);
+
+    if (window.history.state !== null) {
+      history.back();
       return;
     }
 
-    // history.back();
+    this.navigate(HOME);
   };
 }

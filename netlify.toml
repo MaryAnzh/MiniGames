@@ -3,3 +3,13 @@
   to = "https://faxb76kxra.execute-api.eu-central-1.amazonaws.com/api/:splat"
   status = 200
   force = true
+
+[[redirects]]
+  from = "/assets/*"
+  to = "/assets/:splat"
+  status = 200
+
+  [[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
