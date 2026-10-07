@@ -251,12 +251,10 @@ export class AuthDialog extends Component {
   public setError(message: string) {
     this.errorMessage = message;
 
-    // Удаляем старый баннер
     if (this.errorBanner) {
       this.errorBanner.destroy();
     }
 
-    // Создаём новый баннер
     this.errorBanner = new ErrorBanner({
       parentNode: this.node,
       message: this.errorMessage,

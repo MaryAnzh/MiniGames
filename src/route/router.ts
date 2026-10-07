@@ -148,7 +148,6 @@ export class Router {
   closePortal = () => {
     this.portal.unmount();
 
-    // Если есть история — возвращаемся назад
     if (window.history.state !== null) {
       history.back();
       return;

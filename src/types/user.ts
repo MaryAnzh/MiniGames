@@ -25,7 +25,7 @@ export type FirebaseUserDataType = User &
 export type FirebaseAuthError = {
   name: 'FirebaseError';
   message: string;
-  code: string; // auth/invalid-credential, auth/email-already-in-use, etc.
+  code: string;
   stack?: string;
 };
 

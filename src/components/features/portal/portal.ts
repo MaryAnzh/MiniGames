@@ -8,7 +8,7 @@ type PortalProps = {
 export class Portal extends Component {
   private timeout: number | null = null;
   private activeComponent: Component | null = null;
-  private isLocked = false; // ← добавили флаг
+  private isLocked = false;
   onClose: (() => void) | null = null;
 
   constructor({ className, position }: PortalProps = {}) {
