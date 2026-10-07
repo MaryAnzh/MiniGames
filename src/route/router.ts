@@ -3,7 +3,7 @@ import { APP_ROUTES, LOGIN } from '@constants';
 import { HomePage, CommunityPage, LibraryPage, TournamentsPage, NotFoundPage } from '@pages';
 import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
 import appStore from '@store';
-import type { AuthTabType } from '@types';
+import type { AuthTabType, FirebaseUserResponseType } from '@types';
 
 const { HOME, COMMUNITY, GAME, LIBRARY, TOURNAMENTS, AUTH } = APP_ROUTES;
 
@@ -108,6 +108,9 @@ export class Router {
         onOpenAuthDialog: (nextTab) => {
           this.navigate(`${AUTH}?tab=${nextTab}`);
         },
+        onSubmit: (email, password, username) => {
+          this.handleAuthSubmit(tab, email, password, username, dialog);
+        },
         onClose: this.closePortal,
       });
 
@@ -145,6 +148,7 @@ export class Router {
   closePortal = () => {
     this.portal.unmount();
 
+    // Если есть история — возвращаемся назад
     if (window.history.state !== null) {
       history.back();
       return;
@@ -152,4 +156,35 @@ export class Router {
 
     this.navigate(HOME);
   };
+
+  private async handleAuthSubmit(
+    tab: AuthTabType,
+    email: string,
+    password: string,
+    username?: string,
+    dialog?: AuthDialog,
+  ) {
+    dialog?.setPending(true);
+    this.portal.lock();
+
+    let res;
+
+    if (tab === LOGIN) {
+      res = await this.store.login(email, password);
+    } else {
+      res = await this.store.register(email, password, username ?? '');
+    }
+    const result = res as FirebaseUserResponseType;
+
+    dialog?.setPending(false);
+    this.portal.unlock();
+
+    if (!result.ok) {
+      dialog?.setError(`${result.error.name}: ${result.error.code}`);
+      return;
+    }
+
+    this.closePortal();
+    this.navigate(HOME);
+  }
 }

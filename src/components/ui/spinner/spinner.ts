@@ -22,4 +22,10 @@ export class Spinner extends Component {
       ],
     });
   }
+  hide() {
+    this.node.style.display = 'none';
+  }
+  show() {
+    this.node.style.display = 'flex';
+  }
 }

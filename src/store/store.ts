@@ -156,18 +156,22 @@ class AppStore {
   }
 
   /** AUTH */
-  async login(email: string, password: string) {
+  async login(email: string, password: string): Promise<T.FirebaseUserResponseType> {
     const res = await this.auth.login(email, password);
     if (res.ok) {
-      this.saveSession(res?.user?.email ?? email);
+      this.saveSession(res?.user?.email ?? email, res?.user?.displayName ?? '');
     }
     return res;
   }
 
-  async register(email: string, password: string, username: string) {
-    const res = await this.auth.register(email, password);
+  async register(
+    email: string,
+    password: string,
+    username: string,
+  ): Promise<T.FirebaseUserResponseType> {
+    const res = await this.auth.register(email, password, username);
     if (res.ok) {
-      this.saveSession(res?.user?.email ?? email, username);
+      this.saveSession(res?.user?.email ?? email, res?.user?.displayName ?? username);
     }
     return res;
   }

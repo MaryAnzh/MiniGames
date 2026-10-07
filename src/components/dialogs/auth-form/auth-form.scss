@@ -1,4 +1,5 @@
 .app-auth-dialog {
+  position: relative;
   width: var(--layout-auth-dialog-width);
   max-width: 100%;
   height: fit-content;
@@ -13,6 +14,15 @@
   justify-content: flex-start;
   align-items: flex-start;
   gap: var(--size-3);
+
+  &_error-banner {
+    position: absolute;
+    top: var(--size-3);
+    width: 90%;
+    height: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 
   &_heading {
     display: flex;
@@ -62,6 +72,10 @@
     align-items: center;
     padding-top: var(--size-1);
     gap: var(--size-2);
+
+    &_submit {
+      position: relative;
+    }
   }
 
   &_divider {

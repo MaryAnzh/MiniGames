@@ -35,6 +35,12 @@ export class Switcher extends Component {
     });
   }
 
+  setDisabled(value: boolean) {
+    this.tabs.forEach((tab) =>
+      tab.setAttributes([{ attr: 'disabled', value: value ? 'true' : null }]),
+    );
+  }
+
   destroy() {
     this.tabs.forEach((tab) => {
       tab.node.onclick = null;

@@ -1,20 +1,20 @@
 import { Component } from '@components';
 import { LIGHT, LOGIN, REGISTER, INPUT_TYPES } from '@constants';
 import type { AuthTabType } from '@types';
-import { Input, Button, Switcher } from '@ui';
+import { Input, Button, Switcher, Spinner, ErrorBanner } from '@ui';
 
 import type { AuthPopupProps } from './types';
 import { LOGIN_FIELDS, REGISTER_FIELDS } from './constants';
-import appStore from '@store';
+
+import { validateField } from '@utils';
 
 const { PASSWORD, EMAIL } = INPUT_TYPES;
 
 export class AuthDialog extends Component {
-  private store: typeof appStore;
-
   public activeTab: AuthTabType;
+
   private onOpenAuthDialog?: (tab: AuthTabType) => void;
-  private onClose: () => void;
+  private onSubmit: (email: string, password: string, username?: string) => void;
 
   private fields: Record<string, string> = {};
   private errors: Record<string, string> = {};
@@ -25,16 +25,22 @@ export class AuthDialog extends Component {
   private googleBtn!: Button;
   private bottomLink!: Component;
 
-  constructor({ parentNode, tab, onOpenAuthDialog, onClose }: AuthPopupProps) {
+  private isPending = false;
+  private errorMessage = '';
+  private spinner!: Spinner;
+  private errorBanner: ErrorBanner | null = null;
+  private errorTimeout: number | null = null;
+
+  constructor({ parentNode, tab, onOpenAuthDialog, onSubmit }: AuthPopupProps) {
     super({
       parentNode,
       tagName: 'div',
       className: 'app-auth-dialog',
     });
-    this.store = appStore;
+
     this.activeTab = tab;
     this.onOpenAuthDialog = onOpenAuthDialog;
-    this.onClose = onClose;
+    this.onSubmit = onSubmit;
 
     this.resetState();
     this.render();
@@ -44,67 +50,8 @@ export class AuthDialog extends Component {
     this.fields = {};
     this.errors = {};
     this.inputs = {};
-  }
-
-  private validateField(name: string, value: string) {
-    // EMAIL
-    if (name === EMAIL) {
-      if (!value) return 'Email is required';
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(value)) return 'Invalid email format';
-      return '';
-    }
-
-    // USERNAME
-    if (name === 'username') {
-      if (!value) return 'Username is required';
-      if (value.length < 2 || value.length > 30) return '2–30 characters required';
-      if (!/^[A-Z][A-Za-z0-9]*$/.test(value))
-        return 'Must start with uppercase and contain only letters/digits';
-      return '';
-    }
-
-    // PASSWORD (login)
-    if (name === PASSWORD && this.activeTab === LOGIN) {
-      if (!value) return 'Password is required';
-      if (value.length < 6) return 'Minimum 6 characters';
-      return '';
-    }
-
-    // PASSWORD (register)
-    if (name === PASSWORD && this.activeTab === REGISTER) {
-      if (!value) return 'Password is required';
-      if (value.length < 6) return 'Minimum 6 characters';
-      if (!/[A-Z]/.test(value)) return 'Must contain uppercase letter';
-      if (!/[0-9]/.test(value)) return 'Must contain a digit';
-      if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) return 'Must contain a special character';
-      return '';
-    }
-
-    // CONFIRM PASSWORD
-    if (name === 'confirm') {
-      if (!value) return 'Confirm your password';
-      if (value !== this.fields.password) return 'Passwords do not match';
-      return '';
-    }
-
-    return '';
-  }
-
-  private validateForm() {
-    const fields = this.activeTab === LOGIN ? LOGIN_FIELDS : REGISTER_FIELDS;
-
-    fields.forEach((f) => {
-      const value = this.fields[f.name] ?? '';
-      const error = this.validateField(f.name, value);
-      this.errors[f.name] = error;
-
-      const input = this.inputs[f.name];
-      input?.setError(error);
-    });
-
-    const hasErrors = Object.values(this.errors).some((e) => e);
-    this.authBtn.setDisabled(hasErrors);
+    this.errorBanner = null;
+    this.errorMessage = '';
   }
 
   private attachValidation(input: Input, name: string) {
@@ -112,18 +59,34 @@ export class AuthDialog extends Component {
 
     inputElement.addEventListener('input', () => {
       this.fields[name] = inputElement.value;
-      const error = this.validateField(name, inputElement.value);
+      const error = validateField(this.activeTab, name, inputElement.value, this.fields);
       this.errors[name] = error;
       input.setError(error);
       this.validateForm();
     });
 
     inputElement.addEventListener('blur', () => {
-      const error = this.validateField(name, inputElement.value);
+      const error = validateField(this.activeTab, name, inputElement.value, this.fields);
       this.errors[name] = error;
       input.setError(error);
       this.validateForm();
     });
+  }
+
+  private validateForm() {
+    const fields = this.activeTab === LOGIN ? LOGIN_FIELDS : REGISTER_FIELDS;
+
+    fields.forEach((f) => {
+      const value = this.fields[f.name] ?? '';
+      const error = validateField(this.activeTab, f.name, value, this.fields);
+      this.errors[f.name] = error;
+
+      const input = this.inputs[f.name];
+      input?.setError(error);
+    });
+
+    const hasErrors = Object.values(this.errors).some((e) => e);
+    this.authBtn.setDisabled(hasErrors || this.isPending);
   }
 
   public render() {
@@ -184,7 +147,6 @@ export class AuthDialog extends Component {
       });
 
       this.inputs[field.name] = input;
-
       this.attachValidation(input, field.name);
     });
 
@@ -196,17 +158,26 @@ export class AuthDialog extends Component {
 
     this.authBtn = new Button({
       parentNode: buttonWrap.node,
-      text: isLogin ? LOGIN : 'Create Account',
+      text: isLogin ? 'Login' : 'Create Account',
       size: 'lg',
       color: 'primary',
       fullWidth: true,
       shadow: 'hard',
-      className: 'app-auth-dialog_main_btn',
+      className: 'app-auth-dialog_button-wrap_submit',
       ariaLabel: isLogin ? LOGIN : REGISTER,
       type: 'submit',
     });
+
     this.authBtn.setDisabled(true);
     this.authBtn.node.onclick = (e) => this.handleSubmit(e);
+
+    this.spinner = new Spinner({
+      parentNode: this.authBtn.node,
+      size: 'sm',
+      color: 'light',
+      className: 'auth-spinner',
+    });
+    this.spinner.hide();
 
     new Component({
       parentNode: buttonWrap.node,
@@ -251,21 +222,80 @@ export class AuthDialog extends Component {
     };
   }
 
-  private async handleSubmit(e: PointerEvent) {
+  private handleSubmit(e: PointerEvent) {
     e.preventDefault();
 
     const email = this.fields[EMAIL];
     const password = this.fields[PASSWORD];
+    const username = this.fields.username;
 
-    if (this.activeTab === LOGIN) {
-      await this.store.login(email, password);
-      this.onClose();
+    this.onSubmit(email, password, username);
+  }
+
+  public setPending(value: boolean) {
+    this.isPending = value;
+
+    if (value) {
+      this.spinner.show();
+      this.authBtn.setText('Loading...');
     } else {
-      const name = this.fields.username;
-
-      await this.store.register(email, password, name);
-      this.onClose();
+      this.spinner.hide();
+      this.authBtn.setText(this.activeTab === LOGIN ? 'Login' : 'Register');
     }
+
+    Object.values(this.inputs).forEach((input) => input.setDisabled(value));
+    this.authBtn.setDisabled(value);
+    this.switcher.setDisabled(value);
+  }
+
+  public setError(message: string) {
+    this.errorMessage = message;
+
+    // Удаляем старый баннер
+    if (this.errorBanner) {
+      this.errorBanner.destroy();
+    }
+
+    // Создаём новый баннер
+    this.errorBanner = new ErrorBanner({
+      parentNode: this.node,
+      message: this.errorMessage,
+      className: 'app-auth-dialog_error-banner',
+      onClose: () => this.closeErrorBanner(),
+    });
+
+    if (this.errorTimeout) {
+      clearTimeout(this.errorTimeout);
+    }
+
+    this.errorTimeout = window.setTimeout(() => {
+      this.closeErrorBanner();
+    }, 5000);
+  }
+
+  private closeErrorBanner() {
+    if (this.errorTimeout) {
+      clearTimeout(this.errorTimeout);
+      this.errorTimeout = null;
+    }
+
+    if (this.errorBanner) {
+      this.errorBanner.destroy();
+      this.errorBanner = null;
+    }
+
+    this.errors = {};
+    Object.values(this.inputs).forEach((input) => {
+      input.setError('');
+    });
+
+    Object.keys(this.fields).forEach((key) => {
+      this.fields[key] = '';
+      const inputElement = this.inputs[key]?.getInput().node as HTMLInputElement;
+      if (inputElement) inputElement.value = '';
+    });
+
+    this.validateForm();
   }
 
   destroy() {
@@ -273,9 +303,12 @@ export class AuthDialog extends Component {
     this.authBtn.node.onclick = null;
     this.googleBtn.node.onclick = null;
     this.bottomLink.node.onclick = null;
+    if (this.errorTimeout) {
+      clearTimeout(this.errorTimeout);
+    }
 
     Object.values(this.inputs).forEach((input) => input.destroy());
-
+    this.errorBanner?.destroy();
     super.destroy();
   }
 }

@@ -8,7 +8,7 @@ type PortalProps = {
 export class Portal extends Component {
   private timeout: number | null = null;
   private activeComponent: Component | null = null;
-
+  private isLocked = false; // ← добавили флаг
   onClose: (() => void) | null = null;
 
   constructor({ className, position }: PortalProps = {}) {
@@ -41,10 +41,12 @@ export class Portal extends Component {
   }
 
   private closePortal = () => {
+    if (this.isLocked) return;
     this.onClose?.();
   };
 
   private handleOutsideClick = (event: Event) => {
+    if (this.isLocked) return;
     if ((event.target as HTMLElement).id === 'appPortal') {
       this.closePortal();
     }
@@ -69,5 +71,13 @@ export class Portal extends Component {
         document.body.style.overflow = 'auto';
       }
     }, 300);
+  }
+
+  public lock() {
+    this.isLocked = true;
+  }
+
+  public unlock() {
+    this.isLocked = false;
   }
 }

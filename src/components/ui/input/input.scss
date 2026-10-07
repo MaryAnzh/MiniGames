@@ -114,3 +114,17 @@
     padding-right: var(--size-6);
   }
 }
+
+.app_input.input-disabled .app_input_field {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.app_input.input-disabled .app_input_icon {
+  opacity: 0.4;
+}
+
+.app_input.input-disabled .app_input_right-icon {
+  pointer-events: none;
+  opacity: 0.4;
+}

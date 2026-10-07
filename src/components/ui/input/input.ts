@@ -125,6 +125,26 @@ export class Input extends Component {
     return this.inputNode;
   }
 
+  public setDisabled(value: boolean) {
+    const inputElement = this.inputNode.node as HTMLInputElement;
+
+    if (value) {
+      inputElement.setAttribute('disabled', 'true');
+      this.wrapNode.classList.add('input-disabled');
+
+      if (this.rightIcon) {
+        this.rightIcon.setDisabled(true);
+      }
+    } else {
+      inputElement.removeAttribute('disabled');
+      this.wrapNode.classList.remove('input-disabled');
+
+      if (this.rightIcon) {
+        this.rightIcon.setDisabled(false);
+      }
+    }
+  }
+
   destroy(): void {
     this.rightIcon?.destroy();
     this.inputNode.node.onblur = null;
