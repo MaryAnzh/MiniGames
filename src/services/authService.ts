@@ -86,10 +86,14 @@ export class AuthService {
     }
   }
 
-  async logout() {
+  async logout(isSessionExpired?: boolean) {
     try {
       await signOut(firebaseAuth);
-      snackbar.show('Logged out', 'info');
+
+      snackbar.show(
+        isSessionExpired ? 'Your session has expired. Please sign in again.' : 'Logged out',
+        'info',
+      );
       return { ok: true };
     } catch (e) {
       const err = e as FirebaseError;

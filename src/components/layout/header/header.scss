@@ -18,21 +18,6 @@
     display: none;
   }
 
-  &_user-avatar {
-    width: var(--size-4);
-    height: var(--size-4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--corner-full);
-    outline: var(--border-1) solid var(--on-primary);
-    offset: var(--border-1-neg);
-    font-size: var(--body-small);
-    font-weight: var(--weight-bold);
-    text-transform: uppercase;
-    color: var(--on-primary);
-  }
-
   @media (min-width: $tablet) {
     display: grid;
     padding: var(--size-2-1) var(--size-5);
@@ -41,12 +26,6 @@
     &_signup_btn,
     &_logout_btn {
       display: flex;
-    }
-
-    &_user-avatar {
-      width: var(--size-4);
-      height: var(--size-4);
-      font-size: var(--body-medium);
     }
   }
 

@@ -1,3 +1,5 @@
+import { USER } from '@constants';
+
 export function getAvatarLetters(name: string) {
   if (!name) return '';
   const clean = name.trim();
@@ -31,4 +33,33 @@ export function replaceImageToWebp(url: string): string {
 export function capitalizeFirst(str: string) {
   if (!str) return '';
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export function getInitials(name: string): string {
+  const clean = name.trim();
+  if (!clean) return '';
+
+  const parts = clean.split(/\s+/);
+
+  const extract = (word: string) => {
+    const m = word.match(/[A-Za-zА-Яа-я0-9]/u);
+    return m ? m[0].toUpperCase() : '';
+  };
+
+  if (parts.length === 1) {
+    return extract(parts[0]);
+  }
+
+  const first = extract(parts[0]);
+  const second = extract(parts[1]);
+
+  return (first + second).trim() || '';
+}
+
+export function getProfileName({ email, username }: { email: string; username: string }): string {
+  if (username?.trim()) return username.trim();
+
+  if (email?.includes('@')) return email.split('@')[0];
+
+  return USER;
 }

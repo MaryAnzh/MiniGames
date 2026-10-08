@@ -21,6 +21,6 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    exclude: ['web-vitals', '__tests__'],
+    exclude: ['web-vitals'],
   },
 });

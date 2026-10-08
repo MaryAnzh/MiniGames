@@ -19,6 +19,7 @@ export const {
   PASSWORDS_DO_NOT_MATCH,
   CONFIRM,
   USERNAME,
+  USER,
 } = {
   APP: 'app',
   OPEN_SELECT: 'Open select',
@@ -40,4 +41,5 @@ export const {
   PASSWORDS_DO_NOT_MATCH: 'Passwords do not match',
   USERNAME: 'username',
   CONFIRM: 'confirm',
+  USER: 'user',
 } as const;

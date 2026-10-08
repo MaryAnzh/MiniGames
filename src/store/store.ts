@@ -5,6 +5,7 @@ import { api, authService } from '@services';
 
 import type { PageComponentType } from '@pages';
 import { APP_SESSION_KEY, SESSION_LIFETIME_MS } from './constants';
+import type { AuthStoreDataType, SessionType, UserDataType } from './types';
 
 class AppStore {
   private api: typeof api;
@@ -17,6 +18,7 @@ class AppStore {
   private _isAuth = false;
   userEmail: string = '';
   username: string = '';
+  photoURL: string = '';
 
   currentPageInstance: PageComponentType | null = null;
 
@@ -78,29 +80,33 @@ class AppStore {
     return this.api.getGameComments(slug, params);
   }
 
-  setAuthData({
-    isAuth,
-    email = '',
-    userName = '',
-  }: {
-    isAuth: boolean;
-    email?: string;
-    userName?: string;
-  }) {
+  setAuthData({ isAuth, email = '', displayName = '', avatarUrl = '' }: AuthStoreDataType) {
     this.userEmail = email;
-    this.username = userName;
+    this.username = displayName;
+    this.photoURL = avatarUrl;
     this.isAuth = isAuth;
   }
 
   /** SESSIONS */
-  private saveSession(email: string, username?: string) {
-    const session = {
+  private isValidSession(session: SessionType): session is SessionType {
+    return (
+      typeof session === 'object' &&
+      typeof session.email === 'string' &&
+      typeof session.displayName === 'string' &&
+      typeof session.expiresAt === 'number' &&
+      (typeof session.avatarUrl === 'string' || session.avatarUrl === undefined)
+    );
+  }
+
+  private saveSession({ email, avatarUrl = '', displayName = '' }: UserDataType) {
+    const session: SessionType = {
       email,
-      username,
+      displayName,
       expiresAt: Date.now() + SESSION_LIFETIME_MS,
+      avatarUrl,
     };
     localStorage.setItem(APP_SESSION_KEY, JSON.stringify(session));
-    this.setAuthData({ isAuth: true, email, userName: username ?? '' });
+    this.setAuthData({ isAuth: true, email, displayName, avatarUrl });
   }
 
   private clearSession() {
@@ -108,30 +114,36 @@ class AppStore {
     this.setAuthData({ isAuth: false });
   }
 
-  private restoreSession() {
+  private async restoreSession() {
     const raw = localStorage.getItem(APP_SESSION_KEY);
     if (!raw) {
-      this.clearSession();
-      this.setAuthData({ isAuth: false });
+      if (this.isAuth) {
+        this.clearSession();
+      }
       return;
     }
 
     try {
-      const session = JSON.parse(raw);
-      if (Date.now() > session.expiresAt) {
+      const session: SessionType = JSON.parse(raw);
+
+      if (!this.isValidSession(session)) {
         this.clearSession();
-        this.isAuth = false;
-        this.userEmail = '';
-        this.username = '';
+        await this.logout(true);
         return;
       }
 
-      this.isAuth = true;
+      if (Date.now() > session.expiresAt) {
+        this.clearSession();
+        await this.logout(true);
+        return;
+      }
       this.userEmail = session.email ?? '';
-      this.username = session.username ?? '';
+      this.username = session.displayName ?? '';
+      this.photoURL = session.avatarUrl ?? '';
+      this.isAuth = true;
     } catch {
       this.clearSession();
-      this.setAuthData({ isAuth: false });
+      this.logout(true);
     }
   }
 
@@ -139,20 +151,59 @@ class AppStore {
     setInterval(() => {
       const raw = localStorage.getItem(APP_SESSION_KEY);
       if (!raw) {
-        this.setAuthData({ isAuth: false });
+        if (this.isAuth) {
+          this.setAuthData({ isAuth: false });
+        }
         return;
       }
 
       try {
-        const session = JSON.parse(raw);
+        const session: SessionType = JSON.parse(raw);
         if (Date.now() > session.expiresAt) {
           this.clearSession();
-          this.auth.logout();
+          this.auth.logout(true);
         }
       } catch {
-        this.clearSession();
+        if (this.isAuth) {
+          this.clearSession();
+          this.logout(true);
+        }
       }
     }, 10000);
+  }
+
+  public async checkSession(): Promise<boolean> {
+    const raw = localStorage.getItem(APP_SESSION_KEY);
+    if (!raw) {
+      if (this.isAuth) {
+        this.setAuthData({ isAuth: false });
+      }
+      return false;
+    }
+
+    try {
+      const session: SessionType = JSON.parse(raw);
+
+      if (!this.isValidSession(session)) {
+        this.clearSession();
+        await this.logout(true);
+        return false;
+      }
+
+      const isExpired = Date.now() > session.expiresAt;
+
+      if (isExpired) {
+        this.clearSession();
+        this.auth.logout(true);
+        return false;
+      }
+
+      return true;
+    } catch {
+      this.clearSession();
+      this.auth.logout(true);
+      return false;
+    }
   }
 
   /** AUTH */
@@ -160,7 +211,11 @@ class AppStore {
     const res = await this.auth.loginWithGoogle();
 
     if (res.ok) {
-      this.saveSession(res.user.email ?? '', res.user.displayName ?? '');
+      this.saveSession({
+        email: res.user.email ?? '',
+        displayName: res.user.displayName ?? '',
+        avatarUrl: res.user.photoURL ?? '',
+      });
     }
 
     return res;
@@ -169,7 +224,11 @@ class AppStore {
   async login(email: string, password: string): Promise<T.FirebaseUserResponseType> {
     const res = await this.auth.login(email, password);
     if (res.ok) {
-      this.saveSession(res?.user?.email ?? email, res?.user?.displayName ?? '');
+      this.saveSession({
+        email: res.user.email ?? '',
+        displayName: res.user.displayName ?? '',
+        avatarUrl: res.user.photoURL ?? '',
+      });
     }
     return res;
   }
@@ -181,13 +240,16 @@ class AppStore {
   ): Promise<T.FirebaseUserResponseType> {
     const res = await this.auth.register(email, password, username);
     if (res.ok) {
-      this.saveSession(res?.user?.email ?? email, res?.user?.displayName ?? username);
+      this.saveSession({
+        email: res.user.email ?? '',
+        displayName: res.user.displayName ?? '',
+      });
     }
     return res;
   }
 
-  async logout() {
-    const res = await this.auth.logout();
+  async logout(isSessionExpired?: boolean) {
+    const res = await this.auth.logout(Boolean(isSessionExpired));
     if (res.ok) {
       this.clearSession();
     }

@@ -4,8 +4,9 @@ import { Component, Portal } from '@components';
 import { BurgerMenu, Button, Logo, Navigate } from '@ui';
 import type { AuthTabType } from '@types';
 import { CUSTOM_EVENTS, LIGHT, LOGIN, REGISTER } from '@constants';
-import { appEvents, getRandomAvatarColor } from '@utils';
+import { appEvents } from '@utils';
 import appStore from '@store';
+import { Avatar } from 'src/components/ui/avatar/avatar';
 
 type HeaderProps = {
   parentNode: HTMLElement | null;
@@ -16,6 +17,7 @@ type HeaderProps = {
 };
 
 export class Header extends Component {
+  private children: Component[] = [];
   private store: typeof appStore;
   private portal: Portal;
   private router!: Router;
@@ -60,35 +62,30 @@ export class Header extends Component {
 
   render() {
     /** BRAND */
-    new Logo({
+    const logo = new Logo({
       parentNode: this.node,
       withText: true,
       isTitle: true,
     });
+    this.children.push(logo);
 
     /** NAVIGATION */
-    new Navigate({
+    const nav = new Navigate({
       parentNode: this.node,
       className: 'header_nav',
       router: this.router,
     });
+    this.children.push(nav);
 
     if (this.isAuth) {
-      const userEmail = this.store.userEmail;
-
-      new Component({
+      const avatar = new Avatar({
         parentNode: this.node,
-        tagName: 'span',
+        email: this.store.userEmail,
+        username: this.store.username,
+        avatarUrl: this.store.photoURL,
         className: 'header_user-avatar',
-        content: this.store.userEmail[0],
-        attrs: [
-          {
-            attr: 'style',
-            value: `background: var(${getRandomAvatarColor().token})`,
-          },
-          { attr: 'title', value: userEmail },
-        ],
       });
+      this.children.push(avatar);
 
       this.logoutBtn = new Button({
         parentNode: this.node,
@@ -141,16 +138,16 @@ export class Header extends Component {
 
     this.handleOpen = () => this.portal.mount(this.burgerMenu.node, this.burgerMenu);
     this.burgerBtn.node.onclick = this.handleOpen;
+    this.children.push(logo, this.loginBtn, this.burgerBtn, this.signinBtn, this.burgerMenu);
   }
 
   removeListeners = () => {
-    [this.loginBtn, this.signinBtn, this.logoutBtn, this.burgerBtn]
-      .filter(Boolean)
-      .forEach((node) => node.removeOnclick());
+    this.children.filter(Boolean).forEach((node) => node.removeOnclick());
   };
 
   destroy(): void {
     this.removeListeners();
+    this.children.forEach((el) => el && el.destroy());
     super.destroy();
   }
 }
