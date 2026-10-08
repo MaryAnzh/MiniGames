@@ -1,8 +1,6 @@
 import path from 'node:path';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import dotenv from 'dotenv';
-dotenv.config({ path: '.env' });
 
 export default defineConfig({
   base: '/',
@@ -11,6 +9,7 @@ export default defineConfig({
     alias: {
       '@constants': path.resolve(__dirname, './src/constants'),
       '@types': path.resolve(__dirname, './src/types'),
+      '@assets': path.resolve(__dirname, './src/assets/icons'),
       '@utils': path.relative(__dirname, './src/utils'),
       '@components': path.resolve(__dirname, './src/components'),
       '@ui': path.resolve(__dirname, './src/components/ui'),

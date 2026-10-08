@@ -5,6 +5,7 @@
     "paths": {
       "@constants": ["src/constants"],
       "@types": ["src/types"],
+      "@assets": ["src/assets/icons"],
       "@utils": ["src/utils"],
       "@components": ["src/components"],
       "@ui": ["src/components/ui"],
