@@ -5,6 +5,7 @@ import unicorn from 'eslint-plugin-unicorn';
 export default [
   {
     files: ['src/**/*.ts'],
+
     languageOptions: {
       parser: tsParser,
       parserOptions: {
