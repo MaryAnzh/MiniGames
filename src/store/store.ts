@@ -6,8 +6,7 @@ import { ApiService, AuthService } from '@services';
 import type { PageComponentType } from '@pages';
 import { APP_SESSION_KEY, SESSION_LIFETIME_MS } from './constants';
 import type { AuthStoreDataType, SessionType, UserDataType } from './types';
-import type { Snackbar } from '@ui';
-import { SnackbarPortal } from '@components';
+import { type SnackbarPortal } from '@components';
 import { snackbar } from './snackbar';
 
 class AppStore {
