@@ -1,19 +1,20 @@
-import { Component, Portal } from '@components';
-import type { ComponentProps } from '@types';
+import { Component } from '@components';
+import type { ComponentProps, GameCardItemType, ResponseStatusType } from '@types';
 
 import { HeroSection, SliderSection, GameDeveloperSection, TableSection } from './components';
 import appStore from '@store';
-import { EMPTY, ERROR, LOADING, SUCCESS } from '@constants';
+import { APP_ROUTES, EMPTY, ERROR, LOADING, SUCCESS } from '@constants';
 
-type HomePageProps = Pick<ComponentProps, 'parentNode'> & { portal: Portal };
+type HomePageProps = Pick<ComponentProps, 'parentNode'> & { navigate: (path: string) => void };
 
 export class HomePage extends Component {
   private store: typeof appStore;
   private sliderSection: SliderSection;
   private tableSection: TableSection;
+  private navigate: (path: string) => void;
   children: Component[] = [];
 
-  constructor({ parentNode, portal }: HomePageProps) {
+  constructor({ parentNode, navigate }: HomePageProps) {
     super({
       parentNode,
       tagName: 'div',
@@ -21,6 +22,7 @@ export class HomePage extends Component {
       attrs: [{ attr: 'id', value: 'page' }],
     });
     this.store = appStore;
+    this.navigate = navigate;
 
     const heroSection = new HeroSection({
       parentNode: this.node,
@@ -28,10 +30,8 @@ export class HomePage extends Component {
 
     this.sliderSection = new SliderSection({
       parentNode: this.node,
-      slides: [],
-      status: LOADING,
-      portal,
       onRetry: this.onRetry,
+      openDetails: this.openDetails,
     });
 
     this.tableSection = new TableSection({
@@ -51,10 +51,10 @@ export class HomePage extends Component {
       const respStatus = result.status;
       if (respStatus === SUCCESS) {
         const games = result.data.data;
-        this.sliderSection.updateSlides(games);
+        this.renderSlider(games, games.length === 0 ? EMPTY : SUCCESS);
       }
       if (respStatus === ERROR) {
-        this.sliderSection.updateSlides([], ERROR);
+        this.renderSlider([], ERROR);
       }
     });
     this.store.getLeaderboard().then((result) => {
@@ -73,9 +73,9 @@ export class HomePage extends Component {
     const result = await this.store.getGames({ featured: true });
     if (result.status === SUCCESS) {
       const games = result.data.data;
-      this.sliderSection.updateSlides(games);
+      this.renderSlider(games, games.length === 0 ? EMPTY : SUCCESS);
     } else {
-      this.sliderSection.updateSlides([], result.status);
+      this.renderSlider([], result.status);
     }
   };
 
@@ -87,6 +87,16 @@ export class HomePage extends Component {
     } else {
       this.tableSection.updateRows([], result.status);
     }
+  };
+
+  private renderSlider(games: GameCardItemType[], status: ResponseStatusType) {
+    this.sliderSection.updateSlides(games, status);
+  }
+
+  public openDetails = (slug: string) => {
+    const gamePath = APP_ROUTES.GAME + slug;
+    this.store.currentRoute = gamePath;
+    this.navigate(gamePath);
   };
 
   destroy(): void {

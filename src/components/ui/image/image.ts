@@ -12,7 +12,8 @@ type ImageProps = Pick<ComponentProps, 'parentNode'> & {
 
 export class Image extends Component {
   private img!: HTMLImageElement;
-  private skeleton: Skeleton;
+  private skeleton: Skeleton | null = null;
+  private skeletonTimer: number | null = null;
 
   constructor({ parentNode, src, alt, skeletonColor = DARK, className }: ImageProps) {
     super({
@@ -21,12 +22,6 @@ export class Image extends Component {
       className: ['app-image', className ?? ''],
     });
 
-    this.skeleton = new Skeleton({
-      parentNode: this.node,
-      color: skeletonColor,
-    });
-
-    // Image element
     this.img = document.createElement('img');
     this.img.className = 'app-image_img';
     this.img.alt = alt;
@@ -36,17 +31,35 @@ export class Image extends Component {
       return;
     }
 
+    this.skeletonTimer = setTimeout(() => {
+      this.skeleton = new Skeleton({
+        parentNode: this.node,
+        color: skeletonColor,
+      });
+    }, 1000);
+
     this.img.src = src;
     this.node.appendChild(this.img);
 
     this.img.onload = () => {
-      this.skeleton.destroy();
+      this.clearSkeleton();
     };
 
     this.img.onerror = () => {
-      this.skeleton.destroy();
+      this.clearSkeleton();
       this.renderEmptyIcon();
     };
+  }
+
+  private clearSkeleton() {
+    if (this.skeletonTimer) {
+      clearTimeout(this.skeletonTimer);
+      this.skeletonTimer = null;
+    }
+    if (this.skeleton) {
+      this.skeleton.destroy();
+      this.skeleton = null;
+    }
   }
 
   private renderEmptyIcon() {
@@ -62,6 +75,11 @@ export class Image extends Component {
   destroy(): void {
     this.img.onload = null;
     this.img.onerror = null;
+
+    if (this.skeletonTimer) {
+      clearTimeout(this.skeletonTimer);
+    }
+
     super.destroy();
   }
 }

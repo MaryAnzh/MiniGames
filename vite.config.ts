@@ -9,6 +9,7 @@ export default defineConfig({
     alias: {
       '@constants': path.resolve(__dirname, './src/constants'),
       '@types': path.resolve(__dirname, './src/types'),
+      '@assets': path.resolve(__dirname, './src/assets/icons'),
       '@utils': path.relative(__dirname, './src/utils'),
       '@components': path.resolve(__dirname, './src/components'),
       '@ui': path.resolve(__dirname, './src/components/ui'),
@@ -20,6 +21,6 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    exclude: ['web-vitals'],
+    exclude: ['web-vitals', '__tests__'],
   },
 });

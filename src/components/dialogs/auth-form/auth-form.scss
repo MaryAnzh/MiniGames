@@ -1,0 +1,133 @@
+.app-auth-dialog {
+  position: relative;
+  width: var(--layout-auth-dialog-width);
+  max-width: 100%;
+  height: fit-content;
+  display: flex;
+  padding: var(--size-4);
+  background: var(--bg);
+  box-shadow: var(--level-3);
+  border-radius: var(--corner-extra-large);
+  outline: var(--border-3) var(--on-primary) solid;
+  outline-offset: var(--border-3-neg);
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: var(--size-3);
+
+  &_error-banner {
+    position: absolute;
+    top: var(--size-3);
+    width: 90%;
+    height: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &_heading {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-1);
+
+    &_title {
+      color: var(--on-primary);
+      font-size: var(--headline-medium);
+      font-weight: var(--weight-bold);
+    }
+    &_subtitle {
+      color: var(--on-bg);
+      font-size: var(--label-large);
+      font-weight: var(--weight-regular);
+    }
+  }
+
+  &_form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-2);
+
+    &_forgot {
+      color: var(--on-primary);
+      font-size: var(--body-small);
+      font-weight: var(--weight-bold);
+      text-align: right;
+      text-decoration: underline;
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        color: var(--bg-footer-low);
+      }
+      &:active {
+        transform: scale(0.9);
+      }
+    }
+  }
+
+  &_button-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: var(--size-1);
+    gap: var(--size-2);
+
+    &_submit {
+      position: relative;
+    }
+  }
+
+  &_divider {
+    width: 100%;
+    color: var(--on-bg);
+    font-size: var(--label-medium);
+    font-weight: var(--weight-bold);
+    text-align: center;
+  }
+
+  &_google_btn {
+    height: var(--icon-size-x-lg);
+    padding: var(--size-2) var(--size-3);
+    border-radius: var(--corner-medium);
+    outline: var(--border-2) var(--on-primary) solid;
+    outline-offset: var(--border-2-neg);
+    gap: var(--size-2);
+    font-size: var(--body-medium);
+  }
+
+  &_footer {
+    width: 100%;
+    display: flex;
+    gap: var(--size-05);
+    align-items: end;
+    justify-content: center;
+
+    &_text {
+      color: var(--on-bg);
+      font-size: var(--body-small);
+      font-weight: var(--weight-regular);
+    }
+    &_link {
+      border: none;
+      outline: none;
+      background: none;
+      color: var(--on-primary);
+      font-size: var(--body-small);
+      font-weight: var(--weight-bold);
+      text-decoration: underline;
+      cursor: pointer;
+
+      &::first-letter {
+        text-decoration: underline;
+      }
+
+      &:hover {
+        color: var(--tertiary);
+      }
+      &:active {
+        transform: scale(0.9);
+      }
+    }
+  }
+}

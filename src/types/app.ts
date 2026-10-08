@@ -26,6 +26,12 @@ export type ApiError = {
   error: string;
 };
 
+export type ErrorMessageType = { message: string };
+
+export type AirbaseErrorType = {
+  message: string;
+};
+
 export type ApiState<T> = ApiSuccess<T> | ApiError;
 
 export type GameCardItemType = {
@@ -95,6 +101,7 @@ export type GameDetailsType = {
   };
   topRecords: TopRecordsType[];
 };
+
 export type GameDetailsResponse = {
   data: GameDetailsType;
 };
