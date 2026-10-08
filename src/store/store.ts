@@ -1,15 +1,19 @@
 import { CUSTOM_EVENTS, CUSTOM_EVENTS as e, RATING_DESC } from '@constants';
 import { appEvents } from '@utils';
 import type * as T from '@types';
-import { api, authService } from '@services';
+import { ApiService, AuthService } from '@services';
 
 import type { PageComponentType } from '@pages';
 import { APP_SESSION_KEY, SESSION_LIFETIME_MS } from './constants';
 import type { AuthStoreDataType, SessionType, UserDataType } from './types';
+import type { Snackbar } from '@ui';
+import { SnackbarPortal } from '@components';
+import { snackbar } from './snackbar';
 
 class AppStore {
-  private api: typeof api;
-  private auth: typeof authService;
+  private api: ApiService;
+  private auth: AuthService;
+  private snackbar: SnackbarPortal;
 
   private _currentRoute = '/';
   routeParams: Record<string, string> = {};
@@ -28,8 +32,10 @@ class AppStore {
   pageLimit = 6;
 
   constructor() {
-    this.api = api;
-    this.auth = authService;
+    this.snackbar = snackbar;
+    this.api = new ApiService({ snackbar });
+    this.auth = new AuthService({ snackbar });
+
     this.restoreSession();
     this.startSessionWatcher();
   }
@@ -254,6 +260,10 @@ class AppStore {
       this.clearSession();
     }
     return res;
+  }
+
+  public showSnack(message: string, type: 'error' | 'success' | 'info') {
+    this.snackbar.show(message, type);
   }
 }
 

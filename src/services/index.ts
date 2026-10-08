@@ -1,3 +1,2 @@
-export { authService } from './authService';
-export { api } from './app';
-export { snackbar } from './snackbar';
+export { AuthService } from './authService';
+export { ApiService } from './app';

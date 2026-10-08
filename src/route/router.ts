@@ -60,7 +60,7 @@ export class Router {
     return { view: NotFoundPage, params: {} };
   }
 
-  private handleRoute() {
+  private async handleRoute() {
     const url = new URL(window.location.href);
     let pathname = url.pathname.replace(/\/+$/, '');
     const searchParams = Object.fromEntries(url.searchParams.entries());
@@ -73,6 +73,7 @@ export class Router {
       this.portal.unmount();
     }
 
+    /** GAME */
     if (pathname.startsWith(GAME)) {
       const slug = pathname.replace(GAME, '').replace(/^\/+/, '');
 
@@ -90,34 +91,76 @@ export class Router {
       return;
     }
 
+    /** AUTH */
     if (pathname === AUTH) {
+      const url = new URL(window.location.href);
+      const searchParams = Object.fromEntries(url.searchParams.entries());
+      const openDialog = () => {
+        const tab = (searchParams.tab as AuthTabType) ?? LOGIN;
+
+        const dialog = new AuthDialog({
+          parentNode: null,
+          tab,
+          onOpenAuthDialog: (nextTab) => {
+            this.navigate(`${AUTH}?tab=${nextTab}`);
+          },
+          onSubmit: (email, password, username) => {
+            this.handleAuthSubmit(tab, email, password, username, dialog);
+          },
+          onGoogleSubmit: () => {
+            this.handleGoogleSubmit(dialog);
+          },
+          onClose: this.closePortal,
+        });
+
+        this.portal.mount(dialog.node, dialog);
+      };
+
+      if (history.length <= 1) {
+        history.replaceState({}, '', HOME);
+
+        this.store.currentRoute = HOME;
+        this.store.routeParams = {};
+        this.store.queryParams = {};
+
+        if (this.store.currentPageInstance?.destroy) {
+          this.store.currentPageInstance.destroy();
+        }
+
+        this.root.innerHTML = '';
+        const homeInstance = new HomePage({
+          parentNode: this.root,
+          navigate: (path: string) => this.navigate(path),
+        });
+        this.store.currentPageInstance = homeInstance;
+
+        openDialog();
+        return;
+      }
+
       this.store.currentRoute = pathname;
       this.store.routeParams = {};
       this.store.queryParams = searchParams;
 
-      if (this.store.isAuth) {
-        this.navigate(HOME);
+      const valid = this.store.checkSession();
+
+      if (!valid) {
+        openDialog();
         return;
       }
 
-      const tab = (searchParams.tab as AuthTabType) ?? LOGIN;
+      if (this.store.isAuth) {
+        this.store.showSnack('You are already authenticated', 'info');
 
-      const dialog = new AuthDialog({
-        parentNode: null,
-        tab,
-        onOpenAuthDialog: (nextTab) => {
-          this.navigate(`${AUTH}?tab=${nextTab}`);
-        },
-        onSubmit: (email, password, username) => {
-          this.handleAuthSubmit(tab, email, password, username, dialog);
-        },
-        onGoogleSubmit: () => {
-          this.handleGoogleSubmit(dialog);
-        },
-        onClose: this.closePortal,
-      });
+        const cleanUrl = new URL(window.location.href);
+        cleanUrl.searchParams.delete('auth');
+        cleanUrl.searchParams.delete('tab');
 
-      this.portal.mount(dialog.node, dialog);
+        history.replaceState({}, '', cleanUrl.toString());
+        return;
+      }
+
+      openDialog();
       return;
     }
 
@@ -147,17 +190,6 @@ export class Router {
 
     this.store.currentPageInstance = pageInstance;
   }
-
-  closePortal = () => {
-    this.portal.unmount();
-
-    if (window.history.state !== null) {
-      history.back();
-      return;
-    }
-
-    this.navigate(HOME);
-  };
 
   private async handleAuthSubmit(
     tab: AuthTabType,
@@ -207,4 +239,22 @@ export class Router {
     this.closePortal();
     this.navigate(HOME);
   }
+
+  closePortal = () => {
+    this.portal.unmount();
+
+    const url = new URL(window.location.href);
+
+    if (url.searchParams.has('auth')) {
+      if (history.length > 1) {
+        history.back();
+        return;
+      }
+
+      this.navigate(HOME);
+      return;
+    }
+
+    this.handleRoute();
+  };
 }

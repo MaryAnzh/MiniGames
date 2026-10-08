@@ -1,6 +1,5 @@
 import * as C from '@constants';
 import * as R from './constants';
-import { snackbar } from './snackbar';
 
 import type {
   ResponseType,
@@ -13,15 +12,16 @@ import type {
   GameCommentsResponse,
 } from '@types';
 import { capitalizeFirst } from '@utils';
+import type { SnackbarPortal } from '@components';
 
 const { NETWORK } = C.ERROR_GROUP;
 
 export class ApiService {
   private baseUrl = R.API;
-  private snackbarPortal: typeof snackbar;
+  private snackbar: SnackbarPortal;
 
-  constructor() {
-    this.snackbarPortal = snackbar;
+  constructor({ snackbar }: { snackbar: SnackbarPortal }) {
+    this.snackbar = snackbar;
   }
 
   async get<T>(path: string, resourceName?: string): Promise<ApiState<T>> {
@@ -31,29 +31,15 @@ export class ApiService {
 
       if (!response.ok) {
         const errorMsg = this.handleHttpError(response, name);
-        this.snackbarPortal.show(errorMsg, 'error');
+        this.snackbar.show(errorMsg, 'error');
         return { status: C.ERROR, error: errorMsg };
       }
 
       const json = await response.json();
       const data = json as T;
-
-      if ('data' in (data as ResponseType<unknown>)) {
-        const items = (data as ResponseType<unknown>).data;
-        if (Array.isArray(items)) {
-          if (items.length === 0) {
-            this.snackbarPortal.show(`Data ${name} is empty`, 'info');
-          } else {
-            this.snackbarPortal.show(`Data ${name} loaded (${items.length})`, 'success');
-          }
-        }
-      } else {
-        this.snackbarPortal.show(`Data ${name} loaded successfully`, 'success');
-      }
-
       return { status: C.SUCCESS, data };
     } catch {
-      this.snackbarPortal.show('Network error. Check your connection.', 'error');
+      this.snackbar.show('Network error. Check your connection.', 'error');
       return { status: C.ERROR, error: NETWORK };
     }
   }
@@ -119,5 +105,3 @@ export class ApiService {
     return `Unexpected error for ${path.toLocaleUpperCase()}.`;
   }
 }
-
-export const api = new ApiService();
