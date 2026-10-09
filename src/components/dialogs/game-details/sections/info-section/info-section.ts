@@ -197,6 +197,7 @@ export class InfoSection extends Component {
         size: 'lg',
         isFavorite: this.isFavorite,
         callback: this.handleLike,
+        disabled: !this.store.isAuth,
       });
     }
   }
