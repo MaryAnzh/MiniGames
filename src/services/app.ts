@@ -1,6 +1,5 @@
 import * as C from '@constants';
 import * as R from './constants';
-import { snackbar } from './snackbar';
 
 import type {
   ResponseType,
@@ -13,15 +12,16 @@ import type {
   GameCommentsResponse,
 } from '@types';
 import { capitalizeFirst } from '@utils';
+import type { SnackbarPortal } from '@components';
 
 const { NETWORK } = C.ERROR_GROUP;
 
 export class ApiService {
   private baseUrl = R.API;
-  private snackbarPortal: typeof snackbar;
+  private snackbar: SnackbarPortal;
 
-  constructor() {
-    this.snackbarPortal = snackbar;
+  constructor({ snackbar }: { snackbar: SnackbarPortal }) {
+    this.snackbar = snackbar;
   }
 
   async get<T>(path: string, resourceName?: string): Promise<ApiState<T>> {
@@ -31,31 +31,52 @@ export class ApiService {
 
       if (!response.ok) {
         const errorMsg = this.handleHttpError(response, name);
-        this.snackbarPortal.show(errorMsg, 'error');
+        this.snackbar.show(errorMsg, 'error');
+        return { status: C.ERROR, error: errorMsg };
+      }
+
+      const json = await response.json();
+      const data = json as T;
+      return { status: C.SUCCESS, data };
+    } catch {
+      this.snackbar.show('Network error. Check your connection.', 'error');
+      return { status: C.ERROR, error: NETWORK };
+    }
+  }
+
+  async post<T, K>(path: string, body: K, resourceName?: string): Promise<ApiState<T>> {
+    const name = capitalizeFirst(resourceName ?? path);
+
+    try {
+      const response = await fetch(`${this.baseUrl}${path}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        const errorMsg = this.handleHttpError(response, name);
+        this.snackbar.show(errorMsg, 'error');
         return { status: C.ERROR, error: errorMsg };
       }
 
       const json = await response.json();
       const data = json as T;
 
-      if ('data' in (data as ResponseType<unknown>)) {
-        const items = (data as ResponseType<unknown>).data;
-        if (Array.isArray(items)) {
-          if (items.length === 0) {
-            this.snackbarPortal.show(`Data ${name} is empty`, 'info');
-          } else {
-            this.snackbarPortal.show(`Data ${name} loaded (${items.length})`, 'success');
-          }
-        }
-      } else {
-        this.snackbarPortal.show(`Data ${name} loaded successfully`, 'success');
-      }
-
       return { status: C.SUCCESS, data };
     } catch {
-      this.snackbarPortal.show('Network error. Check your connection.', 'error');
+      this.snackbar.show('Network error. Check your connection.', 'error');
       return { status: C.ERROR, error: NETWORK };
     }
+  }
+
+  async toggleFavorite(
+    slug: string,
+    body: { userEmail: string },
+  ): Promise<ApiState<{ data: { isFavorited: boolean; likesCount: number } }>> {
+    return this.post(`${R.GAMES}/${slug}/favorite`, body, `Game ${slug} Favorite`);
   }
 
   async getGames(params?: GameCardParamsType): Promise<ApiState<ResponseType<GameCardItemType>>> {
@@ -84,8 +105,9 @@ export class ApiService {
     return await this.get<ResponseType<CategoryType>>(R.CATEGORIES);
   }
 
-  async getGameDetails(slug: string): Promise<ApiState<GameDetailsResponse>> {
-    return await this.get<GameDetailsResponse>(`${R.GAMES}/${slug}`, `Game ${slug}`);
+  async getGameDetails(slug: string, userEmail?: string): Promise<ApiState<GameDetailsResponse>> {
+    const query = userEmail ? `?userEmail=${encodeURIComponent(userEmail)}` : '';
+    return await this.get<GameDetailsResponse>(`${R.GAMES}/${slug}${query}`, `Game ${slug}`);
   }
 
   async getGameComments(
@@ -105,6 +127,18 @@ export class ApiService {
     return result;
   }
 
+  async toggleCommentLike(
+    slug: string,
+    commentId: string,
+    body: { userEmail: string },
+  ): Promise<ApiState<{ data: { isLiked: boolean; likesCount: number } }>> {
+    return this.post(
+      `${R.GAMES}/${slug}/${R.COMMENTS}/${commentId}/like`,
+      body,
+      `Comment ${commentId} Like`,
+    );
+  }
+
   private handleHttpError(response: Response, path: string): string {
     const status = response.status;
 
@@ -119,5 +153,3 @@ export class ApiService {
     return `Unexpected error for ${path.toLocaleUpperCase()}.`;
   }
 }
-
-export const api = new ApiService();

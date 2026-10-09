@@ -15,16 +15,23 @@ import type {
   FirebaseUserResponseType,
 } from '@types';
 
-import { snackbar } from './snackbar';
 import type { FirebaseError } from 'firebase/app';
+import type { SnackbarPortal } from '@components';
 
 const googleProvider = new GoogleAuthProvider();
 
 export class AuthService {
+  private snackbar: SnackbarPortal;
+
+  constructor({ snackbar }: { snackbar: SnackbarPortal }) {
+    this.snackbar = snackbar;
+  }
+
   async loginWithGoogle(): Promise<FirebaseUserResponseType> {
     try {
       const cred = await signInWithPopup(firebaseAuth, googleProvider);
 
+      this.snackbar.show('Your login with Google!', 'success');
       return {
         ok: true,
         user: cred.user as FirebaseUserDataType,
@@ -32,7 +39,7 @@ export class AuthService {
     } catch (e) {
       const err = e as FirebaseAuthError;
       const message = err ? `${err.name}: ${err.code}` : 'Auth with Google failed';
-      snackbar.show(message, 'error');
+      this.snackbar.show(message, 'error');
       return { ok: false, error: err };
     }
   }
@@ -49,10 +56,10 @@ export class AuthService {
         await updateProfile(cred.user, { displayName: username });
       } catch (e) {
         const err = e as ErrorMessageType;
-        snackbar.show(err.message ?? 'Update userName failed', 'error');
+        this.snackbar.show(err.message ?? 'Update userName failed', 'error');
       }
 
-      snackbar.show('Registration successful', 'success');
+      this.snackbar.show('Registration successful', 'success');
       const user = cred.user as FirebaseUserDataType;
 
       return {
@@ -62,7 +69,7 @@ export class AuthService {
     } catch (e) {
       const err = e as FirebaseAuthError;
       const message = err ? `${err.name}: ${err.code}` : 'Registration failed';
-      snackbar.show(message, 'error');
+      this.snackbar.show(message, 'error');
       return { ok: false, error: err };
     }
   }
@@ -71,7 +78,7 @@ export class AuthService {
     try {
       const cred = await signInWithEmailAndPassword(firebaseAuth, email, password);
 
-      snackbar.show('Login successful', 'success');
+      this.snackbar.show('Login successful', 'success');
       const user = <FirebaseUserDataType>cred.user;
 
       return {
@@ -81,23 +88,25 @@ export class AuthService {
     } catch (e) {
       const err = e as FirebaseAuthError;
       const message = err ? `${err.name}: ${err.code}` : 'Login failed';
-      snackbar.show(message, 'error');
+      this.snackbar.show(message, 'error');
       return { ok: false, error: err };
     }
   }
 
-  async logout() {
+  async logout(isSessionExpired?: boolean) {
     try {
       await signOut(firebaseAuth);
-      snackbar.show('Logged out', 'info');
+
+      this.snackbar.show(
+        isSessionExpired ? 'Your session has expired. Please sign in again.' : 'Logged out',
+        'info',
+      );
       return { ok: true };
     } catch (e) {
       const err = e as FirebaseError;
       const message = err ? `${err.name}: ${err.code}` : 'Login failed';
-      snackbar.show(message ?? 'Logout failed', 'error');
+      this.snackbar.show(message ?? 'Logout failed', 'error');
       return { ok: false, error: err };
     }
   }
 }
-
-export const authService = new AuthService();

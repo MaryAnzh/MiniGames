@@ -1,6 +1,7 @@
 import arrow_down from '@assets/arrow-down.svg?raw';
 import arrow_left from '@assets/arrow-left.svg?raw';
 import arrow_right from '@assets/arrow-right.svg?raw';
+import avatar from '@assets/avatar.svg?raw';
 import burger from '@assets/burger.svg?raw';
 import close from '@assets/close.svg?raw';
 import checked from '@assets/checked.svg?raw';
@@ -12,6 +13,7 @@ import empty_img from '@assets/empty-img.svg?raw';
 import error from '@assets/error.svg?raw';
 import error_icon from '@assets/error-icon.svg?raw';
 import favorite from '@assets/favorite.svg?raw';
+import favorite_with_fill from '@assets/favorite-with-fill.svg?raw';
 import gold from '@assets/gold.svg?raw';
 import google from '@assets/google.svg?raw';
 import info from '@assets/info.svg?raw';
@@ -29,6 +31,7 @@ export const ICON_PICKER = {
   arrow_down,
   arrow_left,
   arrow_right,
+  avatar,
   burger,
   checked,
   close,
@@ -40,6 +43,7 @@ export const ICON_PICKER = {
   error,
   error_icon,
   favorite,
+  favorite_with_fill,
   info,
   gold,
   google,

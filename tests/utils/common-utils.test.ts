@@ -1,4 +1,6 @@
 import { describe, test, expect } from 'vitest';
+
+import { USER } from '@constants';
 import * as U from '@utils';
 
 describe('Array: arrayFromNumber', () => {
@@ -15,7 +17,7 @@ describe('Array: arrayFromNumber', () => {
   });
 });
 
-describe('Avatar: getRandomAvatarColor', () => {
+describe('Avatar bg: getRandomAvatarColor', () => {
   test('returns one of predefined colors', () => {
     const allowedTokens = [
       '--avatar-color-1',
@@ -31,7 +33,7 @@ describe('Avatar: getRandomAvatarColor', () => {
   });
 });
 
-describe('Avatar: getAvatarLetters', () => {
+describe('User: getAvatarLetters', () => {
   test('returns empty string for empty name', () => {
     expect(U.getAvatarLetters('')).toBe('');
   });
@@ -49,11 +51,21 @@ describe('Avatar: getAvatarLetters', () => {
   });
 
   test('fallback: first two letters uppercased', () => {
-    expect(U.getAvatarLetters('alex')).toBe('AL');
+    expect(U.getAvatarLetters('alice')).toBe('AL');
   });
 
   test('handles trimming', () => {
     expect(U.getAvatarLetters('  anna_karenina  ')).toBe('AK');
+  });
+
+  test('profile user name from email', () => {
+    expect(U.getProfileName({ email: 'Alice@mail.ru', username: '' })).toBe('Alice');
+  });
+  test('profile user name from userName', () => {
+    expect(U.getProfileName({ email: 'Alice-123@mail.ru', username: 'Alice' })).toBe('Alice');
+  });
+  test('profile user name is empty', () => {
+    expect(U.getProfileName({ email: '', username: '' })).toBe(USER);
   });
 });
 

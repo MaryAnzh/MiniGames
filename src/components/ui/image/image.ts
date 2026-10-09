@@ -8,6 +8,7 @@ type ImageProps = Pick<ComponentProps, 'parentNode'> & {
   alt: string;
   skeletonColor?: ColorVariantType;
   className?: string;
+  isAvatar?: boolean;
 };
 
 export class Image extends Component {
@@ -15,7 +16,7 @@ export class Image extends Component {
   private skeleton: Skeleton | null = null;
   private skeletonTimer: number | null = null;
 
-  constructor({ parentNode, src, alt, skeletonColor = DARK, className }: ImageProps) {
+  constructor({ parentNode, src, alt, skeletonColor = DARK, className, isAvatar }: ImageProps) {
     super({
       parentNode,
       tagName: 'div',
@@ -27,7 +28,7 @@ export class Image extends Component {
     this.img.alt = alt;
 
     if (!src) {
-      this.renderEmptyIcon();
+      this.renderEmptyIcon(isAvatar);
       return;
     }
 
@@ -40,14 +41,13 @@ export class Image extends Component {
 
     this.img.src = src;
     this.node.appendChild(this.img);
-
     this.img.onload = () => {
       this.clearSkeleton();
     };
 
     this.img.onerror = () => {
       this.clearSkeleton();
-      this.renderEmptyIcon();
+      this.renderEmptyIcon(isAvatar);
     };
   }
 
@@ -62,13 +62,15 @@ export class Image extends Component {
     }
   }
 
-  private renderEmptyIcon() {
+  private renderEmptyIcon(isAvatar = false) {
+    const imgClass = `app-image-empty${isAvatar ? '-avatar' : ''}`;
+
     this.node.innerHTML = '';
-    this.node.classList.add('app-image-empty');
+    this.node.classList.add(imgClass);
     new Icon({
       parentNode: this.node,
-      icon: 'empty_img',
-      className: 'app-image_empty',
+      icon: isAvatar ? 'avatar' : 'empty_img',
+      className: `${imgClass}_icon`,
     });
   }
 

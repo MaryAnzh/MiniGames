@@ -1,3 +1,5 @@
-export const APP_SESSION_KEY = 'minigames-app-session';
-// 5 minuter
-export const SESSION_LIFETIME_MS = 5 * 60 * 1000;
+export const APP_SESSION_KEY = 'minigames:short-track:app-session';
+// 5 min for  task
+//!!! will  change
+const sessionTime = 30; // minutes
+export const SESSION_LIFETIME_MS = sessionTime * 60 * 1000;
