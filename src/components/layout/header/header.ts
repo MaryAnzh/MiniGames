@@ -2,90 +2,129 @@ import type { Router } from '@route';
 
 import { Component, Portal } from '@components';
 import { BurgerMenu, Button, Logo, Navigate } from '@ui';
-import { AuthPopup } from 'src/components/pop-up/auth-form/auth-form';
-import type { AuthFormType } from '@types';
+import type { AuthTabType } from '@types';
+import { CUSTOM_EVENTS, LIGHT, LOGIN, REGISTER } from '@constants';
+import { appEvents } from '@utils';
+import appStore from '@store';
+import { Avatar } from 'src/components/ui/avatar/avatar';
 
 type HeaderProps = {
   parentNode: HTMLElement | null;
   isAuth: boolean;
   router: Router;
+  portal: Portal;
+  onOpenAuthDialog?: (tag: AuthTabType) => void;
 };
 
 export class Header extends Component {
+  private children: Component[] = [];
+  private store: typeof appStore;
   private portal: Portal;
-  private burgerMenu: BurgerMenu;
-  private burgerBtn: Component;
-  private authPopup: AuthPopup;
+  private router!: Router;
 
-  public isAuth: boolean = false;
-  private handleOpen: () => void;
+  private burgerMenu!: BurgerMenu;
+  private burgerBtn!: Component;
+  private loginBtn!: Button;
+  private signinBtn!: Button;
+  private logoutBtn!: Button;
 
-  constructor({ parentNode, isAuth, router }: HeaderProps) {
+  private onOpenAuthDialog?: (tag: AuthTabType) => void;
+  private handleOpen!: () => void;
+
+  public isAuth: boolean;
+
+  constructor({ parentNode, router, onOpenAuthDialog, portal }: HeaderProps) {
     super({ parentNode, tagName: 'header', className: 'header' });
-    this.isAuth = isAuth;
+    this.store = appStore;
 
+    this.isAuth = this.store.isAuth;
+    this.router = router;
+    this.portal = portal;
+    this.onOpenAuthDialog = onOpenAuthDialog;
+
+    appEvents.on(CUSTOM_EVENTS.AUTH_CHANGE, (value) => {
+      const next = value === 'true';
+
+      if (this.isAuth === next) return;
+
+      this.isAuth = next;
+      this.rerender();
+    });
+
+    this.render();
+  }
+
+  rerender() {
+    this.removeListeners();
+    this.node.innerHTML = '';
+    this.render();
+  }
+
+  render() {
     /** BRAND */
-    new Logo({
+    const logo = new Logo({
       parentNode: this.node,
       withText: true,
       isTitle: true,
     });
+    this.children.push(logo);
 
     /** NAVIGATION */
-    new Navigate({
+    const nav = new Navigate({
       parentNode: this.node,
       className: 'header_nav',
-      router,
+      router: this.router,
     });
+    this.children.push(nav);
 
-    /** PORTAL */
-    this.portal = new Portal({});
+    if (this.isAuth) {
+      const avatar = new Avatar({
+        parentNode: this.node,
+        email: this.store.userEmail,
+        username: this.store.username,
+        avatarUrl: this.store.photoURL,
+        className: 'header_user-avatar',
+      });
+      this.children.push(avatar);
 
-    this.authPopup = new AuthPopup({
-      parentNode: this.portal.node,
-      tab: 'Login',
-    });
+      this.logoutBtn = new Button({
+        parentNode: this.node,
+        className: 'header_logout_btn',
+        text: 'Logout',
+        response: 'md',
+        color: LIGHT,
+      });
+      this.logoutBtn.node.onclick = () => this.store.logout();
+    } else {
+      /** LOGIN BUTTON */
+      this.loginBtn = new Button({
+        parentNode: this.node,
+        className: 'header_login_btn',
+        text: 'Log In',
+        response: 'md',
+        color: LIGHT,
+      });
+      this.loginBtn.node.onclick = () => this.onOpenAuthDialog?.(LOGIN);
 
-    /** LOGIN BUTTON */
-    const loginButton = new Button({
-      parentNode: this.node,
-      className: 'header_login_btn',
-      text: 'Log In',
-      response: 'md',
-      color: 'light',
-    });
-
-    loginButton.node.addEventListener('click', () => {
-      this.authPopup.activeTab = 'Login';
-      this.authPopup.render();
-      this.portal.mount(this.authPopup.node);
-    });
-
-    /** SIGNUP BUTTON */
-    const signinButton = new Button({
-      parentNode: this.node,
-      className: 'header_signup_btn',
-      text: 'Sign Up',
-      response: 'md',
-      color: 'primary',
-    });
-
-    signinButton.node.addEventListener('click', () => {
-      this.authPopup.activeTab = 'Register';
-      this.authPopup.render();
-      this.portal.mount(this.authPopup.node);
-    });
-
+      /** SIGNUP BUTTON */
+      this.signinBtn = new Button({
+        parentNode: this.node,
+        className: 'header_signup_btn',
+        text: 'Sign Up',
+        response: 'md',
+        color: 'primary',
+      });
+      this.signinBtn.node.onclick = () => this.onOpenAuthDialog?.(REGISTER);
+    }
     /** BURGER MENU */
     this.burgerMenu = new BurgerMenu({
       parentNode: null,
-      router,
+      router: this.router,
       isAuth: this.isAuth,
       onClose: () => this.portal.unmount(),
-      onOpenAuth: (tab: AuthFormType) => {
-        this.authPopup.activeTab = tab;
-        this.authPopup.render();
-        this.portal.mount(this.authPopup.node);
+      onOpenAuth: (tab: AuthTabType) => {
+        this.onOpenAuthDialog?.(tab);
+        this.portal.unmount();
       },
     });
 
@@ -97,12 +136,18 @@ export class Header extends Component {
       className: 'header_burger_btn',
     });
 
-    this.handleOpen = () => this.portal.mount(this.burgerMenu.node);
-    this.burgerBtn.node.addEventListener('click', this.handleOpen);
+    this.handleOpen = () => this.portal.mount(this.burgerMenu.node, this.burgerMenu);
+    this.burgerBtn.node.onclick = this.handleOpen;
+    this.children.push(logo, this.loginBtn, this.burgerBtn, this.signinBtn, this.burgerMenu);
   }
 
+  removeListeners = () => {
+    this.children.filter(Boolean).forEach((node) => node.removeOnclick());
+  };
+
   destroy(): void {
-    this.burgerBtn.node.removeEventListener('click', this.handleOpen);
+    this.removeListeners();
+    this.children.forEach((el) => el && el.destroy());
     super.destroy();
   }
 }

@@ -39,6 +39,6 @@ export class HeroSection extends Component {
       leftIcon: 'close',
     });
     closeBtn.setAttributes([{ attr: 'role', value: CLOSE_BTN }]);
-    closeBtn.node.onclick = this.handleClose;
+    closeBtn.node.onclick = () => this.handleClose();
   }
 }

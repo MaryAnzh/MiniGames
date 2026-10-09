@@ -7,17 +7,34 @@ type ErrorBannerProps = Pick<ComponentProps, 'parentNode'> & {
   message: string;
   onRetry?: () => void;
   className?: string;
+  onClose?: () => void;
 };
 
 export class ErrorBanner extends Component {
   actionBtn: Button | null = null;
 
-  constructor({ parentNode, message, onRetry, className }: ErrorBannerProps) {
+  constructor({ parentNode, message, onRetry, className, onClose }: ErrorBannerProps) {
     super({
       parentNode,
       tagName: 'div',
       className: ['app-error-banner', className ?? ''],
     });
+    if (onClose) {
+      const closeWrap = new Component({
+        parentNode: this.node,
+        tagName: 'span',
+        className: 'app-error-banner_close',
+      });
+      const close = new Button({
+        parentNode: closeWrap.node,
+        color: 'light',
+        size: 'icon-lg',
+        leftIcon: 'close',
+        ariaLabel: 'Close button',
+        corner: 'circle',
+      });
+      close.node.onclick = () => onClose();
+    }
 
     new Icon({
       parentNode: this.node,

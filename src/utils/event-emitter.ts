@@ -1,15 +1,17 @@
 import type { CustomEventsType } from '@types';
 
 export class EventEmitter {
-  private events: Record<string, Array<(data?: string | undefined) => void>> = {};
+  private events: Record<CustomEventsType, Array<(data?: string) => void>> = {
+    'route:change': [],
+    'auth:change': [],
+  };
 
-  on(event: CustomEventsType, callback: (data?: string | undefined) => void) {
-    if (!this.events[event]) this.events[event] = [];
+  on(event: CustomEventsType, callback: (data?: string) => void) {
     this.events[event].push(callback);
   }
 
-  emit(event: CustomEventsType, data?: string | undefined) {
-    this.events[event]?.forEach((cb) => cb(data));
+  emit(event: CustomEventsType, data?: string) {
+    this.events[event].forEach((cb) => cb(data));
   }
 }
 

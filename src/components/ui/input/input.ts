@@ -1,12 +1,15 @@
 import { Component } from '@components';
-import { GoogleIcon } from '@ui';
-import type { GoogleIconsType } from '@types';
+import { Button, GoogleIcon } from '@ui';
+import type { GoogleIconsType, InputType } from '@types';
+import { INPUT_TYPES } from '@constants';
+
+const { PASSWORD, TEXT } = INPUT_TYPES;
 
 type InputProps = {
   parentNode: HTMLElement;
   label: string;
   placeholder: string;
-  type?: string;
+  type?: InputType;
   leftIcon?: GoogleIconsType;
   rightIcon?: GoogleIconsType;
   id: string;
@@ -15,6 +18,11 @@ type InputProps = {
 };
 
 export class Input extends Component {
+  private wrapNode!: HTMLElement;
+  private inputNode!: Component;
+  private errorNode!: Component;
+  private rightIcon: Button | null = null;
+
   constructor({
     parentNode,
     label,
@@ -45,15 +53,16 @@ export class Input extends Component {
       tagName: 'div',
       className: 'app_input_wrap',
     });
+    this.wrapNode = wrap.node;
 
-    new Component({
-      parentNode: wrap.node,
+    this.inputNode = new Component({
+      parentNode: this.wrapNode,
       tagName: 'input',
       className: [
         'app_input_field',
         leftIcon ? 'input-with-icon' : '',
         rightIcon ? 'input-right-icon' : '',
-      ],
+      ].filter(Boolean),
       attrs: [
         { attr: 'id', value: id },
         { attr: 'name', value: name },
@@ -71,12 +80,75 @@ export class Input extends Component {
       });
     }
 
-    if (rightIcon) {
-      new GoogleIcon({
+    if (type === PASSWORD && rightIcon) {
+      this.rightIcon = new Button({
         parentNode: wrap.node,
-        iconName: rightIcon,
-        iconClass: 'app_input_right-icon',
+        googleIcon: rightIcon,
+        className: 'app_input_right-icon',
+        variant: 'empty',
       });
+      this.rightIcon.node.onclick = () => this.changePasswordVisibility();
     }
+
+    this.errorNode = new Component({
+      parentNode: this.node,
+      tagName: 'span',
+      className: 'app_input_error',
+      content: '',
+    });
+  }
+
+  public setError(text: string) {
+    this.errorNode.node.textContent = text;
+
+    if (text) {
+      this.wrapNode.classList.add('has-error');
+      this.errorNode.node.classList.add('visible');
+    } else {
+      this.wrapNode.classList.remove('has-error');
+      this.errorNode.node.classList.remove('visible');
+    }
+  }
+
+  public changePasswordVisibility() {
+    const inputElement = this.inputNode.node as HTMLInputElement;
+    if (inputElement.type === PASSWORD) {
+      inputElement.type = TEXT;
+      this.rightIcon?.setGoogleIcon('visibility');
+    } else {
+      inputElement.type = PASSWORD;
+      this.rightIcon?.setGoogleIcon('visibility_off');
+    }
+  }
+
+  public getInput() {
+    return this.inputNode;
+  }
+
+  public setDisabled(value: boolean) {
+    const inputElement = this.inputNode.node as HTMLInputElement;
+
+    if (value) {
+      inputElement.setAttribute('disabled', 'true');
+      this.wrapNode.classList.add('input-disabled');
+
+      if (this.rightIcon) {
+        this.rightIcon.setDisabled(true);
+      }
+    } else {
+      inputElement.removeAttribute('disabled');
+      this.wrapNode.classList.remove('input-disabled');
+
+      if (this.rightIcon) {
+        this.rightIcon.setDisabled(false);
+      }
+    }
+  }
+
+  destroy(): void {
+    this.rightIcon?.destroy();
+    this.inputNode.node.onblur = null;
+    this.inputNode.node.onfocus = null;
+    super.destroy();
   }
 }
