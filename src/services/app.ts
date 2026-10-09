@@ -44,6 +44,41 @@ export class ApiService {
     }
   }
 
+  async post<T, K>(path: string, body: K, resourceName?: string): Promise<ApiState<T>> {
+    const name = capitalizeFirst(resourceName ?? path);
+
+    try {
+      const response = await fetch(`${this.baseUrl}${path}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        const errorMsg = this.handleHttpError(response, name);
+        this.snackbar.show(errorMsg, 'error');
+        return { status: C.ERROR, error: errorMsg };
+      }
+
+      const json = await response.json();
+      const data = json as T;
+
+      return { status: C.SUCCESS, data };
+    } catch {
+      this.snackbar.show('Network error. Check your connection.', 'error');
+      return { status: C.ERROR, error: NETWORK };
+    }
+  }
+
+  async toggleFavorite(
+    slug: string,
+    body: { userEmail: string },
+  ): Promise<ApiState<{ data: { isFavorited: boolean; likesCount: number } }>> {
+    return this.post(`${R.GAMES}/${slug}/favorite`, body, `Game ${slug} Favorite`);
+  }
+
   async getGames(params?: GameCardParamsType): Promise<ApiState<ResponseType<GameCardItemType>>> {
     const query = new URLSearchParams();
 
@@ -70,8 +105,9 @@ export class ApiService {
     return await this.get<ResponseType<CategoryType>>(R.CATEGORIES);
   }
 
-  async getGameDetails(slug: string): Promise<ApiState<GameDetailsResponse>> {
-    return await this.get<GameDetailsResponse>(`${R.GAMES}/${slug}`, `Game ${slug}`);
+  async getGameDetails(slug: string, userEmail?: string): Promise<ApiState<GameDetailsResponse>> {
+    const query = userEmail ? `?userEmail=${encodeURIComponent(userEmail)}` : '';
+    return await this.get<GameDetailsResponse>(`${R.GAMES}/${slug}${query}`, `Game ${slug}`);
   }
 
   async getGameComments(
@@ -89,6 +125,18 @@ export class ApiService {
       `Game ${gameSlug} ${R.COMMENTS}`,
     );
     return result;
+  }
+
+  async toggleCommentLike(
+    slug: string,
+    commentId: string,
+    body: { userEmail: string },
+  ): Promise<ApiState<{ data: { isLiked: boolean; likesCount: number } }>> {
+    return this.post(
+      `${R.GAMES}/${slug}/${R.COMMENTS}/${commentId}/like`,
+      body,
+      `Comment ${commentId} Like`,
+    );
   }
 
   private handleHttpError(response: Response, path: string): string {

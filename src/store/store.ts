@@ -1,13 +1,13 @@
 import { CUSTOM_EVENTS, CUSTOM_EVENTS as e, RATING_DESC } from '@constants';
-import { appEvents } from '@utils';
-import type * as T from '@types';
-import { ApiService, AuthService } from '@services';
-
+import { type SnackbarPortal } from '@components';
 import type { PageComponentType } from '@pages';
+import { ApiService, AuthService } from '@services';
+import type * as T from '@types';
+import { appEvents } from '@utils';
+
+import { snackbar } from './helpers/snackbar';
 import { APP_SESSION_KEY, SESSION_LIFETIME_MS } from './constants';
 import type { AuthStoreDataType, SessionType, UserDataType } from './types';
-import { type SnackbarPortal } from '@components';
-import { snackbar } from './snackbar';
 
 class AppStore {
   private api: ApiService;
@@ -75,14 +75,34 @@ class AppStore {
   }
 
   async getGameDetails(slug: string) {
-    return this.api.getGameDetails(slug);
+    this.checkSession();
+    return this.api.getGameDetails(slug, this.userEmail || undefined);
   }
 
   async getGameComments(
     slug: string,
     params?: { limit?: number; sort?: 'newest' | 'oldest'; userEmail?: string },
   ) {
-    return this.api.getGameComments(slug, params);
+    this.checkSession();
+
+    return this.api.getGameComments(slug, {
+      ...params,
+      userEmail: this.userEmail || undefined,
+    });
+  }
+
+  async toggleFavorite(slug: string) {
+    this.checkSession();
+    return this.api.toggleFavorite(slug, {
+      userEmail: this.userEmail,
+    });
+  }
+
+  async toggleCommentLike(slug: string, commentId: string) {
+    this.checkSession();
+    return this.api.toggleCommentLike(slug, commentId, {
+      userEmail: this.userEmail,
+    });
   }
 
   setAuthData({ isAuth, email = '', displayName = '', avatarUrl = '' }: AuthStoreDataType) {

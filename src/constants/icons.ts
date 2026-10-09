@@ -13,6 +13,7 @@ import empty_img from '@assets/empty-img.svg?raw';
 import error from '@assets/error.svg?raw';
 import error_icon from '@assets/error-icon.svg?raw';
 import favorite from '@assets/favorite.svg?raw';
+import favorite_with_fill from '@assets/favorite-with-fill?raw';
 import gold from '@assets/gold.svg?raw';
 import google from '@assets/google.svg?raw';
 import info from '@assets/info.svg?raw';
@@ -42,6 +43,7 @@ export const ICON_PICKER = {
   error,
   error_icon,
   favorite,
+  favorite_with_fill,
   info,
   gold,
   google,
