@@ -1,3 +1,3 @@
-import { SnackbarPortal } from '../components/features/index';
+import { SnackbarPortal } from '@components';
 
 export const snackbar = new SnackbarPortal();
