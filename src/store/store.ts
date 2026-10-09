@@ -79,10 +79,7 @@ class AppStore {
     return this.api.getGameDetails(slug, this.userEmail || undefined);
   }
 
-  async getGameComments(
-    slug: string,
-    params?: { limit?: number; sort?: 'newest' | 'oldest'; userEmail?: string },
-  ) {
+  async getGameComments(slug: string, params?: { limit?: number; sort?: 'newest' | 'oldest' }) {
     this.checkSession();
 
     return this.api.getGameComments(slug, {
@@ -281,7 +278,21 @@ class AppStore {
     return res;
   }
 
-  public showSnack(message: string, type: 'error' | 'success' | 'info') {
+  canOpenAuthDialog(): boolean {
+    const valid = this.checkSession();
+
+    if (!valid) return true;
+
+    if (this.isAuth) return false;
+
+    return true;
+  }
+
+  prepareGameDetails(): void {
+    this.checkSession();
+  }
+
+  showSnack(message: string, type: 'error' | 'success' | 'info') {
     this.snackbar.show(message, type);
   }
 }

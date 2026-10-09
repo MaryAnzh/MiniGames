@@ -104,7 +104,6 @@ export class GameDetailsDialog extends Component {
         appStore.getGameComments(this.slug, {
           limit: 10,
           sort: 'newest',
-          userEmail: this.store.userEmail,
         }),
       ]);
 
@@ -114,7 +113,6 @@ export class GameDetailsDialog extends Component {
 
       const game = gameRes.data.data;
       const comments = commentsRes.status === SUCCESS ? commentsRes.data.data : [];
-
       this.node.replaceChildren();
 
       this.render(game, comments);

@@ -2,7 +2,8 @@ import { Component } from '@components';
 import type { ComponentProps, GameCardDataType } from '@types';
 import { MetaSection } from '../meta-section/meta-section';
 import { Button, LikeButton, Skeleton, SkeletonText } from '@ui';
-import { PLAY_NOW, LIGHT } from '@constants';
+import { PLAY_NOW, LIGHT, SUCCESS } from '@constants';
+import appStore from '@store';
 
 type InfoType = Pick<
   GameCardDataType,
@@ -22,7 +23,11 @@ type InfoSectionProps = Pick<ComponentProps, 'parentNode'> &
   };
 
 export class InfoSection extends Component {
+  store: typeof appStore;
   info: InfoType;
+  isFavorite: boolean = false;
+  private smallLikeButton?: LikeButton;
+  private bigLikeButton?: LikeButton;
 
   constructor({
     parentNode,
@@ -41,7 +46,9 @@ export class InfoSection extends Component {
       tagName: 'div',
       className: 'game-detail_info',
     });
+
     this.info = { category, duration, name, players, price, shortDescription, rating, likesCount };
+    this.store = appStore;
 
     this.render(this.info, isSkeleton);
   }
@@ -73,12 +80,14 @@ export class InfoSection extends Component {
       });
     }
 
-    new MetaSection({
+    const meta = new MetaSection({
       parentNode: titleWrap.node,
       rating,
       likesCount,
       isSkeleton,
+      onLike: this.handleLike,
     });
+    this.smallLikeButton = meta.likeButton;
 
     if (isSkeleton) {
       new SkeletonText({
@@ -178,14 +187,7 @@ export class InfoSection extends Component {
         { attr: 'tabindex', value: '0' },
       ]);
 
-      new LikeButton({
-        parentNode: actionsWrap.node,
-        shadow: 'hard',
-        className: 'game-detail_info_actions-wrap_like',
-        corner: 'sm-x',
-      });
-
-      new LikeButton({
+      this.bigLikeButton = new LikeButton({
         parentNode: actionsWrap.node,
         shadow: 'hard',
         className: 'game-detail_info_actions-wrap_like-desktop',
@@ -193,7 +195,50 @@ export class InfoSection extends Component {
         withText: true,
         fullWidth: true,
         size: 'lg',
+        isFavorite: this.isFavorite,
+        callback: this.handleLike,
       });
     }
   }
+
+  handleLike = async () => {
+    this.smallLikeButton?.setLoading(true);
+    this.bigLikeButton?.setLoading(true);
+
+    const res = await this.store.toggleFavorite(appStore.routeParams.id);
+
+    if (res.status !== SUCCESS) {
+      const fallback = {
+        isLiked: this.isFavorite,
+        likesCount: this.info.likesCount,
+      };
+
+      this.smallLikeButton?.setLiked(fallback.isLiked);
+      this.smallLikeButton?.setCount(fallback.likesCount);
+      this.bigLikeButton?.setLiked(fallback.isLiked);
+
+      this.smallLikeButton?.setLoading(false);
+      this.bigLikeButton?.setLoading(false);
+
+      this.store.showSnack('Error when send like', 'error');
+
+      return fallback;
+    }
+
+    const { isFavorited, likesCount } = res.data.data;
+
+    this.isFavorite = isFavorited;
+    this.info.likesCount = likesCount;
+
+    this.smallLikeButton?.setLiked(isFavorited);
+    this.smallLikeButton?.setCount(likesCount);
+    this.bigLikeButton?.setLiked(isFavorited);
+
+    this.smallLikeButton?.setLoading(false);
+    this.bigLikeButton?.setLoading(false);
+
+    this.store.showSnack('Your like send!!!', 'success');
+
+    return { isLiked: isFavorited, likesCount };
+  };
 }

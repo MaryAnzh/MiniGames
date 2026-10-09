@@ -1,0 +1,37 @@
+.app-like-button_disabled {
+  pointer-events: none;
+  & svg {
+    opacity: 0.5;
+  }
+}
+.app-like-button {
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+
+  &.app-like-button_disabled {
+    pointer-events: none;
+    opacity: 0.6;
+
+    svg {
+      opacity: 0.5;
+    }
+  }
+
+  &.app-like-button_loading {
+    pointer-events: none;
+
+    svg {
+      animation: like-pulse 0.6s infinite alternate;
+    }
+  }
+}
+
+@keyframes like-pulse {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}

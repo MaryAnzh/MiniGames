@@ -69,98 +69,63 @@ export class Router {
       pathname = '/';
     }
 
-    if (!pathname.startsWith(GAME) && pathname !== AUTH) {
-      this.portal.unmount();
+    /** AUTH */
+    if (pathname === AUTH) {
+      const tab = (searchParams.tab as AuthTabType) ?? LOGIN;
+
+      const forbidden = () => {
+        this.store.showSnack('You are already authenticated', 'info');
+
+        const cleanUrl = new URL(window.location.href);
+        cleanUrl.searchParams.delete('auth');
+        cleanUrl.searchParams.delete('tab');
+        history.replaceState({}, '', cleanUrl.toString());
+      };
+
+      if (history.length <= 1) {
+        this.renderHome();
+
+        if (!this.store.canOpenAuthDialog()) {
+          forbidden();
+          return;
+        }
+
+        this.openAuthDialog(tab);
+        return;
+      }
+
+      if (!this.store.canOpenAuthDialog()) {
+        forbidden();
+        return;
+      }
+
+      this.openAuthDialog(tab);
+      return;
     }
 
     /** GAME */
     if (pathname.startsWith(GAME)) {
       const slug = pathname.replace(GAME, '').replace(/^\/+/, '');
 
-      this.store.currentRoute = pathname;
-      this.store.routeParams = { id: slug };
-      this.store.queryParams = searchParams;
-
-      const dialog = new GameDetailsDialog({
-        parentNode: null,
-        slug,
-        onClose: this.closePortal,
-      });
-
-      this.portal.mount(dialog.node, dialog);
-      return;
-    }
-
-    /** AUTH */
-    if (pathname === AUTH) {
-      const url = new URL(window.location.href);
-      const searchParams = Object.fromEntries(url.searchParams.entries());
-      const openDialog = () => {
-        const tab = (searchParams.tab as AuthTabType) ?? LOGIN;
-
-        const dialog = new AuthDialog({
-          parentNode: null,
-          tab,
-          onOpenAuthDialog: (nextTab) => {
-            this.navigate(`${AUTH}?tab=${nextTab}`);
-          },
-          onSubmit: (email, password, username) => {
-            this.handleAuthSubmit(tab, email, password, username, dialog);
-          },
-          onGoogleSubmit: () => {
-            this.handleGoogleSubmit(dialog);
-          },
-          onClose: this.closePortal,
-        });
-
-        this.portal.mount(dialog.node, dialog);
-      };
-
-      if (history.length <= 1) {
-        history.replaceState({}, '', HOME);
-
-        this.store.currentRoute = HOME;
-        this.store.routeParams = {};
-        this.store.queryParams = {};
-
-        if (this.store.currentPageInstance?.destroy) {
-          this.store.currentPageInstance.destroy();
+      if (!slug) {
+        if (history.length <= 1) {
+          this.renderHome();
+          return;
         }
 
-        this.root.innerHTML = '';
-        const homeInstance = new HomePage({
-          parentNode: this.root,
-          navigate: (path: string) => this.navigate(path),
-        });
-        this.store.currentPageInstance = homeInstance;
-
-        openDialog();
+        history.back();
         return;
       }
 
-      this.store.currentRoute = pathname;
-      this.store.routeParams = {};
-      this.store.queryParams = searchParams;
+      this.store.prepareGameDetails();
 
-      const valid = this.store.checkSession();
-
-      if (!valid) {
-        openDialog();
+      if (history.length <= 1) {
+        this.renderHome();
+        this.openGameDialog(slug);
         return;
       }
 
-      if (this.store.isAuth) {
-        this.store.showSnack('You are already authenticated', 'info');
-
-        const cleanUrl = new URL(window.location.href);
-        cleanUrl.searchParams.delete('auth');
-        cleanUrl.searchParams.delete('tab');
-
-        history.replaceState({}, '', cleanUrl.toString());
-        return;
-      }
-
-      openDialog();
+      this.openGameDialog(slug);
       return;
     }
 
@@ -240,12 +205,57 @@ export class Router {
     this.navigate(HOME);
   }
 
+  renderHome() {
+    history.replaceState({}, '', HOME);
+
+    this.store.currentRoute = HOME;
+    this.store.routeParams = {};
+    this.store.queryParams = {};
+
+    if (this.store.currentPageInstance?.destroy) {
+      this.store.currentPageInstance.destroy();
+    }
+
+    this.root.innerHTML = '';
+    const homeInstance = new HomePage({
+      parentNode: this.root,
+      navigate: (path: string) => this.navigate(path),
+    });
+    this.store.currentPageInstance = homeInstance;
+  }
+
+  openAuthDialog(tab: AuthTabType) {
+    const dialog = new AuthDialog({
+      parentNode: null,
+      tab,
+      onOpenAuthDialog: (nextTab) => this.navigate(`${AUTH}?tab=${nextTab}`),
+      onSubmit: (email, password, username) => {
+        this.handleAuthSubmit(tab, email, password, username, dialog);
+      },
+      onGoogleSubmit: () => this.handleGoogleSubmit(dialog),
+      onClose: this.closePortal,
+    });
+
+    this.portal.mount(dialog.node, dialog);
+  }
+
+  openGameDialog(slug: string) {
+    const dialog = new GameDetailsDialog({
+      parentNode: null,
+      slug,
+      onClose: this.closePortal,
+    });
+
+    this.portal.mount(dialog.node, dialog);
+  }
+
   closePortal = () => {
     this.portal.unmount();
 
     const url = new URL(window.location.href);
 
-    if (url.searchParams.has('auth')) {
+    // GAME dialog close
+    if (url.pathname.startsWith(GAME)) {
       if (history.length > 1) {
         history.back();
         return;
@@ -255,6 +265,15 @@ export class Router {
       return;
     }
 
-    this.handleRoute();
+    // AUTH dialog close
+    if (url.searchParams.has('auth')) {
+      if (history.length > 1) {
+        history.back();
+        return;
+      }
+
+      this.navigate(HOME);
+      return;
+    }
   };
 }

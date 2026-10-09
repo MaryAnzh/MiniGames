@@ -20,6 +20,8 @@ export const {
   CONFIRM,
   USERNAME,
   USER,
+  ADD_TO_FAVORITES,
+  REMOVE_FROM_FAVORITES,
 } = {
   APP: 'app',
   OPEN_SELECT: 'Open select',
@@ -42,4 +44,6 @@ export const {
   USERNAME: 'username',
   CONFIRM: 'confirm',
   USER: 'user',
+  ADD_TO_FAVORITES: 'Add to Favorites',
+  REMOVE_FROM_FAVORITES: 'Remove from favorites',
 } as const;

@@ -143,11 +143,13 @@ export class BurgerMenu extends Component {
         text: 'Log Out',
         color: 'ghost',
       });
-      logoutBtn.node.onclick = () => {
-        // this.store.logout();
-        // this.router.navigate('/');
-        // this.onClose();
-      };
+
+      // Check Logic!!
+      // logoutBtn.node.onclick = () => {
+      //   this.store.logout();
+      //   this.router.navigate('/');
+      //   this.onClose();
+      // };
       this.children.push(logoutBtn);
     }
   }

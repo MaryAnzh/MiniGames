@@ -1,72 +1,135 @@
+import { ADD_TO_FAVORITES, LOADING, REMOVE_FROM_FAVORITES } from '@constants';
 import { Button, type ButtonProps } from '@ui';
 
 const CountRefactor = (count: number) => {
   return count >= 1099 ? `${(count / 1000).toFixed(1)} K` : count.toString();
 };
 
-type LikeButtonProps = ButtonProps & {
+export type LikeButtonProps = ButtonProps & {
   withText?: boolean;
   isLight?: boolean;
   isIcon?: boolean;
   value?: number;
   isSkeleton?: boolean;
+  isFavorite?: boolean;
+  callback?: () => Promise<{
+    isLiked: boolean;
+    likesCount: number;
+  }>;
 };
 
 export class LikeButton extends Button {
-  private isPressed = false;
-  private withText: boolean = false;
-  private isLight: boolean = false;
+  private isLight = false;
+  private withText = false;
+  private isFavorite = false;
+  private callback?: LikeButtonProps['callback'];
 
-  constructor({ withText, isLight, isIcon, value, ...props }: LikeButtonProps) {
+  constructor({
+    withText,
+    isLight,
+    isIcon,
+    value,
+    disabled,
+    isFavorite,
+    callback,
+    ...props
+  }: LikeButtonProps) {
     super({
       ...props,
       leftIcon: 'favorite',
       ariaLabel: props.ariaLabel ?? 'Like this game',
       text: withText
-        ? 'Add to Favorites'
-        : value !== undefined && value >= -1
+        ? isFavorite
+          ? REMOVE_FROM_FAVORITES
+          : ADD_TO_FAVORITES
+        : value !== undefined
           ? CountRefactor(value)
           : undefined,
       variant: isIcon ? 'empty' : props.variant,
+      className: `app-like-button`,
     });
+
     this.withText = Boolean(withText);
+    this.isFavorite = Boolean(isFavorite);
     this.isLight = Boolean(isLight);
+    this.callback = callback;
 
-    if (isLight) {
-      this.node.style.color = 'var(--white)';
-    }
-
+    this.setDisabled(disabled);
     this.initAccessibility();
-    this.initToggleLogic();
+    this.initLogic();
   }
 
   private initAccessibility() {
     this.setAttributes([
       { attr: 'role', value: 'button' },
       { attr: 'aria-label', value: this.node.getAttribute('aria-label') ?? 'Like this game' },
-      { attr: 'aria-pressed', value: 'false' },
+      { attr: 'aria-pressed', value: String(this.isFavorite) },
       { attr: 'tabindex', value: '0' },
       { attr: 'data-action', value: 'like' },
     ]);
   }
 
-  private initToggleLogic() {
-    this.node.onclick = () => {
-      this.isPressed = !this.isPressed;
+  private initLogic() {
+    if (!this.callback) return;
 
-      this.node.setAttribute('aria-pressed', String(this.isPressed));
+    this.node.onclick = async () => {
+      this.setLoading(true);
 
-      if (this.isPressed) {
-        this.node.style.color = 'var(--like)';
-        if (this.withText) {
-          super.setText('In your Favorites');
-        }
-      } else {
-        this.node.style.color = this.isLight ? 'var(--white)' : 'var(--on-primary)';
-        if (this.withText) {
-          super.setText('Add to Favorites');
-        }
+      try {
+        const { isLiked, likesCount } = await this.callback!();
+
+        this.setLiked(isLiked);
+        this.setCount(likesCount);
+      } finally {
+        this.setLoading(false);
       }
     };
+  }
+
+  public setLoading(isLoading: boolean) {
+    if (isLoading) {
+      this.node.classList.add('app-like-button_loading');
+      this.setDisabled(true);
+
+      if (this.withText) {
+        super.setText(`${LOADING}...`);
+      }
+    } else {
+      this.node.classList.remove('app-like-button_loading');
+      this.setDisabled(false);
+
+      if (this.withText) {
+        super.setText(this.isFavorite ? REMOVE_FROM_FAVORITES : ADD_TO_FAVORITES);
+      }
+    }
+  }
+
+  public setLiked(isLiked: boolean) {
+    this.isFavorite = isLiked;
+
+    this.node.setAttribute('aria-pressed', String(isLiked));
+    this.node.style.color = isLiked
+      ? 'var(--like)'
+      : this.isLight
+        ? 'var(--white)'
+        : 'var(--on-primary)';
+
+    if (this.withText) {
+      super.setText(isLiked ? REMOVE_FROM_FAVORITES : ADD_TO_FAVORITES);
+    }
+  }
+
+  public setCount(count: number) {
+    if (!this.withText) {
+      super.setText(CountRefactor(count));
+    }
+  }
+
+  public setDisabled(value?: boolean) {
+    if (value) {
+      this.node.classList.add('app-like-button_disabled');
+    } else {
+      this.node.classList.remove('app-like-button_disabled');
+    }
   }
 }
