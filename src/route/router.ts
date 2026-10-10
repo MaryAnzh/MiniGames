@@ -31,11 +31,6 @@ export class Router {
     this.handleRoute();
   }
 
-  navigate(path: string) {
-    history.pushState({}, '', path);
-    this.handleRoute();
-  }
-
   private matchRoute(pathname: string) {
     for (const route of this.routes) {
       const routeParts = route.path.split('/');
@@ -224,7 +219,13 @@ export class Router {
     this.store.currentPageInstance = homeInstance;
   }
 
-  openAuthDialog(tab: AuthTabType) {
+  /** PUBLIC  */
+  navigate = (path: string) => {
+    history.pushState({}, '', path);
+    this.handleRoute();
+  };
+
+  openAuthDialog = (tab: AuthTabType) => {
     const dialog = new AuthDialog({
       parentNode: null,
       tab,
@@ -237,17 +238,18 @@ export class Router {
     });
 
     this.portal.mount(dialog.node, dialog);
-  }
+  };
 
-  openGameDialog(slug: string) {
+  openGameDialog = (slug: string) => {
     const dialog = new GameDetailsDialog({
       parentNode: null,
       slug,
+      navigateTo: this.navigate,
       onClose: this.closePortal,
     });
 
     this.portal.mount(dialog.node, dialog);
-  }
+  };
 
   closePortal = () => {
     this.portal.unmount();

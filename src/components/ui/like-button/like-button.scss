@@ -9,7 +9,7 @@
     color 0.2s ease,
     opacity 0.2s ease;
 
-  &.app-like-button_disabled {
+  &_disabled {
     pointer-events: none;
     opacity: 0.6;
 
@@ -18,12 +18,21 @@
     }
   }
 
-  &.app-like-button_loading {
+  &_loading {
     pointer-events: none;
 
     svg {
       animation: like-pulse 0.6s infinite alternate;
     }
+  }
+
+  &_liked {
+    svg {
+      color: var(--like);
+    }
+  }
+  &_light {
+    color: var(--white);
   }
 }
 

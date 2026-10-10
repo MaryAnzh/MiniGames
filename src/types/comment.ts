@@ -1,3 +1,5 @@
+import type { ApiPostState } from './app';
+
 export type GameComment = {
   commentId: string;
   authorName: string;
@@ -12,6 +14,17 @@ export type GameCommentsMeta = {
   returnedCount: number;
   sort: 'newest' | 'oldest' | string;
 };
+
+export type CommentToggleType = {
+  isLikedByCurrentUser: boolean;
+  likesCount: number;
+};
+
+export type CommentErrorType = {
+  error: string;
+};
+
+export type CommentToggleResponseType = ApiPostState<CommentToggleType>;
 
 export type GameCommentsResponse = {
   data: GameComment[];

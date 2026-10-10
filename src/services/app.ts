@@ -10,9 +10,13 @@ import type {
   CategoryType,
   GameDetailsResponse,
   GameCommentsResponse,
+  CommentToggleResponseType,
+  ApiPostState,
+  CommentToggleType,
 } from '@types';
 import { capitalizeFirst } from '@utils';
 import type { SnackbarPortal } from '@components';
+import type { GameToggleLikeResponseType } from 'src/types/game';
 
 const { NETWORK } = C.ERROR_GROUP;
 
@@ -44,9 +48,8 @@ export class ApiService {
     }
   }
 
-  async post<T, K>(path: string, body: K, resourceName?: string): Promise<ApiState<T>> {
+  async post<T>(path: string, body: unknown, resourceName?: string): Promise<ApiPostState<T>> {
     const name = capitalizeFirst(resourceName ?? path);
-
     try {
       const response = await fetch(`${this.baseUrl}${path}`, {
         method: 'POST',
@@ -63,9 +66,9 @@ export class ApiService {
       }
 
       const json = await response.json();
-      const data = json as T;
+      const result = json as { data: T };
 
-      return { status: C.SUCCESS, data };
+      return { status: C.SUCCESS, data: result.data };
     } catch {
       this.snackbar.show('Network error. Check your connection.', 'error');
       return { status: C.ERROR, error: NETWORK };
@@ -75,7 +78,7 @@ export class ApiService {
   async toggleFavorite(
     slug: string,
     body: { userEmail: string },
-  ): Promise<ApiState<{ data: { isFavorited: boolean; likesCount: number } }>> {
+  ): Promise<GameToggleLikeResponseType> {
     return this.post(`${R.GAMES}/${slug}/favorite`, body, `Game ${slug} Favorite`);
   }
 
@@ -127,16 +130,19 @@ export class ApiService {
     return result;
   }
 
-  async toggleCommentLike(
+  async postComment(
     slug: string,
+    body: { userEmail: string; authorName: string; text: string },
+  ): Promise<ApiPostState<GameCommentsResponse>> {
+    return this.post(`${R.GAMES}/${slug}/${R.COMMENTS}`, body, `Comment ${slug} Create`);
+  }
+
+  async toggleCommentLike(
     commentId: string,
     body: { userEmail: string },
-  ): Promise<ApiState<{ data: { isLiked: boolean; likesCount: number } }>> {
-    return this.post(
-      `${R.GAMES}/${slug}/${R.COMMENTS}/${commentId}/like`,
-      body,
-      `Comment ${commentId} Like`,
-    );
+  ): Promise<CommentToggleResponseType> {
+    const res = await this.post<CommentToggleType>(`${R.COMMENTS}/${commentId}/like`, body);
+    return res;
   }
 
   private handleHttpError(response: Response, path: string): string {

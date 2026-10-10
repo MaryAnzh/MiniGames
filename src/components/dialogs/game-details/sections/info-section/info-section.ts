@@ -1,20 +1,18 @@
 import { Component } from '@components';
-import type { ComponentProps, GameCardDataType } from '@types';
+import type {
+  CommentToggleResponseType,
+  CommentToggleType,
+  ComponentProps,
+  GameDetailsType,
+} from '@types';
 import { MetaSection } from '../meta-section/meta-section';
 import { Button, LikeButton, Skeleton, SkeletonText } from '@ui';
 import { PLAY_NOW, LIGHT, SUCCESS } from '@constants';
 import appStore from '@store';
 
 type InfoType = Pick<
-  GameCardDataType,
-  | 'name'
-  | 'shortDescription'
-  | 'category'
-  | 'duration'
-  | 'players'
-  | 'price'
-  | 'likesCount'
-  | 'rating'
+  GameDetailsType,
+  'name' | 'fullDescription' | 'specs' | 'likesCount' | 'isLikedByCurrentUser' | 'rating' | 'slug'
 >;
 
 type InfoSectionProps = Pick<ComponentProps, 'parentNode'> &
@@ -23,38 +21,33 @@ type InfoSectionProps = Pick<ComponentProps, 'parentNode'> &
   };
 
 export class InfoSection extends Component {
-  store: typeof appStore;
-  info: InfoType;
-  isFavorite: boolean = false;
+  private store: typeof appStore;
+  private info: InfoType;
+
   private smallLikeButton?: LikeButton;
   private bigLikeButton?: LikeButton;
 
-  constructor({
-    parentNode,
-    category,
-    duration,
-    name,
-    players,
-    price,
-    shortDescription,
-    rating,
-    likesCount,
-    isSkeleton = false,
-  }: InfoSectionProps) {
+  constructor({ parentNode, isSkeleton = false, ...info }: InfoSectionProps) {
     super({
       parentNode,
       tagName: 'div',
       className: 'game-detail_info',
     });
-
-    this.info = { category, duration, name, players, price, shortDescription, rating, likesCount };
     this.store = appStore;
+    this.info = info;
 
-    this.render(this.info, isSkeleton);
+    this.render(isSkeleton);
   }
 
-  private render(info: InfoType, isSkeleton: boolean) {
-    const { name, shortDescription, category, duration, players, price, rating, likesCount } = info;
+  private render(isSkeleton: boolean) {
+    const {
+      name,
+      fullDescription,
+      specs: { genre: category, duration, players, price },
+      rating,
+      likesCount,
+      isLikedByCurrentUser,
+    } = this.info;
 
     const titleWrap = new Component({
       parentNode: this.node,
@@ -85,6 +78,7 @@ export class InfoSection extends Component {
       rating,
       likesCount,
       isSkeleton,
+      isLikedByCurrentUser,
       onLike: this.handleLike,
     });
     this.smallLikeButton = meta.likeButton;
@@ -103,7 +97,7 @@ export class InfoSection extends Component {
         parentNode: this.node,
         tagName: 'p',
         className: 'game-detail_info_desc',
-        content: shortDescription,
+        content: fullDescription,
       });
     }
 
@@ -195,51 +189,57 @@ export class InfoSection extends Component {
         withText: true,
         fullWidth: true,
         size: 'lg',
-        isFavorite: this.isFavorite,
+        isFavorite: isLikedByCurrentUser,
         callback: this.handleLike,
         disabled: !this.store.isAuth,
+        value: likesCount,
       });
     }
   }
 
-  handleLike = async () => {
+  handleLike = async (): Promise<CommentToggleResponseType> => {
     this.smallLikeButton?.setLoading(true);
     this.bigLikeButton?.setLoading(true);
 
-    const res = await this.store.toggleFavorite(appStore.routeParams.id);
+    const res = await this.store.toggleFavorite(this.info.slug);
 
     if (res.status !== SUCCESS) {
-      const fallback = {
-        isLiked: this.isFavorite,
+      const fallback: CommentToggleType = {
+        isLikedByCurrentUser: this.info.isLikedByCurrentUser,
         likesCount: this.info.likesCount,
       };
 
-      this.smallLikeButton?.setLiked(fallback.isLiked);
+      this.smallLikeButton?.setLiked(fallback.isLikedByCurrentUser);
       this.smallLikeButton?.setCount(fallback.likesCount);
-      this.bigLikeButton?.setLiked(fallback.isLiked);
+      this.bigLikeButton?.setLiked(fallback.isLikedByCurrentUser);
+      this.smallLikeButton?.setAttributes([
+        { attr: 'title', value: fallback.likesCount.toString() },
+      ]);
+      this.bigLikeButton?.setAttributes([{ attr: 'title', value: fallback.likesCount.toString() }]);
 
       this.smallLikeButton?.setLoading(false);
       this.bigLikeButton?.setLoading(false);
 
       this.store.showSnack('Error when send like', 'error');
 
-      return fallback;
+      return { status: SUCCESS, data: fallback };
     }
+    const { isFavorited, likesCount } = res.data;
 
-    const { isFavorited, likesCount } = res.data.data;
-
-    this.isFavorite = isFavorited;
+    this.info.isLikedByCurrentUser = isFavorited;
     this.info.likesCount = likesCount;
 
     this.smallLikeButton?.setLiked(isFavorited);
     this.smallLikeButton?.setCount(likesCount);
     this.bigLikeButton?.setLiked(isFavorited);
+    this.smallLikeButton?.setAttributes([{ attr: 'title', value: likesCount.toString() }]);
+    this.bigLikeButton?.setAttributes([{ attr: 'title', value: likesCount.toString() }]);
 
     this.smallLikeButton?.setLoading(false);
     this.bigLikeButton?.setLoading(false);
 
     this.store.showSnack('Your like send!!!', 'success');
 
-    return { isLiked: isFavorited, likesCount };
+    return { data: { isLikedByCurrentUser: isFavorited, likesCount }, status: SUCCESS };
   };
 }

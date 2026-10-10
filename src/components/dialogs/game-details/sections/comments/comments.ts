@@ -1,21 +1,30 @@
 import { Component } from '@components';
 import type { ComponentProps, GameComment } from '@types';
 import { Button, LikeButton, Skeleton, SkeletonText } from '@ui';
-import { DARK, LIGHT } from '@constants';
-import { arrayFromNumber, getRandomAvatarColor } from '@utils';
+import { APP_ROUTES, DARK, ERROR, LIGHT, SUCCESS } from '@constants';
+import { arrayFromNumber, getInitials, getRandomAvatarColor } from '@utils';
+import appStore from '@store';
 
 type CommentsSectionProps = Pick<ComponentProps, 'parentNode'> & {
   comments: GameComment[];
   isSkeleton?: boolean;
+  navigateTo: (path: string) => void;
+  slug: string;
 };
 
 export class CommentsSection extends Component {
   private comments: GameComment[];
   private textarea!: HTMLTextAreaElement;
+  private sendButton!: Button;
   private isSkeleton: boolean;
   private commentsDefaultCount = 3;
 
-  constructor({ parentNode, comments, isSkeleton }: CommentsSectionProps) {
+  private isAuth: boolean;
+  private userName?: string;
+  private navigateTo: (path: string) => void;
+  private slug: string;
+
+  constructor({ parentNode, comments, isSkeleton, navigateTo, slug }: CommentsSectionProps) {
     super({
       parentNode,
       tagName: 'div',
@@ -24,6 +33,11 @@ export class CommentsSection extends Component {
 
     this.comments = comments;
     this.isSkeleton = Boolean(isSkeleton);
+    this.slug = slug;
+
+    this.isAuth = appStore.isAuth;
+    this.userName = appStore.username;
+    this.navigateTo = navigateTo;
 
     this.render();
   }
@@ -79,7 +93,7 @@ export class CommentsSection extends Component {
         parentNode: newCommentWrap.node,
         tagName: 'div',
         className: 'game-details-comments_new-avatar',
-        content: 'U',
+        content: this.isAuth ? this.userName?.at(0)?.toUpperCase() : 'U',
       });
 
       /* Textarea */
@@ -91,21 +105,35 @@ export class CommentsSection extends Component {
 
       this.textarea = document.createElement('textarea');
       this.textarea.className = 'game-details-comments_textarea';
-      this.textarea.placeholder = 'Write a comment...';
+      this.textarea.placeholder = this.isAuth ? 'Write a comment...' : 'Login to write a comment';
       this.textarea.rows = 1;
 
       this.textarea.addEventListener('input', () => this.autoGrow());
+      this.textarea.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          this.handleSubmit();
+        }
+      });
+
+      if (!this.isAuth) {
+        this.textarea.disabled = true;
+      }
+
       textareaWrap.node.appendChild(this.textarea);
 
       /* Send button */
-      new Button({
+      this.sendButton = new Button({
         parentNode: newCommentWrap.node,
         className: 'game-details-comments_new-send',
         size: 'icon-md',
         color: DARK,
         leftIcon: 'send',
         ariaLabel: 'Send comment',
+        disabled: !this.isAuth,
       });
+
+      this.sendButton.node.onclick = () => this.handleSubmit();
     }
 
     /* COMMENTS LIST */
@@ -119,8 +147,84 @@ export class CommentsSection extends Component {
       arrayFromNumber(this.commentsDefaultCount).forEach(() =>
         this.renderSkeletonComment(list.node),
       );
+    } else if (this.comments.length === 0) {
+      this.renderEmptyState(list.node);
     } else {
       this.comments.forEach((c) => this.renderComment(list.node, c));
+    }
+  }
+
+  private renderEmptyState(parent: HTMLElement) {
+    new Component({
+      parentNode: parent,
+      tagName: 'div',
+      className: 'game-details-comments_empty',
+      content: 'No comments yet. Be the first!',
+    });
+  }
+
+  private validateText(text: string) {
+    const trimmed = text.trim();
+    return trimmed.length >= 1 && trimmed.length <= 500 ? trimmed : null;
+  }
+
+  private lockForm() {
+    this.textarea.disabled = true;
+    this.sendButton.setDisabled(true);
+  }
+
+  private unlockForm() {
+    this.textarea.disabled = !this.isAuth;
+    this.sendButton.setDisabled(!this.isAuth);
+  }
+
+  private async handleSubmit() {
+    if (!this.isAuth) {
+      this.navigateTo(APP_ROUTES.AUTH_LOGIN);
+      appStore.showSnack('Login to write a comment', 'info');
+      return;
+    }
+
+    const text = this.validateText(this.textarea.value);
+    if (!text) {
+      appStore.showSnack('Comment must be 1–500 characters', 'error');
+      return;
+    }
+
+    this.lockForm();
+
+    try {
+      const res = await appStore.postComment(this.slug, text);
+
+      if (res.status !== SUCCESS) {
+        this.unlockForm();
+        appStore.showSnack('Failed to send comment', 'error');
+        return;
+      }
+
+      // success
+      this.textarea.value = '';
+      this.autoGrow();
+
+      await this.refreshComments();
+
+      appStore.showSnack('Comment added', 'success');
+    } catch {
+      this.unlockForm();
+      appStore.showSnack('Unknown error. Comment not sent.', 'error');
+    }
+  }
+
+  private async refreshComments() {
+    const res = await appStore.getGameComments(this.slug, {
+      limit: 5,
+      sort: 'newest',
+    });
+
+    if (res.status === SUCCESS) {
+      this.comments = res.data.data;
+      this.node.replaceChildren();
+      this.render();
     }
   }
 
@@ -207,7 +311,7 @@ export class CommentsSection extends Component {
       parentNode: left.node,
       tagName: 'div',
       className: 'game-details-comments_card-avatar',
-      content: c.authorName.at(0),
+      content: getInitials(c.authorName),
     });
     avatar.node.style.background = `var(${getRandomAvatarColor().token})`;
 
@@ -246,7 +350,21 @@ export class CommentsSection extends Component {
       className: 'game-details-comments_like',
     });
 
-    new LikeButton({ parentNode: likeWrap.node, isIcon: true, value: c.likesCount });
+    new LikeButton({
+      parentNode: likeWrap.node,
+      isIcon: true,
+      value: c.likesCount,
+      isFavorite: c.isLikedByCurrentUser,
+      callback: async () => {
+        if (!this.isAuth) {
+          this.navigateTo(APP_ROUTES.AUTH_LOGIN);
+          appStore.showSnack('Login to like comments', 'info');
+          return { status: ERROR, error: 'Login to like comments' };
+        }
+
+        return await appStore.toggleCommentLike(c.commentId);
+      },
+    });
   }
 
   private autoGrow() {

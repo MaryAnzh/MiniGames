@@ -1,4 +1,4 @@
-import { CUSTOM_EVENTS, CUSTOM_EVENTS as e, RATING_DESC } from '@constants';
+import { CUSTOM_EVENTS, CUSTOM_EVENTS as e, ERROR, RATING_DESC } from '@constants';
 import { type SnackbarPortal } from '@components';
 import type { PageComponentType } from '@pages';
 import { ApiService, AuthService } from '@services';
@@ -88,16 +88,35 @@ class AppStore {
     });
   }
 
-  async toggleFavorite(slug: string) {
+  async postComment(slug: string, text: string) {
+    this.checkSession();
+
+    if (!this.isAuth || !this.userEmail || !this.username) {
+      return {
+        status: ERROR,
+        error: 'User is not authenticated',
+      };
+    }
+
+    const body = {
+      userEmail: this.userEmail,
+      authorName: this.username,
+      text,
+    };
+
+    return this.api.postComment(slug, body);
+  }
+
+  async toggleFavorite(slug: string): Promise<T.GameToggleLikeResponseType> {
     this.checkSession();
     return this.api.toggleFavorite(slug, {
       userEmail: this.userEmail,
     });
   }
 
-  async toggleCommentLike(slug: string, commentId: string) {
+  async toggleCommentLike(commentId: string): Promise<T.CommentToggleResponseType> {
     this.checkSession();
-    return this.api.toggleCommentLike(slug, commentId, {
+    return this.api.toggleCommentLike(commentId, {
       userEmail: this.userEmail,
     });
   }

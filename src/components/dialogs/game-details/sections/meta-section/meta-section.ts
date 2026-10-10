@@ -1,18 +1,14 @@
 import { Component } from '@components';
 import { Icon, LikeButton, Skeleton } from '@ui';
-import type { ComponentProps, GameCardItemType } from '@types';
+import type { CommentToggleResponseType, ComponentProps, GameCardItemType } from '@types';
 import { LIGHT } from '@constants';
 import appStore from '@store';
 
 export type MetaSectionProps = Pick<ComponentProps, 'parentNode'> &
   Pick<GameCardItemType, 'likesCount' | 'rating'> & {
     isSkeleton?: boolean;
-
-    /** callback из InfoSection */
-    onLike?: () => Promise<{
-      isLiked: boolean;
-      likesCount: number;
-    }>;
+    isLikedByCurrentUser: boolean;
+    onLike?: () => Promise<CommentToggleResponseType>;
   };
 
 export class MetaSection extends Component {
@@ -20,7 +16,14 @@ export class MetaSection extends Component {
   isAuth: boolean;
   public likeButton?: LikeButton;
 
-  constructor({ parentNode, likesCount, rating, isSkeleton = false, onLike }: MetaSectionProps) {
+  constructor({
+    parentNode,
+    likesCount,
+    rating,
+    isSkeleton = false,
+    onLike,
+    isLikedByCurrentUser,
+  }: MetaSectionProps) {
     super({
       parentNode,
       tagName: 'div',
@@ -30,10 +33,16 @@ export class MetaSection extends Component {
     this.store = appStore;
     this.isAuth = this.store.isAuth;
 
-    this.render({ rating, likesCount, isSkeleton, onLike });
+    this.render({ rating, likesCount, isSkeleton, onLike, isLikedByCurrentUser });
   }
 
-  private render({ rating, likesCount, isSkeleton, onLike }: Omit<MetaSectionProps, 'parentNode'>) {
+  private render({
+    rating,
+    likesCount,
+    isSkeleton,
+    onLike,
+    isLikedByCurrentUser,
+  }: Omit<MetaSectionProps, 'parentNode'>) {
     const ratingWrap = new Component({
       parentNode: this.node,
       tagName: 'span',
@@ -77,6 +86,7 @@ export class MetaSection extends Component {
       variant: 'empty',
       value: likesCount,
       isIcon: true,
+      isFavorite: isLikedByCurrentUser,
       disabled: !this.isAuth,
       callback: onLike,
     });

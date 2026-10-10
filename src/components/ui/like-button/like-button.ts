@@ -1,4 +1,5 @@
-import { ADD_TO_FAVORITES, LOADING, REMOVE_FROM_FAVORITES } from '@constants';
+import { ADD_TO_FAVORITES, LOADING, YOUR_FAVORITES, SUCCESS } from '@constants';
+import type { CommentToggleResponseType } from '@types';
 import { Button, type ButtonProps } from '@ui';
 
 const CountRefactor = (count: number) => {
@@ -12,17 +13,14 @@ export type LikeButtonProps = ButtonProps & {
   value?: number;
   isSkeleton?: boolean;
   isFavorite?: boolean;
-  callback?: () => Promise<{
-    isLiked: boolean;
-    likesCount: number;
-  }>;
+  callback?: () => Promise<CommentToggleResponseType>;
 };
 
 export class LikeButton extends Button {
-  private isLight = false;
   private withText = false;
   private isFavorite = false;
   private callback?: LikeButtonProps['callback'];
+  private count?: number;
 
   constructor({
     withText,
@@ -40,7 +38,7 @@ export class LikeButton extends Button {
       ariaLabel: props.ariaLabel ?? 'Like this game',
       text: withText
         ? isFavorite
-          ? REMOVE_FROM_FAVORITES
+          ? YOUR_FAVORITES
           : ADD_TO_FAVORITES
         : value !== undefined
           ? CountRefactor(value)
@@ -48,12 +46,13 @@ export class LikeButton extends Button {
       variant: isIcon ? 'empty' : props.variant,
       className: `app-like-button`,
     });
-
     this.withText = Boolean(withText);
     this.isFavorite = Boolean(isFavorite);
-    this.isLight = Boolean(isLight);
     this.callback = callback;
+    this.count = value;
 
+    this.initColor(Boolean(isLight));
+    this.setLiked(Boolean(isFavorite));
     this.setDisabled(disabled);
     this.initAccessibility();
     this.initLogic();
@@ -66,6 +65,7 @@ export class LikeButton extends Button {
       { attr: 'aria-pressed', value: String(this.isFavorite) },
       { attr: 'tabindex', value: '0' },
       { attr: 'data-action', value: 'like' },
+      { attr: 'title', value: `${this.count}` },
     ]);
   }
 
@@ -76,14 +76,24 @@ export class LikeButton extends Button {
       this.setLoading(true);
 
       try {
-        const { isLiked, likesCount } = await this.callback!();
+        const res = await this.callback!();
+        if (res.status === SUCCESS) {
+          const { isLikedByCurrentUser, likesCount } = res.data;
+          this.count = likesCount;
 
-        this.setLiked(isLiked);
-        this.setCount(likesCount);
+          this.setLiked(isLikedByCurrentUser);
+          this.setCount(likesCount);
+          this.setAttributes([{ attr: 'title', value: likesCount.toString() }]);
+        }
       } finally {
         this.setLoading(false);
       }
     };
+  }
+  private initColor(isLight: boolean) {
+    if (isLight) {
+      this.node.classList.add('app-like-button_light');
+    }
   }
 
   public setLoading(isLoading: boolean) {
@@ -99,7 +109,7 @@ export class LikeButton extends Button {
       this.setDisabled(false);
 
       if (this.withText) {
-        super.setText(this.isFavorite ? REMOVE_FROM_FAVORITES : ADD_TO_FAVORITES);
+        super.setText(this.isFavorite ? YOUR_FAVORITES : ADD_TO_FAVORITES);
       }
     }
   }
@@ -108,14 +118,13 @@ export class LikeButton extends Button {
     this.isFavorite = isLiked;
 
     this.node.setAttribute('aria-pressed', String(isLiked));
-    this.node.style.color = isLiked
-      ? 'var(--like)'
-      : this.isLight
-        ? 'var(--white)'
-        : 'var(--on-primary)';
-
+    if (isLiked) {
+      this.node.classList.add('app-like-button_liked');
+    } else {
+      this.node.classList.remove('app-like-button_liked');
+    }
     if (this.withText) {
-      super.setText(isLiked ? REMOVE_FROM_FAVORITES : ADD_TO_FAVORITES);
+      super.setText(isLiked ? YOUR_FAVORITES : ADD_TO_FAVORITES);
     }
   }
 
