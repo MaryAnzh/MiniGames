@@ -1,11 +1,15 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { appStore, APP_SESSION_KEY, SESSION_LIFETIME_MS } from '@store';
 import { AuthService } from '@services';
+import { appEvents } from '@utils';
+import type { SessionType } from 'src/store/types';
 
 describe('AppStore: Session Management', () => {
   beforeEach(() => {
     localStorage.clear();
     vi.restoreAllMocks();
+
+    vi.spyOn(appEvents, 'emit').mockImplementation(() => {});
   });
 
   const createValidSession = () => ({
@@ -27,8 +31,7 @@ describe('AppStore: Session Management', () => {
   });
 
   it('isValidSession returns false for invalid session object', () => {
-    const session = { email: 123, expiresAt: 'wrong' };
-    // @ts-ignore
+    const session = { email: 123, expiresAt: 'wrong' } as unknown as SessionType;
     expect(appStore['isValidSession'](session)).toBe(false);
   });
 

@@ -1,12 +1,15 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { appStore, APP_SESSION_KEY } from '@store';
 import { AuthService } from '@services';
+import { appEvents } from '@utils';
 
 describe('AppStore: Auth Flow', () => {
   beforeEach(() => {
     localStorage.clear();
     vi.restoreAllMocks();
     appStore['clearSession']();
+
+    vi.spyOn(appEvents, 'emit').mockImplementation(() => {});
   });
 
   const authData = {
