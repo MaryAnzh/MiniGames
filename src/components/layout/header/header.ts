@@ -5,7 +5,7 @@ import { BurgerMenu, Button, Logo, Navigate } from '@ui';
 import type { AuthTabType } from '@types';
 import { CUSTOM_EVENTS, LIGHT, LOGIN, REGISTER } from '@constants';
 import { appEvents } from '@utils';
-import appStore from '@store';
+import { appStore } from '@store';
 import { Avatar } from 'src/components/ui/avatar/avatar';
 
 type HeaderProps = {

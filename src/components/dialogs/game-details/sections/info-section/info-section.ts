@@ -8,7 +8,7 @@ import type {
 import { MetaSection } from '../meta-section/meta-section';
 import { Button, LikeButton, Skeleton, SkeletonText } from '@ui';
 import { PLAY_NOW, LIGHT, SUCCESS } from '@constants';
-import appStore from '@store';
+import { appStore } from '@store';
 
 type InfoType = Pick<
   GameDetailsType,

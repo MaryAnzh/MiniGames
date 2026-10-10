@@ -3,7 +3,7 @@ import { Component } from '@components';
 import { Button } from '@ui';
 import type { AuthFormType, ComponentProps } from '@types';
 import { Router } from '@route';
-import appStore from '@store';
+import { appStore } from '@store';
 
 type BurgerMenuProps = Pick<ComponentProps, 'parentNode'> & {
   isAuth: boolean;

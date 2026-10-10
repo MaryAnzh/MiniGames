@@ -1,6 +1,6 @@
 import { Component } from '@components';
 import { SUCCESS } from '@constants';
-import appStore from '@store';
+import { appStore } from '@store';
 import type { GameComment, GameDetailsType } from '@types';
 
 import { CommentsSection, HeroSection, InfoSection, RecordsSection } from './sections';

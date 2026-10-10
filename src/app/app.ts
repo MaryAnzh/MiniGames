@@ -3,7 +3,7 @@ import * as C from '@constants';
 import { APP_ROUTES } from '@constants';
 
 import { Router } from '@route';
-import appStore from '@store';
+import { appStore } from '@store';
 import type { AuthTabType } from '@types';
 
 export class App {

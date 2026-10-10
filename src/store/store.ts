@@ -316,5 +316,4 @@ class AppStore {
   }
 }
 
-const appStore = new AppStore();
-export default appStore;
+export const appStore = new AppStore();

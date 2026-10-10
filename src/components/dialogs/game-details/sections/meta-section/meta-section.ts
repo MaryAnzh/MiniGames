@@ -2,7 +2,7 @@ import { Component } from '@components';
 import { Icon, LikeButton, Skeleton } from '@ui';
 import type { CommentToggleResponseType, ComponentProps, GameCardItemType } from '@types';
 import { LIGHT } from '@constants';
-import appStore from '@store';
+import { appStore } from '@store';
 
 export type MetaSectionProps = Pick<ComponentProps, 'parentNode'> &
   Pick<GameCardItemType, 'likesCount' | 'rating'> & {

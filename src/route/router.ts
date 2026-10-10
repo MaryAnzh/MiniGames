@@ -2,7 +2,7 @@ import { AuthDialog, type Portal } from '@components';
 import { APP_ROUTES, LOGIN } from '@constants';
 import { HomePage, CommunityPage, LibraryPage, TournamentsPage, NotFoundPage } from '@pages';
 import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
-import appStore from '@store';
+import { appStore } from '@store';
 import type { AuthTabType, FirebaseUserResponseType } from '@types';
 
 const { HOME, COMMUNITY, GAME, LIBRARY, TOURNAMENTS, AUTH } = APP_ROUTES;

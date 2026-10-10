@@ -3,7 +3,7 @@ import type { ComponentProps, GameComment } from '@types';
 import { Button, LikeButton, Skeleton, SkeletonText } from '@ui';
 import { APP_ROUTES, DARK, ERROR, LIGHT, SUCCESS } from '@constants';
 import { arrayFromNumber, getInitials, getRandomAvatarColor } from '@utils';
-import appStore from '@store';
+import { appStore } from '@store';
 
 type CommentsSectionProps = Pick<ComponentProps, 'parentNode'> & {
   comments: GameComment[];

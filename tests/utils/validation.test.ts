@@ -20,7 +20,7 @@ describe('Utils: Validation auth form', () => {
   test('User name: validateUsername', () => {
     expect(V.validateUsername('')).toBe(C.USERNAME_IS_REQUIRED);
     expect(V.validateUsername('a')).toBe(C.NAME_LENGTH_MESSAGE);
-    expect(V.validateUsername('ab')).toBe(C.USERNAME_CHECK_MESSAGE); // must start with uppercase
+    expect(V.validateUsername('ab')).toBe(C.USERNAME_CHECK_MESSAGE);
     expect(V.validateUsername('John')).toBe('');
     expect(V.validateUsername('John123')).toBe('');
   });

@@ -1,7 +1,7 @@
 import { Component } from '@components';
 import type { ComponentProps } from '@types';
 import { Pagination } from '@ui';
-import appStore from '@store';
+import { appStore } from '@store';
 import { appEvents } from '@utils';
 
 import { LibraryIntro, LibraryFilters, LibraryCards } from './sections';

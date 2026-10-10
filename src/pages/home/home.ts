@@ -2,7 +2,7 @@ import { Component } from '@components';
 import type { ComponentProps, GameCardItemType, ResponseStatusType } from '@types';
 
 import { HeroSection, SliderSection, GameDeveloperSection, TableSection } from './components';
-import appStore from '@store';
+import { appStore } from '@store';
 import { APP_ROUTES, EMPTY, ERROR, LOADING, SUCCESS } from '@constants';
 
 type HomePageProps = Pick<ComponentProps, 'parentNode'> & { navigate: (path: string) => void };
