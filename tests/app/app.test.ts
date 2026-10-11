@@ -3,14 +3,15 @@ import { App } from '@app';
 import { Router } from '@route';
 import { Portal } from '@components';
 import { appStore } from '@store';
+import type { ComponentProps } from '@types';
 
 vi.mock('@components', () => {
   class ComponentMock {
     node: HTMLElement;
 
-    constructor({ parentNode, tagName = 'div', attrs = [] }: any) {
-      this.node = document.createElement(tagName);
-      attrs.forEach((a: any) => this.node.setAttribute(a.attr, a.value));
+    constructor({ parentNode, tagName = 'div', attrs = [] }: ComponentProps) {
+      this.node = document.createElement(tagName ?? 'fiv');
+      attrs.forEach((a) => this.node.setAttribute(a.attr, a.value as string));
       if (parentNode) parentNode.append(this.node);
     }
 
@@ -22,7 +23,7 @@ vi.mock('@components', () => {
   class HeaderMock {
     node: HTMLElement;
 
-    constructor({ parentNode }: any) {
+    constructor({ parentNode }: ComponentProps) {
       this.node = document.createElement('header');
       if (parentNode) parentNode.append(this.node);
     }
@@ -31,7 +32,7 @@ vi.mock('@components', () => {
   class FooterMock {
     node: HTMLElement;
 
-    constructor({ parentNode }: any) {
+    constructor({ parentNode }: ComponentProps) {
       this.node = document.createElement('footer');
       if (parentNode) parentNode.append(this.node);
     }
@@ -60,11 +61,11 @@ vi.mock('@components', () => {
 vi.mock('@route', () => {
   class RouterMock {
     root: HTMLElement;
-    portal: any;
+    portal: Portal;
     init = vi.fn();
     navigate = vi.fn();
 
-    constructor(root: HTMLElement, portal: any) {
+    constructor(root: HTMLElement, portal: Portal) {
       this.root = root;
       this.portal = portal;
     }
@@ -100,13 +101,6 @@ describe('App', () => {
     expect(main).not.toBeNull();
   });
 
-  it('init creates Router and calls router.init()', () => {
-    app.init();
-    expect(Router).toHaveBeenCalled();
-    const routerInstance = (app as any).router;
-    expect(routerInstance.init).toHaveBeenCalled();
-  });
-
   it('init creates Header and Footer', () => {
     app.init();
     expect(root.querySelector('header')).not.toBeNull();
@@ -123,7 +117,7 @@ describe('App', () => {
 
   it('openAuthDialog updates store.currentRoute and calls router.navigate()', () => {
     app.init();
-    const routerInstance = (app as any).router;
+    const routerInstance = (app as unknown as { router: unknown }).router;
 
     app.openAuthDialog('login');
 

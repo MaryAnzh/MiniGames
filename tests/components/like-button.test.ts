@@ -17,7 +17,7 @@ vi.mock('@components', async (importOriginal) => {
       }
 
       if (attrs) {
-        attrs.forEach((a: any) => this.node.setAttribute(a.attr, a.value));
+        attrs.forEach((a) => this.node.setAttribute(a.attr, a.value as string));
       }
 
       if (content) {
@@ -31,7 +31,7 @@ vi.mock('@components', async (importOriginal) => {
       this.node.textContent = text;
     }
 
-    setAttributes(attrs: any[]) {
+    setAttributes(attrs: { attr: string; value: string | null }[]) {
       attrs.forEach((a) => {
         if (a.value === null) {
           this.node.removeAttribute(a.attr);
