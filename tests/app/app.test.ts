@@ -117,7 +117,7 @@ describe('App', () => {
 
   it('openAuthDialog updates store.currentRoute and calls router.navigate()', () => {
     app.init();
-    const routerInstance = (app as unknown as { router: unknown }).router;
+    const routerInstance = (app as unknown as { router: Router }).router;
 
     app.openAuthDialog('login');
 
