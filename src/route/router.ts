@@ -31,7 +31,7 @@ export class Router {
     this.handleRoute();
   }
 
-  private matchRoute(pathname: string) {
+  matchRoute(pathname: string) {
     for (const route of this.routes) {
       const routeParts = route.path.split('/');
       const pathParts = pathname.split('/');
@@ -55,7 +55,7 @@ export class Router {
     return { view: NotFoundPage, params: {} };
   }
 
-  private async handleRoute() {
+  async handleRoute() {
     const url = new URL(window.location.href);
     let pathname = url.pathname.replace(/\/+$/, '');
     const searchParams = Object.fromEntries(url.searchParams.entries());
@@ -151,7 +151,7 @@ export class Router {
     this.store.currentPageInstance = pageInstance;
   }
 
-  private async handleAuthSubmit(
+  async handleAuthSubmit(
     tab: AuthTabType,
     email: string,
     password: string,
@@ -182,7 +182,7 @@ export class Router {
     this.navigate(HOME);
   }
 
-  private async handleGoogleSubmit(dialog: AuthDialog) {
+  async handleGoogleSubmit(dialog: AuthDialog) {
     dialog.setPending(true);
     this.portal.lock();
 

@@ -3,7 +3,13 @@ import { InfoSection, MetaSection } from 'src/components/dialogs/game-details/se
 import { SUCCESS } from '@constants';
 import { appStore } from '@store';
 import type { ComponentProps } from '@types';
-import type { ButtonProps, LikeButtonProps, SkeletonProps, SkeletonTextProps } from '@ui';
+import type {
+  ButtonProps,
+  IconProps,
+  LikeButtonProps,
+  SkeletonProps,
+  SkeletonTextProps,
+} from '@ui';
 
 vi.mock('@store', () => ({
   appStore: {
@@ -96,9 +102,9 @@ vi.mock('@ui', () => {
 
     Icon: class {
       node = document.createElement('span');
-      constructor({ parentNode }: any) {
+      constructor({ parentNode }: IconProps) {
         this.node.className = 'icon-star';
-        parentNode.append(this.node);
+        parentNode?.append(this.node);
       }
     },
   };

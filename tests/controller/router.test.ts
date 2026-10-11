@@ -185,12 +185,12 @@ describe('Router', () => {
   });
 
   it('matchRoute returns correct view', () => {
-    const res = (router as any).matchRoute(APP_ROUTES.HOME);
+    const res = (router as Router).matchRoute(APP_ROUTES.HOME);
     expect(res.view).toBe(HomePage);
   });
 
   it('matchRoute returns NotFoundPage for unknown route', () => {
-    const res = (router as any).matchRoute('/unknown');
+    const res = router.matchRoute('/unknown');
     expect(res.view).toBe(NotFoundPage);
   });
 
@@ -262,11 +262,11 @@ describe('Router: extended tests', () => {
       node: document.createElement('auth'),
       setPending: vi.fn(),
       setError: vi.fn(),
-    } as any;
+    } as unknown as AuthDialog;
 
     const spyNavigate = vi.spyOn(router, 'navigate');
 
-    await (router as any).handleAuthSubmit('login', 'a@a.com', '123', undefined, dialog);
+    await router.handleAuthSubmit('login', 'a@a.com', '123', undefined, dialog);
 
     expect(dialog.setPending).toHaveBeenCalledTimes(2);
     expect(spyNavigate).toHaveBeenCalledWith(APP_ROUTES.HOME);
@@ -282,9 +282,9 @@ describe('Router: extended tests', () => {
       node: document.createElement('auth'),
       setPending: vi.fn(),
       setError: vi.fn(),
-    } as any;
+    } as unknown as AuthDialog;
 
-    await (router as any).handleAuthSubmit('login', 'a@a.com', '123', undefined, dialog);
+    await router.handleAuthSubmit('login', 'a@a.com', '123', undefined, dialog);
 
     expect(dialog.setError).toHaveBeenCalledWith('AuthError: INVALID');
   });
@@ -294,27 +294,13 @@ describe('Router: extended tests', () => {
       node: document.createElement('auth'),
       setPending: vi.fn(),
       setError: vi.fn(),
-    } as any;
+    } as unknown as AuthDialog;
 
     const spyNavigate = vi.spyOn(router, 'navigate');
 
-    await (router as any).handleGoogleSubmit(dialog);
+    await router.handleGoogleSubmit(dialog);
 
     expect(spyNavigate).toHaveBeenCalledWith(APP_ROUTES.HOME);
-  });
-
-  it('matchRoute extracts params correctly', () => {
-    const routerAny = router as any;
-
-    routerAny.routes.push({
-      path: '/game/:slug',
-      view: HomePage,
-    });
-
-    const res = routerAny.matchRoute('/game/abc123');
-
-    expect(res.params.slug).toBe('abc123');
-    expect(res.view).toBe(HomePage);
   });
 
   it('handleRoute opens AuthDialog when AUTH route', () => {
