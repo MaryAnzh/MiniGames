@@ -10,7 +10,7 @@ export class App {
   private root: HTMLElement;
   private router: Router | null = null;
   store: typeof appStore;
-  private portal!: Portal;
+  portal!: Portal;
 
   constructor(root: HTMLElement) {
     this.root = root;
