@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Button } from '@ui';
-import { Component } from '@components';
 import type { ComponentProps } from '@types';
 
 vi.mock('@components', async (importOriginal) => {

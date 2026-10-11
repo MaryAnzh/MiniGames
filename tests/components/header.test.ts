@@ -144,7 +144,7 @@ describe('Header', () => {
   let root: HTMLElement;
   let router: Router;
   let portal: Portal;
-  let onOpenAuthDialog: ReturnType<typeof vi.fn>;
+  let onOpenAuthDialog: (tab: 'login' | 'register') => void;
 
   beforeEach(() => {
     root = document.createElement('div');
@@ -207,8 +207,8 @@ describe('Header', () => {
       parentNode: root,
       router,
       portal,
-      onOpenAuthDialog,
       isAuth: false,
+      onOpenAuthDialog,
     });
 
     root.querySelector('.header_signup_btn')!.dispatchEvent(new Event('click'));
