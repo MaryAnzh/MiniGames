@@ -5,7 +5,7 @@ import * as C from '@constants';
 import { Button } from '@ui';
 import type { Router } from '@route';
 
-const FOOTER_LINKS = [
+export const FOOTER_LINKS = [
   { title: C.EXPLORE, list: C.FOOTER_NAV },
   { title: C.COMPANY, list: C.APP_COMPANY },
 ];

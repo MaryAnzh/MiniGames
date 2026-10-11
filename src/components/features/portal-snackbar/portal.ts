@@ -27,12 +27,9 @@ export class SnackbarPortal extends Component {
       },
     });
 
-    const timer = window.setTimeout(
-      () => {
-        this.remove(snack);
-      },
-      5 * 60 * 1000,
-    );
+    const timer = window.setTimeout(() => {
+      this.remove(snack);
+    }, 5000);
 
     this.snacks.push({ snack, timer });
     this.animateIn(snack.node);
