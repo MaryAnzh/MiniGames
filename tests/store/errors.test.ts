@@ -107,7 +107,6 @@ describe('AppStore: Error Handling', () => {
   });
 
   it('postComment handles ApiService error', async () => {
-    // создаём валидную сессию
     localStorage.setItem(
       APP_SESSION_KEY,
       JSON.stringify({
@@ -117,11 +116,11 @@ describe('AppStore: Error Handling', () => {
       }),
     );
 
-    // восстанавливаем сессию
     await appStore['restoreSession']();
 
-    // мок ошибки API
-    (appStore['api'].postComment as any).mockRejectedValue(new Error('API failure'));
+    (appStore['api'].postComment as ReturnType<typeof vi.fn>).mockRejectedValue(
+      new Error('API failure'),
+    );
 
     await expect(appStore.postComment('slug', 'hello')).rejects.toThrow('API failure');
   });

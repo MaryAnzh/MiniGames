@@ -13,13 +13,12 @@ export default [
         sourceType: 'module',
       },
     },
+
     plugins: {
       '@typescript-eslint': tsPlugin,
       unicorn,
     },
-    linterOptions: {
-      noInlineConfig: true,
-    },
+
     rules: {
       'no-console': 'warn',
 
@@ -31,6 +30,36 @@ export default [
       'unicorn/no-null': 'off',
       'unicorn/prefer-node-protocol': 'warn',
       'unicorn/prefer-modern-dom-apis': 'warn',
+    },
+  },
+
+  {
+    files: ['tests/**/*.ts'],
+
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+
+      globals: {
+        describe: 'readonly',
+        it: 'readonly',
+        expect: 'readonly',
+        vi: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+      },
+    },
+
+    plugins: {
+      '@typescript-eslint': tsPlugin,
+    },
+
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
     },
   },
 ];

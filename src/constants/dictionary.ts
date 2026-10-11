@@ -22,6 +22,11 @@ export const {
   USER,
   ADD_TO_FAVORITES,
   YOUR_FAVORITES,
+  LOGIN_SUCCESSFUL,
+  REGISTRATION_SUCCESSFUL,
+  LOGIN_WITH_GOOGLE,
+  LOGGED_OUT,
+  SESSION_HAS_EXPIRED,
 } = {
   APP: 'app',
   OPEN_SELECT: 'Open select',
@@ -46,4 +51,9 @@ export const {
   USER: 'user',
   ADD_TO_FAVORITES: 'Add to Favorites',
   YOUR_FAVORITES: 'YOUr favorites',
+  LOGIN_SUCCESSFUL: 'Login successful',
+  REGISTRATION_SUCCESSFUL: 'Registration successful',
+  LOGIN_WITH_GOOGLE: 'Your login with Google!',
+  LOGGED_OUT: 'Logged out',
+  SESSION_HAS_EXPIRED: 'Your session has expired. Please sign in again.',
 } as const;

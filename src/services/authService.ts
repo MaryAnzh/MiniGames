@@ -17,6 +17,15 @@ import type {
 
 import type { FirebaseError } from 'firebase/app';
 import type { SnackbarPortal } from '@components';
+import {
+  ERROR,
+  LOGGED_OUT,
+  LOGIN_SUCCESSFUL,
+  LOGIN_WITH_GOOGLE,
+  REGISTRATION_SUCCESSFUL,
+  SESSION_HAS_EXPIRED,
+  SUCCESS,
+} from '@constants';
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -31,7 +40,7 @@ export class AuthService {
     try {
       const cred = await signInWithPopup(firebaseAuth, googleProvider);
 
-      this.snackbar.show('Your login with Google!', 'success');
+      this.snackbar.show(LOGIN_WITH_GOOGLE, SUCCESS);
       return {
         ok: true,
         user: cred.user as FirebaseUserDataType,
@@ -59,7 +68,7 @@ export class AuthService {
         this.snackbar.show(err.message ?? 'Update userName failed', 'error');
       }
 
-      this.snackbar.show('Registration successful', 'success');
+      this.snackbar.show(REGISTRATION_SUCCESSFUL, SUCCESS);
       const user = cred.user as FirebaseUserDataType;
 
       return {
@@ -78,7 +87,7 @@ export class AuthService {
     try {
       const cred = await signInWithEmailAndPassword(firebaseAuth, email, password);
 
-      this.snackbar.show('Login successful', 'success');
+      this.snackbar.show(LOGIN_SUCCESSFUL, SUCCESS);
       const user = <FirebaseUserDataType>cred.user;
 
       return {
@@ -97,15 +106,12 @@ export class AuthService {
     try {
       await signOut(firebaseAuth);
 
-      this.snackbar.show(
-        isSessionExpired ? 'Your session has expired. Please sign in again.' : 'Logged out',
-        'info',
-      );
+      this.snackbar.show(isSessionExpired ? SESSION_HAS_EXPIRED : LOGGED_OUT, 'info');
       return { ok: true };
     } catch (e) {
       const err = e as FirebaseError;
       const message = err ? `${err.name}: ${err.code}` : 'Login failed';
-      this.snackbar.show(message ?? 'Logout failed', 'error');
+      this.snackbar.show(message ?? LOGGED_OUT, ERROR);
       return { ok: false, error: err };
     }
   }
