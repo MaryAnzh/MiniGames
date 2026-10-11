@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { Snackbar } from '@ui';
+import { Snackbar, type ButtonProps, type IconProps } from '@ui';
 import type { ComponentProps } from '@types';
 
 vi.mock('@components', async (importOriginal) => {
@@ -16,7 +16,7 @@ vi.mock('@components', async (importOriginal) => {
       }
 
       if (attrs) {
-        attrs.forEach((a: any) => this.node.setAttribute(a.attr, a.value));
+        attrs.forEach((a) => this.node.setAttribute(a.attr, a.value as string));
       }
 
       if (content) {
@@ -42,8 +42,8 @@ vi.mock('@ui', async (importOriginal) => {
 
   class IconMock {
     node = document.createElement('span');
-    constructor({ parentNode, icon, className }: any) {
-      this.node.className = className ?? '';
+    constructor({ parentNode, icon, className }: IconProps) {
+      this.node.className = className ? (className as string) : '';
       this.node.setAttribute('data-icon', icon);
       parentNode?.append(this.node);
     }
@@ -51,7 +51,7 @@ vi.mock('@ui', async (importOriginal) => {
 
   class ButtonMock {
     node = document.createElement('button');
-    constructor({ parentNode, leftIcon, className, ariaLabel }: any) {
+    constructor({ parentNode, leftIcon, className, ariaLabel }: ButtonProps) {
       this.node.className = className ?? '';
       this.node.setAttribute('data-left-icon', leftIcon ?? '');
       if (ariaLabel) this.node.setAttribute('aria-label', ariaLabel);
@@ -71,7 +71,7 @@ vi.mock('@ui', async (importOriginal) => {
 
 describe('Snackbar', () => {
   let root: HTMLElement;
-  let onClose: any;
+  let onClose: () => {};
 
   beforeEach(() => {
     root = document.createElement('div');

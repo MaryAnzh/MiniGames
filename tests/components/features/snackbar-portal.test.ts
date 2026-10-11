@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { SnackbarPortal } from '@components';
 import type { ComponentProps } from '@types';
+import type { SnackbarProps } from '@ui';
 
 vi.mock('@components', async (importOriginal) => {
   const actual = await importOriginal();
@@ -16,7 +17,7 @@ vi.mock('@components', async (importOriginal) => {
       }
 
       if (attrs) {
-        attrs.forEach((a: any) => this.node.setAttribute(a.attr, a.value));
+        attrs.forEach((a) => this.node.setAttribute(a.attr, a.value as string));
       }
 
       if (content) {
@@ -45,7 +46,7 @@ vi.mock('@ui', async (importOriginal) => {
     inner: HTMLElement;
     onClose?: () => void;
 
-    constructor({ parentNode, message, type, onClose }: any) {
+    constructor({ parentNode, message, type, onClose }: SnackbarProps) {
       this.node = document.createElement('div');
       this.node.className = 'snackbar-root';
 

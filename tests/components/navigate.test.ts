@@ -4,6 +4,7 @@ import { APP_PAGES, CUSTOM_EVENTS as e } from '@constants';
 import { appEvents } from '@utils';
 import type { Router } from '@route';
 import { appStore } from '@store';
+import type { ComponentProps } from '@types';
 
 vi.mock('@store', () => ({
   appStore: {
@@ -15,12 +16,12 @@ vi.mock('@components', () => {
   return {
     Component: class {
       node: HTMLElement;
-      constructor({ parentNode, tagName = 'div', className, content }: any) {
-        this.node = document.createElement(tagName);
+      constructor({ parentNode, tagName = 'div', className, content }: ComponentProps) {
+        this.node = document.createElement(tagName ?? 'div');
         if (className) {
           this.node.className = Array.isArray(className) ? className.join(' ') : className;
         }
-        if (content) this.node.textContent = content;
+        if (content) this.node.textContent = content ? (content as string) : '';
         parentNode?.append(this.node);
       }
     },

@@ -4,7 +4,7 @@ import { Skeleton } from '@ui';
 import { LIGHT } from '@constants';
 import { arrayFromNumber } from '@utils';
 
-type RecordsSectionProps = Pick<ComponentProps, 'parentNode'> & {
+export type RecordsSectionProps = Pick<ComponentProps, 'parentNode'> & {
   records: TopRecordsType[];
   isSkeleton?: boolean;
 };

@@ -8,7 +8,7 @@ import type { AuthTabType } from '@types';
 
 export class App {
   private root: HTMLElement;
-  private router: Router | null = null;
+  router: Router | null = null;
   store: typeof appStore;
   portal!: Portal;
 

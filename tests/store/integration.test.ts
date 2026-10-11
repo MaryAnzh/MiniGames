@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi, type Mock } from 'vitest';
 import { appStore, APP_SESSION_KEY } from '@store';
 import { ERROR } from '@constants';
 
@@ -27,7 +27,7 @@ describe('AppStore: Error Handling', () => {
   it('restoreSession handles invalid JSON in localStorage', async () => {
     localStorage.setItem(APP_SESSION_KEY, 'INVALID_JSON');
 
-    const logoutSpy = appStore['auth'].logout as any;
+    const logoutSpy = appStore['auth'].logout as Mock;
     logoutSpy.mockResolvedValue({ ok: true });
 
     await appStore['restoreSession']();
@@ -40,7 +40,7 @@ describe('AppStore: Error Handling', () => {
   it('restoreSession handles invalid session shape', async () => {
     localStorage.setItem(APP_SESSION_KEY, JSON.stringify({ email: 123 }));
 
-    const logoutSpy = appStore['auth'].logout as any;
+    const logoutSpy = appStore['auth'].logout as Mock;
     logoutSpy.mockResolvedValue({ ok: true });
 
     await appStore['restoreSession']();
@@ -59,7 +59,7 @@ describe('AppStore: Error Handling', () => {
       }),
     );
 
-    const logoutSpy = appStore['auth'].logout as any;
+    const logoutSpy = appStore['auth'].logout as Mock;
     logoutSpy.mockResolvedValue({ ok: true });
 
     await appStore['restoreSession']();
@@ -72,7 +72,7 @@ describe('AppStore: Error Handling', () => {
   it('checkSession handles invalid JSON', async () => {
     localStorage.setItem(APP_SESSION_KEY, 'INVALID');
 
-    const logoutSpy = appStore['auth'].logout as any;
+    const logoutSpy = appStore['auth'].logout as Mock;
     logoutSpy.mockResolvedValue({ ok: true });
 
     const result = await appStore.checkSession();
@@ -84,7 +84,7 @@ describe('AppStore: Error Handling', () => {
   it('checkSession handles invalid session shape', async () => {
     localStorage.setItem(APP_SESSION_KEY, JSON.stringify({ email: 123 }));
 
-    const logoutSpy = appStore['auth'].logout as any;
+    const logoutSpy = appStore['auth'].logout as Mock;
     logoutSpy.mockResolvedValue({ ok: true });
 
     const result = await appStore.checkSession();
@@ -103,7 +103,7 @@ describe('AppStore: Error Handling', () => {
   });
 
   it('getGameDetails handles ApiService error', async () => {
-    const apiSpy = appStore['api'].getGameDetails as any;
+    const apiSpy = appStore['api'].getGameDetails as Mock;
     apiSpy.mockRejectedValue(new Error('API failure'));
 
     vi.spyOn(appStore, 'checkSession').mockResolvedValue(true);
@@ -118,7 +118,7 @@ describe('AppStore: Error Handling', () => {
   });
 
   it('logout handles AuthService error', async () => {
-    const logoutSpy = appStore['auth'].logout as any;
+    const logoutSpy = appStore['auth'].logout as Mock;
     logoutSpy.mockRejectedValue(new Error('Logout failed'));
 
     await expect(appStore.logout()).rejects.toThrow('Logout failed');

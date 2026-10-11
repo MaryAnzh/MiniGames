@@ -4,7 +4,7 @@ import type { ComponentProps } from '@types';
 export type SpinnerSize = 'sm' | 'md' | 'lg';
 export type SpinnerColor = 'primary' | 'dark' | 'light';
 
-type SpinnerProps = Pick<ComponentProps, 'parentNode'> & {
+export type SpinnerProps = Pick<ComponentProps, 'parentNode'> & {
   size?: SpinnerSize;
   color?: SpinnerColor;
   className?: string;

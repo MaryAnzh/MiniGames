@@ -3,7 +3,7 @@ import { arrayFromNumber } from '@utils';
 import { Component } from 'src/components/component';
 import { LIGHT } from '@constants';
 
-type SkeletonTextProps = Pick<ComponentProps, 'parentNode'> & {
+export type SkeletonTextProps = Pick<ComponentProps, 'parentNode'> & {
   columns?: number;
   rows?: number;
   variant?: 'one' | 'multi';

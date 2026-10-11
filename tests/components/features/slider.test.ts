@@ -106,8 +106,8 @@ describe('Components: Slider Controller', () => {
 
 describe('Components: Slider component', () => {
   let root: HTMLElement;
-  let slides: any[];
-  let openDetails: any;
+  let slides: GameCardItemType[];
+  let openDetails: () => void;
 
   beforeEach(() => {
     root = document.createElement('div');
@@ -213,7 +213,7 @@ describe('Components: Slider component', () => {
       openDetails,
     });
 
-    const animateSpy = vi.spyOn(slider as any, 'animate');
+    const animateSpy = vi.spyOn(slider as Slider, 'animate');
 
     slider.animateNext();
 
@@ -228,7 +228,7 @@ describe('Components: Slider component', () => {
       openDetails,
     });
 
-    const animateSpy = vi.spyOn(slider as any, 'animate');
+    const animateSpy = vi.spyOn(slider as Slider, 'animate');
 
     slider.animatePrev();
 
@@ -245,7 +245,7 @@ describe('Components: Slider component', () => {
       openDetails,
     });
 
-    const renderSpy = vi.spyOn(slider as any, 'render');
+    const renderSpy = vi.spyOn(slider as Slider, 'render');
 
     window.dispatchEvent(new Event('resize'));
     vi.advanceTimersByTime(200);

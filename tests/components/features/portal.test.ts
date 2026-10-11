@@ -16,7 +16,7 @@ vi.mock('@components', async (importOriginal) => {
       }
 
       if (attrs) {
-        attrs.forEach((a: any) => this.node.setAttribute(a.attr, a.value));
+        attrs.forEach((a) => this.node.setAttribute(a.attr, a.value as string));
       }
 
       if (content) {
@@ -40,7 +40,7 @@ vi.mock('@components', async (importOriginal) => {
 describe('Components: Portal', () => {
   let content: HTMLElement;
   let portal: Portal;
-  let onClose: any;
+  let onClose: () => void;
 
   beforeEach(() => {
     content = document.createElement('div');

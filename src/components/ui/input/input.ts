@@ -5,7 +5,7 @@ import { INPUT_TYPES } from '@constants';
 
 const { PASSWORD, TEXT } = INPUT_TYPES;
 
-type InputProps = {
+export type InputProps = {
   parentNode: HTMLElement;
   label: string;
   placeholder: string;

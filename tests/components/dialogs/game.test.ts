@@ -2,6 +2,13 @@ import { describe, it, expect, beforeEach, vi, type Mock } from 'vitest';
 import { GameDetailsDialog } from '@components';
 import { SUCCESS } from '@constants';
 import { appStore } from '@store';
+import type {
+  CommentsSectionProps,
+  InfoSectionProps,
+  MetaSectionProps,
+  RecordsSectionProps,
+} from 'src/components/dialogs/game-details/sections';
+import type { ButtonProps, LikeButtonProps } from '@ui';
 
 vi.mock('@store', () => {
   return {
@@ -38,7 +45,7 @@ vi.mock('src/components/dialogs/game-details/sections', async (importOriginal) =
     InfoSection: class {
       node = document.createElement('div');
 
-      constructor(props: any) {
+      constructor(props: InfoSectionProps) {
         const { parentNode, isSkeleton, name, fullDescription } = props;
 
         this.node.className = 'info-section';
@@ -63,45 +70,45 @@ vi.mock('src/components/dialogs/game-details/sections', async (importOriginal) =
           this.node.append(title, desc);
         }
 
-        parentNode.append(this.node);
+        parentNode?.append(this.node);
       }
     },
 
     RecordsSection: class {
       node = document.createElement('div');
-      constructor({ parentNode }: any) {
+      constructor({ parentNode }: RecordsSectionProps) {
         this.node.className = 'records-section';
-        parentNode.append(this.node);
+        parentNode?.append(this.node);
       }
     },
     CommentsSection: class {
       node = document.createElement('div');
-      constructor({ parentNode, navigateTo }: any) {
+      constructor({ parentNode, navigateTo }: CommentsSectionProps) {
         this.node.className = 'comments-section';
         const link = document.createElement('a');
         link.className = 'comments-section_comment-link';
         link.onclick = () => navigateTo('/profile');
         this.node.append(link);
-        parentNode.append(this.node);
+        parentNode?.append(this.node);
       }
     },
     MetaSection: class {
       node = document.createElement('div');
       likeButton: HTMLButtonElement;
 
-      constructor({ parentNode, onLike }: any) {
+      constructor({ parentNode, onLike }: MetaSectionProps) {
         this.node.className = 'game-detail_meta';
 
         const wrap = document.createElement('span');
         wrap.className = 'game-detail_meta_likes';
 
-        const btn = document.createElement('button');
+        const btn = document.createElement('button') as HTMLButtonElement;
         btn.className = 'game-detail_meta_like-btn';
-        btn.onclick = onLike;
+        btn.onclick = onLike as () => {};
 
         wrap.append(btn);
         this.node.append(wrap);
-        parentNode.append(this.node);
+        parentNode?.append(this.node);
 
         this.likeButton = btn;
       }
@@ -116,18 +123,18 @@ vi.mock('@ui', async (importOriginal) => {
     ...(actual as {}),
     Button: class {
       node = document.createElement('button');
-      constructor({ parentNode, className }: any) {
+      constructor({ parentNode, className }: ButtonProps) {
         this.node.className = className ?? '';
-        parentNode.append(this.node);
+        parentNode?.append(this.node);
       }
     },
     LikeButton: class {
       node = document.createElement('button');
 
-      constructor({ parentNode, callback }: any) {
+      constructor({ parentNode, callback }: LikeButtonProps) {
         this.node.className = 'like-button';
-        this.node.onclick = callback;
-        parentNode.append(this.node);
+        this.node.onclick = callback as () => void;
+        parentNode?.append(this.node);
       }
     },
   };

@@ -3,6 +3,8 @@ import { Footer } from '@components';
 import type { ComponentProps } from '@types';
 import { FOOTER_LINKS } from 'src/components/layout/footer/footer';
 import { COMMUNITY_ICONS } from '@constants';
+import type { ButtonProps } from '@ui';
+import type { Router } from '@route';
 
 vi.mock('@components', async (importOriginal) => {
   const actual = await importOriginal();
@@ -18,7 +20,7 @@ vi.mock('@components', async (importOriginal) => {
       }
 
       if (attrs) {
-        attrs.forEach((a: any) => this.node.setAttribute(a.attr, a.value));
+        attrs.forEach((a) => this.node.setAttribute(a.attr, a.value as string));
       }
 
       if (content) {
@@ -43,7 +45,7 @@ vi.mock('@ui', () => {
   return {
     Button: class ButtonMock {
       node = document.createElement('button');
-      constructor({ parentNode, className, ariaLabel }: any) {
+      constructor({ parentNode, className, ariaLabel }: ButtonProps) {
         this.node.className = className ?? '';
         if (ariaLabel) this.node.setAttribute('aria-label', ariaLabel);
         parentNode?.append(this.node);
@@ -54,11 +56,11 @@ vi.mock('@ui', () => {
 
 describe('Footer', () => {
   let root: HTMLElement;
-  let router: any;
+  let router: Router;
 
   beforeEach(() => {
     root = document.createElement('div');
-    router = { navigate: vi.fn() };
+    router = { navigate: vi.fn() } as unknown as Router;
     vi.clearAllMocks();
   });
 

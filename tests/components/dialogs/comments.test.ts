@@ -2,6 +2,8 @@ import { describe, it, expect, beforeEach, vi, type Mock } from 'vitest';
 import { CommentsSection } from 'src/components/dialogs/game-details/sections';
 import { appStore } from '@store';
 import { SUCCESS } from '@constants';
+import type { ComponentProps } from '@types';
+import type { ButtonProps, LikeButtonProps, SkeletonProps, SkeletonTextProps } from '@ui';
 
 vi.mock('@store', () => ({
   appStore: {
@@ -18,10 +20,10 @@ vi.mock('@components', () => {
   return {
     Component: class {
       node: HTMLElement;
-      constructor({ parentNode, tagName = 'div', className, content }: any) {
-        this.node = document.createElement(tagName);
-        if (className) this.node.className = className;
-        if (content) this.node.textContent = content;
+      constructor({ parentNode, tagName = 'div', className, content }: ComponentProps) {
+        this.node = document.createElement(tagName ?? 'div');
+        if (className) this.node.className = className ? (className as string) : '';
+        if (content) this.node.textContent = content as string;
         parentNode?.append(this.node);
       }
     },
@@ -32,10 +34,10 @@ vi.mock('@ui', () => {
   return {
     Button: class {
       node = document.createElement('button');
-      constructor({ parentNode, className, disabled }: any) {
+      constructor({ parentNode, className, disabled }: ButtonProps) {
         this.node.className = className ?? '';
         this.node.disabled = disabled ?? false;
-        parentNode.append(this.node);
+        parentNode?.append(this.node);
       }
       setDisabled(v: boolean) {
         this.node.disabled = v;
@@ -44,10 +46,11 @@ vi.mock('@ui', () => {
 
     LikeButton: class {
       node = document.createElement('button');
-      constructor({ parentNode, callback }: any) {
+      constructor({ parentNode, callback }: LikeButtonProps) {
         this.node.className = 'comment-like-btn';
-        this.node.onclick = callback;
-        parentNode.append(this.node);
+        const click = () => {};
+        this.node.onclick = callback ?? click;
+        parentNode?.append(this.node);
       }
       setLoading() {}
       setLiked() {}
@@ -57,17 +60,17 @@ vi.mock('@ui', () => {
 
     Skeleton: class {
       node = document.createElement('div');
-      constructor({ parentNode, className }: any) {
-        this.node.className = className;
-        parentNode.append(this.node);
+      constructor({ parentNode, className }: SkeletonProps) {
+        this.node.className = className ? (className as string) : '';
+        parentNode?.append(this.node);
       }
     },
 
     SkeletonText: class {
       node = document.createElement('div');
-      constructor({ parentNode, className }: any) {
-        this.node.className = className;
-        parentNode.append(this.node);
+      constructor({ parentNode, className }: SkeletonTextProps) {
+        this.node.className = className ?? '';
+        parentNode?.append(this.node);
       }
     },
   };

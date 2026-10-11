@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { Button } from '@ui';
+import { Button, type GoogleIconProps, type SkeletonProps, type SpinnerProps } from '@ui';
 import type { ComponentProps } from '@types';
 
 vi.mock('@components', async (importOriginal) => {
@@ -12,7 +12,7 @@ vi.mock('@components', async (importOriginal) => {
       this.node = document.createElement(tagName ?? 'button');
       if (className)
         this.node.className = Array.isArray(className) ? className.join(' ') : className;
-      if (attrs) attrs.forEach((a: any) => this.node.setAttribute(a.attr, a.value));
+      if (attrs) attrs.forEach((a) => this.node.setAttribute(a.attr, a.value as string));
       if (content && this.node) {
         this.node.textContent = content as string;
       }
@@ -23,7 +23,7 @@ vi.mock('@components', async (importOriginal) => {
       this.node.textContent = text;
     }
 
-    setAttributes(attrs: any[]) {
+    setAttributes(attrs: { attr: string; value: string | null }[]) {
       attrs.forEach((a) => {
         if (a.value === null) {
           this.node.removeAttribute(a.attr);
@@ -49,7 +49,7 @@ vi.mock('@ui', async (importOriginal) => {
 
   class GoogleIcon {
     node = document.createElement('span');
-    constructor({ parentNode, iconName }: any) {
+    constructor({ parentNode, iconName }: GoogleIconProps) {
       this.node.setAttribute('data-google-icon', iconName);
       parentNode?.append(this.node);
     }
@@ -60,14 +60,14 @@ vi.mock('@ui', async (importOriginal) => {
 
   class Skeleton {
     node = document.createElement('span');
-    constructor({ parentNode }: any) {
+    constructor({ parentNode }: SkeletonProps) {
       this.node.className = 'skeleton';
       parentNode?.append(this.node);
     }
   }
   class Spinner {
     node = document.createElement('span');
-    constructor({ parentNode }: any) {
+    constructor({ parentNode }: SpinnerProps) {
       this.node.className = 'spinner';
       parentNode?.append(this.node);
     }

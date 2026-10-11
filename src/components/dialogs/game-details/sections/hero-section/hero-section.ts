@@ -3,7 +3,7 @@ import type { ComponentProps, GameCardItemType } from '@types';
 import { Button, Image } from '@ui';
 import { CLOSE_BTN, GAME_IMAGE, LIGHT } from '@constants';
 
-type HeroSectionProps = Pick<ComponentProps, 'parentNode'> &
+export type HeroSectionProps = Pick<ComponentProps, 'parentNode'> &
   Pick<GameCardItemType, 'name' | 'cardImage'> & {
     onClose: () => void;
   };

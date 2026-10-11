@@ -5,7 +5,7 @@ import { APP_ROUTES, DARK, ERROR, LIGHT, SUCCESS } from '@constants';
 import { arrayFromNumber, getInitials, getRandomAvatarColor } from '@utils';
 import { appStore } from '@store';
 
-type CommentsSectionProps = Pick<ComponentProps, 'parentNode'> & {
+export type CommentsSectionProps = Pick<ComponentProps, 'parentNode'> & {
   comments: GameComment[];
   isSkeleton?: boolean;
   navigateTo: (path: string) => void;

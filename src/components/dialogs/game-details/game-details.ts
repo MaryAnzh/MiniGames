@@ -5,7 +5,7 @@ import type { GameComment, GameDetailsType } from '@types';
 
 import { CommentsSection, HeroSection, InfoSection, RecordsSection } from './sections';
 
-type GameDetailsProps = {
+export type GameDetailsProps = {
   parentNode: HTMLElement | null;
   onClose: () => void;
   slug: string;

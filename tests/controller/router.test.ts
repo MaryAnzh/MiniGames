@@ -95,12 +95,18 @@ vi.mock('@components', () => {
     node: HTMLElement;
     setPending = vi.fn();
     setError = vi.fn();
-    onOpenAuthDialog?: (tab: string) => void;
+    onOpenAuthDialog?: ((tab: AuthTabType) => void) | undefined;
     onSubmit?: (email: string, password: string, username?: string) => void;
     onGoogleSubmit?: () => void;
     onClose?: () => void;
 
-    constructor({ parentNode, onOpenAuthDialog, onSubmit, onGoogleSubmit, onClose }: any) {
+    constructor({
+      parentNode,
+      onOpenAuthDialog,
+      onSubmit,
+      onGoogleSubmit,
+      onClose,
+    }: AuthPopupProps) {
       this.node = document.createElement('auth');
       parentNode?.append(this.node);
       this.onOpenAuthDialog = onOpenAuthDialog;
@@ -141,7 +147,7 @@ vi.mock('src/components/dialogs/game-details/game-details', () => {
     navigateTo: (path: string) => void;
     onClose: () => void;
 
-    constructor({ parentNode, slug, navigateTo, onClose }: any) {
+    constructor({ parentNode, slug, navigateTo, onClose }: GameDetailsProps) {
       this.node = document.createElement('gamedialog');
       this.slug = slug;
       this.navigateTo = navigateTo;
@@ -157,10 +163,14 @@ vi.mock('src/components/dialogs/game-details/game-details', () => {
 });
 
 import { appStore } from '@store';
-import { Portal } from '@components';
+import { Portal, type AuthPopupProps } from '@components';
 import { AuthDialog } from '@components';
 import { HomePage, NotFoundPage } from '@pages';
-import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
+import {
+  GameDetailsDialog,
+  type GameDetailsProps,
+} from 'src/components/dialogs/game-details/game-details';
+import type { AuthTabType } from '@types';
 
 describe('Router', () => {
   let root: HTMLElement;

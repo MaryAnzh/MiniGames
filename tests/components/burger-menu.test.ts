@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { BurgerMenu } from '@ui';
+import { BurgerMenu, type ButtonProps } from '@ui';
 import { APP_PAGES, CUSTOM_EVENTS as e, LOGIN } from '@constants';
 import { appEvents } from '@utils';
 import { appStore } from '@store';
@@ -20,7 +20,7 @@ vi.mock('@components', async (importOriginal) => {
       }
 
       if (attrs) {
-        attrs.forEach((a: any) => this.node.setAttribute(a.attr, a.value));
+        attrs.forEach((a) => this.node.setAttribute(a.attr, a.value as string));
       }
 
       if (content) {
@@ -48,7 +48,7 @@ vi.mock('@ui', async (importOriginal) => {
     ...(actual as {}),
     Button: class ButtonMock {
       node = document.createElement('button');
-      constructor({ parentNode, className, ariaLabel }: any) {
+      constructor({ parentNode, className, ariaLabel }: ButtonProps) {
         this.node.className = className ?? '';
         if (ariaLabel) this.node.setAttribute('aria-label', ariaLabel);
         parentNode?.append(this.node);
@@ -91,6 +91,7 @@ describe('BurgerMenu', () => {
       router,
       onClose,
       onOpenAuth,
+      onLogout: () => {},
     });
 
     expect(root.querySelector('.burger_login_btn')).toBeDefined();
@@ -107,6 +108,7 @@ describe('BurgerMenu', () => {
       router,
       onClose,
       onOpenAuth,
+      onLogout: () => {},
     });
 
     expect(root.querySelector('.burger_bottom_btn')).toBeDefined();
@@ -120,6 +122,7 @@ describe('BurgerMenu', () => {
       router,
       onClose,
       onOpenAuth,
+      onLogout: () => {},
     });
 
     const firstRoute = root.querySelector('.burger_links_list_link')!;
@@ -136,6 +139,7 @@ describe('BurgerMenu', () => {
       router,
       onClose,
       onOpenAuth,
+      onLogout: () => {},
     });
 
     const loginBtn = root.querySelector('.burger_login_btn')!;
@@ -151,6 +155,7 @@ describe('BurgerMenu', () => {
       router,
       onClose,
       onOpenAuth,
+      onLogout: () => {},
     });
 
     expect(root.querySelector('.burger_login_btn')).toBeDefined();
@@ -170,6 +175,7 @@ describe('BurgerMenu', () => {
       router,
       onClose,
       onOpenAuth,
+      onLogout: () => {},
     });
 
     const items = root.querySelectorAll('.burger_links_list_link');

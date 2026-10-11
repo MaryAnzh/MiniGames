@@ -15,7 +15,7 @@ type InfoType = Pick<
   'name' | 'fullDescription' | 'specs' | 'likesCount' | 'isLikedByCurrentUser' | 'rating' | 'slug'
 >;
 
-type InfoSectionProps = Pick<ComponentProps, 'parentNode'> &
+export type InfoSectionProps = Pick<ComponentProps, 'parentNode'> &
   InfoType & {
     isSkeleton?: boolean;
   };

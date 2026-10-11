@@ -3,7 +3,7 @@ import { Component } from 'src/components/component';
 import { Skeleton, Icon } from '@ui';
 import { DARK } from '@constants';
 
-type ImageProps = Pick<ComponentProps, 'parentNode'> & {
+export type ImageProps = Pick<ComponentProps, 'parentNode'> & {
   src: string;
   alt: string;
   skeletonColor?: ColorVariantType;

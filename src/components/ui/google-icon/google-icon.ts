@@ -1,7 +1,7 @@
 import type { ComponentProps } from '@types';
 import { Component } from 'src/components/component';
 
-type GoogleIconProps = Pick<ComponentProps, 'parentNode'> & {
+export type GoogleIconProps = Pick<ComponentProps, 'parentNode'> & {
   iconName: string;
   iconClass?: string;
 };

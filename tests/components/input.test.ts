@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { Input } from '@ui';
+import { Input, type GoogleIconProps } from '@ui';
 import type { ComponentProps } from '@types';
 
 vi.mock('@components', async (importOriginal) => {
@@ -16,7 +16,7 @@ vi.mock('@components', async (importOriginal) => {
       }
 
       if (attrs) {
-        attrs.forEach((a: any) => this.node.setAttribute(a.attr, a.value));
+        attrs.forEach((a) => this.node.setAttribute(a.attr, a.value as string));
       }
 
       if (content) {
@@ -30,7 +30,7 @@ vi.mock('@components', async (importOriginal) => {
       this.node.textContent = text;
     }
 
-    setAttributes(attrs: any[]) {
+    setAttributes(attrs: { attr: string; value: string | null }[]) {
       attrs.forEach((a) => {
         if (a.value === null) {
           this.node.removeAttribute(a.attr);
@@ -56,7 +56,7 @@ vi.mock('@ui', async (importOriginal) => {
 
   class GoogleIcon {
     node = document.createElement('span');
-    constructor({ parentNode, iconName, iconClass }: any) {
+    constructor({ parentNode, iconName, iconClass }: GoogleIconProps) {
       this.node.setAttribute('data-google-icon', iconName);
       if (iconClass) this.node.className = iconClass;
       parentNode?.append(this.node);

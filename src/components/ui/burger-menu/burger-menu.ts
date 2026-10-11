@@ -6,11 +6,12 @@ import { Router } from '@route';
 import { appStore } from '@store';
 import { appEvents } from '@utils';
 
-type BurgerMenuProps = Pick<ComponentProps, 'parentNode'> & {
+export type BurgerMenuProps = Pick<ComponentProps, 'parentNode'> & {
   isAuth: boolean;
   router: Router;
   onClose: () => void;
   onOpenAuth: (tab: AuthFormType) => void;
+  onLogout: () => void;
 };
 
 export class BurgerMenu extends Component {
@@ -21,11 +22,12 @@ export class BurgerMenu extends Component {
   store = appStore;
   children: Component[] = [];
   isAuth: boolean;
+  onLogout: () => void;
 
   items: Component[] = [];
   highlightClass = 'is-active';
 
-  constructor({ parentNode, isAuth, router, onClose, onOpenAuth }: BurgerMenuProps) {
+  constructor({ parentNode, isAuth, router, onClose, onOpenAuth, onLogout }: BurgerMenuProps) {
     super({
       parentNode,
       tagName: 'div',
@@ -35,6 +37,7 @@ export class BurgerMenu extends Component {
     this.router = router;
     this.onClose = onClose;
     this.onOpenAuth = onOpenAuth;
+    this.onLogout = onLogout;
 
     this.store = appStore;
     this.isAuth = isAuth;
@@ -132,7 +135,6 @@ export class BurgerMenu extends Component {
         fullWidth: true,
       });
       loginBtn.node.onclick = () => {
-        this.onClose();
         this.onOpenAuth(LOGIN);
       };
 
@@ -145,7 +147,6 @@ export class BurgerMenu extends Component {
         fullWidth: true,
       });
       signupBtn.node.onclick = () => {
-        this.onClose();
         this.onOpenAuth(REGISTER);
       };
       this.children.push(loginBtn, signupBtn);
@@ -155,14 +156,14 @@ export class BurgerMenu extends Component {
         className: 'burger_bottom_btn',
         text: 'Log Out',
         color: 'ghost',
+        size: 'md',
+        fullWidth: true,
       });
 
-      // Check Logic!!
-      // logoutBtn.node.onclick = () => {
-      //   this.store.logout();
-      //   this.router.navigate('/');
-      //   this.onClose();
-      // };
+      logoutBtn.node.onclick = () => {
+        this.onLogout();
+        this.onClose();
+      };
       this.children.push(logoutBtn);
     }
   }

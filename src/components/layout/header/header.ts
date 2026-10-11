@@ -124,7 +124,9 @@ export class Header extends Component {
       onClose: () => this.portal.unmount(),
       onOpenAuth: (tab: AuthTabType) => {
         this.onOpenAuthDialog?.(tab);
-        this.portal.unmount();
+      },
+      onLogout: () => {
+        this.store.logout();
       },
     });
 

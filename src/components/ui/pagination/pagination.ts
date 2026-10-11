@@ -4,7 +4,7 @@ import { appEvents, arrayFromNumber } from '@utils';
 import { ROUTE_CHANGE } from '@constants';
 import type { ComponentProps } from '@types';
 
-type PaginationProps = Pick<ComponentProps, 'parentNode'> & {
+export type PaginationProps = Pick<ComponentProps, 'parentNode'> & {
   totalPages: number;
   currentPage?: number;
 };

@@ -1,7 +1,7 @@
 import { Component } from '@components';
 import type { AuthTabType } from '@types';
 
-type SwitcherProps = {
+export type SwitcherProps = {
   parentNode: HTMLElement;
   tabs: AuthTabType[];
   active: AuthTabType;

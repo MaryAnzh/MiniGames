@@ -3,7 +3,7 @@ import { Component } from '../../component';
 import { Button } from '../button/button';
 import { Icon } from '../icon/icon';
 
-type ErrorBannerProps = Pick<ComponentProps, 'parentNode'> & {
+export type ErrorBannerProps = Pick<ComponentProps, 'parentNode'> & {
   message: string;
   onRetry?: () => void;
   className?: string;
