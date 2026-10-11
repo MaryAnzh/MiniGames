@@ -3,14 +3,14 @@ import * as C from '@constants';
 import { APP_ROUTES } from '@constants';
 
 import { Router } from '@route';
-import appStore from '@store';
+import { appStore } from '@store';
 import type { AuthTabType } from '@types';
 
 export class App {
   private root: HTMLElement;
   private router: Router | null = null;
   store: typeof appStore;
-  private portal!: Portal;
+  portal!: Portal;
 
   constructor(root: HTMLElement) {
     this.root = root;

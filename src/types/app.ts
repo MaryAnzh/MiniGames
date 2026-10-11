@@ -1,4 +1,4 @@
-import type { ERROR_GROUP, RESPONSE_STATUS, SORT_DATA_KEYS } from '@constants';
+import type { ERROR, ERROR_GROUP, RESPONSE_STATUS, SORT_DATA_KEYS, SUCCESS } from '@constants';
 import type { KeysTemplateType } from './common';
 
 export type ErrorGropeType = KeysTemplateType<typeof ERROR_GROUP>;
@@ -78,30 +78,5 @@ export type CategoryMetaType = {
 
 export type SortTypes = KeysTemplateType<typeof SORT_DATA_KEYS>;
 
-export type TopRecordsType = {
-  position: number;
-  playerName: string;
-  score: number;
-  achievedAt: string;
-};
-
-export type GameDetailsType = {
-  slug: string;
-  name: string;
-  heroImage: string;
-  rating: number;
-  likesCount: number;
-  isLikedByCurrentUser: boolean;
-  fullDescription: string;
-  specs: {
-    genre: string;
-    players: string;
-    duration: string;
-    price: string;
-  };
-  topRecords: TopRecordsType[];
-};
-
-export type GameDetailsResponse = {
-  data: GameDetailsType;
-};
+export type ApiPostState<T> =
+  { status: typeof SUCCESS; data: T } | { status: typeof ERROR; error: string };

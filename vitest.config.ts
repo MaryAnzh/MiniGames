@@ -33,5 +33,9 @@ export default defineConfig({
         'src/**/index.ts',
       ],
     },
+    sequence: {
+      concurrent: false, // ← тесты НЕ параллельные
+      shuffle: false,
+    },
   },
 });

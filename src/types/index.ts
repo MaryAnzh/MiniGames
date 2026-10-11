@@ -4,3 +4,4 @@ export * from './data';
 export * from './app';
 export * from './user';
 export * from './comment';
+export * from './game';

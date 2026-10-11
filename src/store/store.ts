@@ -1,4 +1,4 @@
-import { CUSTOM_EVENTS, CUSTOM_EVENTS as e, RATING_DESC } from '@constants';
+import { CUSTOM_EVENTS, CUSTOM_EVENTS as e, ERROR, RATING_DESC } from '@constants';
 import { type SnackbarPortal } from '@components';
 import type { PageComponentType } from '@pages';
 import { ApiService, AuthService } from '@services';
@@ -79,10 +79,7 @@ class AppStore {
     return this.api.getGameDetails(slug, this.userEmail || undefined);
   }
 
-  async getGameComments(
-    slug: string,
-    params?: { limit?: number; sort?: 'newest' | 'oldest'; userEmail?: string },
-  ) {
+  async getGameComments(slug: string, params?: { limit?: number; sort?: 'newest' | 'oldest' }) {
     this.checkSession();
 
     return this.api.getGameComments(slug, {
@@ -91,16 +88,35 @@ class AppStore {
     });
   }
 
-  async toggleFavorite(slug: string) {
+  async postComment(slug: string, text: string) {
+    this.checkSession();
+
+    if (!this.isAuth || !this.userEmail || !this.username) {
+      return {
+        status: ERROR,
+        error: 'User is not authenticated',
+      };
+    }
+
+    const body = {
+      userEmail: this.userEmail,
+      authorName: this.username,
+      text,
+    };
+
+    return this.api.postComment(slug, body);
+  }
+
+  async toggleFavorite(slug: string): Promise<T.GameToggleLikeResponseType> {
     this.checkSession();
     return this.api.toggleFavorite(slug, {
       userEmail: this.userEmail,
     });
   }
 
-  async toggleCommentLike(slug: string, commentId: string) {
+  async toggleCommentLike(commentId: string): Promise<T.CommentToggleResponseType> {
     this.checkSession();
-    return this.api.toggleCommentLike(slug, commentId, {
+    return this.api.toggleCommentLike(commentId, {
       userEmail: this.userEmail,
     });
   }
@@ -281,10 +297,23 @@ class AppStore {
     return res;
   }
 
-  public showSnack(message: string, type: 'error' | 'success' | 'info') {
+  canOpenAuthDialog(): boolean {
+    const valid = this.checkSession();
+
+    if (!valid) return true;
+
+    if (this.isAuth) return false;
+
+    return true;
+  }
+
+  prepareGameDetails(): void {
+    this.checkSession();
+  }
+
+  showSnack(message: string, type: 'error' | 'success' | 'info') {
     this.snackbar.show(message, type);
   }
 }
 
-const appStore = new AppStore();
-export default appStore;
+export const appStore = new AppStore();

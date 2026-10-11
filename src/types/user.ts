@@ -1,26 +1,10 @@
-import type { User } from 'firebase/auth';
-
 export type FirebaseUserType = {
-  uid: string;
   email: string | null;
-  displayName: string | null;
-
-  emailVerified: boolean;
+  displayName?: string | null;
+  photoURL?: string | null;
 };
 
-export type FirebaseUserDataType = User &
-  FirebaseUserType & {
-    metadata: {
-      createdAt: string;
-      lastLoginAt: string;
-      lastSignInTime?: string;
-    };
-
-    stsTokenManager: {
-      accessToken: string;
-      expirationTime: number;
-    };
-  };
+export type FirebaseUserDataType = FirebaseUserType;
 
 export type FirebaseAuthError = {
   name: 'FirebaseError';
