@@ -49,7 +49,7 @@ vi.mock('@ui', async (importOriginal) => {
       if (props.leftIcon) this.node.dataset.leftIcon = props.leftIcon;
       if (props.rightIcon) this.node.dataset.rightIcon = props.rightIcon;
 
-      props.parentNode.append(this.node);
+      props.parentNode?.append(this.node);
     }
 
     setAttributes(attrs: { attr: string; value: string | null }[]): void {
