@@ -1,9 +1,10 @@
-import { ICON_PICKER, APP_PAGES, REGISTER, LOGIN } from '@constants';
+import { ICON_PICKER, APP_PAGES, REGISTER, LOGIN, CUSTOM_EVENTS as e } from '@constants';
 import { Component } from '@components';
 import { Button } from '@ui';
 import type { AuthFormType, ComponentProps } from '@types';
 import { Router } from '@route';
 import { appStore } from '@store';
+import { appEvents } from '@utils';
 
 type BurgerMenuProps = Pick<ComponentProps, 'parentNode'> & {
   isAuth: boolean;
@@ -19,6 +20,7 @@ export class BurgerMenu extends Component {
   onOpenAuth: (tab: AuthFormType) => void;
   store = appStore;
   children: Component[] = [];
+  isAuth: boolean;
 
   items: Component[] = [];
   highlightClass = 'is-active';
@@ -33,6 +35,17 @@ export class BurgerMenu extends Component {
     this.router = router;
     this.onClose = onClose;
     this.onOpenAuth = onOpenAuth;
+
+    this.store = appStore;
+    this.isAuth = isAuth;
+
+    appEvents.on(e.AUTH_CHANGE, (value) => {
+      const next = value === 'true';
+      if (this.isAuth !== next) {
+        this.isAuth = next;
+        this.rerender();
+      }
+    });
 
     this.render(isAuth);
   }
@@ -152,6 +165,13 @@ export class BurgerMenu extends Component {
       // };
       this.children.push(logoutBtn);
     }
+  }
+
+  rerender() {
+    this.node.innerHTML = '';
+    this.items = [];
+    this.children = [];
+    this.render(this.isAuth);
   }
 
   highlight(path: string) {

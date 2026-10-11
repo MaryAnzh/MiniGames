@@ -21,10 +21,10 @@ export class AuthDialog extends Component {
   private errors: Record<string, string> = {};
   private inputs: Record<string, Input> = {};
 
-  private authBtn!: Button;
-  private switcher!: Switcher;
-  private googleBtn!: Button;
-  private bottomLink!: Component;
+  authBtn!: Button;
+  switcher!: Switcher;
+  googleBtn!: Button;
+  bottomLink!: Component;
 
   private isPending = false;
   private errorMessage = '';
