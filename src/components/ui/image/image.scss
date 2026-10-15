@@ -12,11 +12,12 @@
     height: 100%;
     object-fit: cover;
   }
+
   &-empty {
     background: var(--on-bg);
   }
 
-  &_empty {
+  &_empty-icon {
     width: var(--size-8);
     height: var(--size-8);
   }

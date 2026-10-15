@@ -5,6 +5,8 @@ import type {
   LOGIN,
   REGISTER,
   COLOR_VARIANT,
+  AUTH_TAGS,
+  INPUT_TYPES,
 } from '@constants';
 import type { KeysTemplateType } from './common';
 
@@ -12,6 +14,8 @@ export type ComponentAttributesType = {
   attr: string;
   value: string | null;
 };
+
+export type InputType = KeysTemplateType<typeof INPUT_TYPES>;
 
 export type ComponentProps = {
   parentNode: HTMLElement | null;
@@ -27,11 +31,19 @@ export type AuthFormType = typeof LOGIN | typeof REGISTER;
 export type AlignType = KeysTemplateType<typeof COMPONENT_ALIGN>;
 
 export type ColorVariantType = KeysTemplateType<typeof COLOR_VARIANT>;
+export type AuthTabType = KeysTemplateType<typeof AUTH_TAGS>;
+
+export type SortOptionType = {
+  label: string;
+  value: string;
+  selected?: boolean;
+};
 
 export type GoogleIconsType =
   | 'mail'
   | 'lock'
   | 'visibility'
+  | 'visibility_off'
   | 'person'
   | 'arrow_back'
   | 'arrow_forward'

@@ -3,7 +3,7 @@ import type { ComponentProps, GameCardItemType } from '@types';
 import { Button, Image } from '@ui';
 import { CLOSE_BTN, GAME_IMAGE, LIGHT } from '@constants';
 
-type HeroSectionProps = Pick<ComponentProps, 'parentNode'> &
+export type HeroSectionProps = Pick<ComponentProps, 'parentNode'> &
   Pick<GameCardItemType, 'name' | 'cardImage'> & {
     onClose: () => void;
   };
@@ -39,6 +39,6 @@ export class HeroSection extends Component {
       leftIcon: 'close',
     });
     closeBtn.setAttributes([{ attr: 'role', value: CLOSE_BTN }]);
-    closeBtn.node.onclick = this.handleClose;
+    closeBtn.node.onclick = () => this.handleClose();
   }
 }

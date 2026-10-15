@@ -1,29 +1,28 @@
-import { Component, Portal } from '@components';
+import { Component } from '@components';
 import type { ComponentProps, GameCardItemType } from '@types';
 import { Button, Image, LikeButton, Skeleton, SkeletonText } from '@ui';
 import { arrayFromNumber } from '@utils';
 import { LIGHT } from '@constants';
 
 import { EMPTY_CARD } from './constants';
-import { GameDetailsDialog } from 'src/components/dialogs/game-details/game-details';
 
 type LibraryCardsProps = Pick<ComponentProps, 'parentNode'> & {
   defaultCardCount: number;
-  portal: Portal;
+  openDetails: (slug: string) => void;
 };
 
 export class LibraryCards extends Component {
-  private portal: Portal;
   private defaultCardCount: number;
+  private openDetails: (slug: string) => void;
 
-  constructor({ parentNode, defaultCardCount, portal }: LibraryCardsProps) {
+  constructor({ parentNode, defaultCardCount, openDetails }: LibraryCardsProps) {
     super({
       parentNode,
       tagName: 'section',
       className: 'library_cards',
     });
 
-    this.portal = portal;
+    this.openDetails = openDetails;
     this.defaultCardCount = defaultCardCount;
 
     this.renderSkeletons();
@@ -184,17 +183,8 @@ export class LibraryCards extends Component {
       variant: likesCount === -1 ? 'skeleton' : undefined,
     });
 
-    detailsBtn.node.onclick = () => this.openDetails(game);
+    detailsBtn.node.onclick = () => this.openDetails(game.slug);
     detailsBtn.setAttributes([{ attr: 'role', value: 'card-dialog' }]);
-  }
-
-  private openDetails(game: GameCardItemType) {
-    const dialog = new GameDetailsDialog({
-      parentNode: null,
-      slug: game.slug,
-      onClose: () => this.portal.unmount(),
-    });
-    this.portal.mount(dialog.node);
   }
 
   public renderAllCards(list: GameCardItemType[]) {

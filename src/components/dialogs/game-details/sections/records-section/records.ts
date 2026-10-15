@@ -1,10 +1,10 @@
 import { Component } from '@components';
-import type { ComponentProps, GameRecord, TopRecordsType } from '@types';
+import type { ComponentProps, TopRecordsType } from '@types';
 import { Skeleton } from '@ui';
 import { LIGHT } from '@constants';
 import { arrayFromNumber } from '@utils';
 
-type RecordsSectionProps = Pick<ComponentProps, 'parentNode'> & {
+export type RecordsSectionProps = Pick<ComponentProps, 'parentNode'> & {
   records: TopRecordsType[];
   isSkeleton?: boolean;
 };
@@ -22,7 +22,7 @@ export class RecordsSection extends Component {
     this.render(records, isSkeleton);
   }
 
-  private render(records: GameRecord[], isSkeleton: boolean) {
+  private render(records: TopRecordsType[], isSkeleton: boolean) {
     const titleRow = new Component({
       parentNode: this.node,
       tagName: 'div',

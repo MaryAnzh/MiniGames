@@ -1,47 +1,32 @@
-import { Component, Portal, Slider } from '@components';
+import { Component, Slider } from '@components';
 import { DARK, EMPTY, ERROR, LOADING, SUCCESS } from '@constants';
 import type { ComponentProps, GameCardItemType, ResponseStatusType } from '@types';
 import { Button } from '@ui';
 
 type SliderSectionProps = Pick<ComponentProps, 'parentNode'> & {
-  slides: GameCardItemType[];
-  status: ResponseStatusType;
-  portal: Portal;
   onRetry: () => Promise<void>;
+  openDetails: (slug: string) => void;
 };
 
 export class SliderSection extends Component {
-  slides: GameCardItemType[];
-  status: ResponseStatusType;
-  slider: Slider | null = null;
-  prevBtn: Button | null = null;
-  nextBtn: Button | null = null;
-  retryBtn: Button;
-  portal: Portal;
-  onRetry: () => Promise<void>;
+  private slider: Slider;
+  private prevBtn!: Button;
+  private nextBtn!: Button;
+  private retryBtn!: Button;
+  private onRetry: () => Promise<void>;
+  private openDetails: (slug: string) => void;
 
-  constructor({ parentNode, slides, status, portal, onRetry }: SliderSectionProps) {
+  constructor({ parentNode, onRetry, openDetails }: SliderSectionProps) {
     super({ parentNode, tagName: 'section', className: 'home-page_slider' });
-    this.portal = portal;
-    this.slides = slides;
-    this.status = status;
+
     this.onRetry = onRetry;
+    this.openDetails = openDetails;
 
-    this.retryBtn = new Button({
-      parentNode: null,
-      ariaLabel: 'Retry',
-      color: DARK,
-      leftIcon: 'empty_img',
-      size: 'md',
-      className: 'slider_title-wrap_retry-brn',
-      text: 'Retry',
-    });
-    this.retryBtn.node.onclick = () => this.handleRetry();
-
-    this.render();
+    this.renderHeader();
+    this.slider = this.createSlider();
   }
 
-  private render() {
+  private renderHeader() {
     const titleWrap = new Component({
       parentNode: this.node,
       tagName: 'div',
@@ -60,12 +45,20 @@ export class SliderSection extends Component {
       className: 'slider_title-wrap_title',
       content: 'New Games',
     });
-    titleWrap.append(this.retryBtn.node);
-    if (this.status !== EMPTY) {
-      this.retryBtn.node.style.display = 'none';
-    }
 
-    const prevBtn = new Button({
+    this.retryBtn = new Button({
+      parentNode: titleWrap.node,
+      ariaLabel: 'Retry',
+      color: DARK,
+      leftIcon: 'empty_img',
+      size: 'md',
+      className: 'slider_title-wrap_retry-brn',
+      text: 'Retry',
+    });
+    this.retryBtn.node.onclick = () => this.handleRetry();
+    this.retryBtn.node.style.display = 'none';
+
+    this.prevBtn = new Button({
       parentNode: titleWrap.node,
       size: 'icon-lg',
       corner: 'circle',
@@ -73,10 +66,8 @@ export class SliderSection extends Component {
       googleIcon: 'arrow_back',
       ariaLabel: 'back slider',
     });
-    prevBtn.setAttributes([{ attr: 'role', value: 'button' }]);
-    this.prevBtn = prevBtn;
 
-    const nextBtn = new Button({
+    this.nextBtn = new Button({
       parentNode: titleWrap.node,
       size: 'icon-lg',
       corner: 'circle',
@@ -84,74 +75,53 @@ export class SliderSection extends Component {
       googleIcon: 'arrow_forward',
       ariaLabel: 'forward slider',
     });
-    nextBtn.setAttributes([{ attr: 'role', value: 'button' }]);
-    this.nextBtn = nextBtn;
+  }
 
-    this.slider = new Slider({
+  private createSlider(slides: GameCardItemType[] = [], status: ResponseStatusType = LOADING) {
+    return new Slider({
       parentNode: this.node,
-      slides: [],
-      status: LOADING,
-      portal: this.portal,
+      slides,
+      status,
+      openDetails: this.openDetails,
     });
   }
 
-  public updateSlides(slides: GameCardItemType[], status?: ResponseStatusType) {
-    const isEmptyData = slides.length === 0;
+  public updateSlides(slides: GameCardItemType[], status: ResponseStatusType) {
+    const isEmpty = slides.length === 0;
     const isError = status === ERROR;
 
-    this.status = isError ? ERROR : isEmptyData ? EMPTY : SUCCESS;
-    if (this.slider) {
-      this.slider.destroy();
-    }
+    const finalStatus = isError ? ERROR : isEmpty ? EMPTY : SUCCESS;
 
-    const slider = new Slider({
-      parentNode: this.node,
-      slides,
-      status: this.status,
-      portal: this.portal,
-    });
-    this.slider = slider;
-    if (this.prevBtn && this.nextBtn && status === SUCCESS) {
-      this.prevBtn.node.onclick = () => slider.animatePrev();
-      this.nextBtn.node.onclick = () => slider.animateNext();
+    this.slider.update({ slides, status: finalStatus });
+
+    if (finalStatus === SUCCESS) {
+      this.prevBtn.node.onclick = () => this.slider.animatePrev();
+      this.nextBtn.node.onclick = () => this.slider.animateNext();
       this.prevBtn.setAttributes([{ attr: 'disable', value: null }]);
       this.nextBtn.setAttributes([{ attr: 'disable', value: null }]);
-
       this.retryBtn.node.style.display = 'none';
-    }
-
-    if (this.prevBtn && this.nextBtn && (isEmptyData || isError)) {
+    } else {
       this.prevBtn.setAttributes([{ attr: 'disable', value: 'true' }]);
       this.nextBtn.setAttributes([{ attr: 'disable', value: 'true' }]);
       this.retryBtn.node.style.display = 'flex';
     }
   }
 
-  private handleRetry = async () => {
-    this.slider?.destroy();
-    this.slider = new Slider({
-      parentNode: this.node,
-      slides: [],
-      status: LOADING,
-      portal: this.portal,
-    });
+  private async handleRetry() {
+    this.slider.update({ slides: [], status: LOADING });
+
     try {
-      await this.onRetry();
+      await this.onRetry?.();
     } catch {
       this.updateSlides([], EMPTY);
     }
-  };
+  }
 
-  destroy(): void {
-    if (this.prevBtn) {
-      this.prevBtn.node.onclick = null;
-    }
-    if (this.nextBtn) {
-      this.nextBtn.node.onclick = null;
-    }
-    if (this.prevBtn) {
-      this.retryBtn.node.onclick = null;
-    }
+  destroy() {
+    this.prevBtn.node.onclick = null;
+    this.nextBtn.node.onclick = null;
+    this.retryBtn.node.onclick = null;
+    this.slider.destroy();
     super.destroy();
   }
 }

@@ -2,7 +2,7 @@ import type { ColorVariantType, ComponentProps } from '@types';
 import { Component } from '../../component';
 import { LIGHT } from '@constants';
 
-type SkeletonProps = Pick<ComponentProps, 'parentNode'> & {
+export type SkeletonProps = Pick<ComponentProps, 'parentNode'> & {
   width?: string;
   height?: string;
   color?: ColorVariantType;

@@ -4,7 +4,7 @@ import { Icon, Button } from '@ui';
 
 type SnackbarType = 'success' | 'error' | 'info';
 
-type SnackbarProps = Pick<ComponentProps, 'parentNode'> & {
+export type SnackbarProps = Pick<ComponentProps, 'parentNode'> & {
   message: string;
   type: SnackbarType;
   onClose: () => void;

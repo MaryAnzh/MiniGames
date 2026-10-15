@@ -77,6 +77,10 @@ export class Component {
     this.node.append(child);
   }
 
+  removeOnclick() {
+    this.node.onclick = null;
+  }
+
   destroy() {
     this.node.remove();
   }

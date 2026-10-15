@@ -1,0 +1,57 @@
+@use '../../../styles/mixins/common.scss' as *;
+@use '../../../styles/variable' as *;
+
+.app-avatar {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: var(--size-3);
+  color: var(--on-bg);
+
+  &_name {
+    font-size: var(--label-medium);
+    font-weight: var(--weight-bold);
+    @include truncate(1);
+  }
+
+  &_img-wrap {
+    width: var(--size-4);
+    height: var(--size-4);
+    display: flex;
+    align-items: center;
+    border-radius: var(--corner-full);
+    outline: var(--border-2) solid var(--on-primary);
+    offset: var(--border-2-neg);
+    justify-content: center;
+    font-size: var(--label-medium);
+    font-weight: var(--weight-bold);
+    text-transform: uppercase;
+    overflow: hidden;
+
+    .app-image-empty {
+      width: var(--size-3);
+      height: var(--size-3);
+      background: inherit;
+    }
+
+    svg {
+      width: var(--size-3);
+      height: var(--size-3);
+      path {
+        stroke: var(--on-bg);
+      }
+    }
+  }
+
+  @media (min-width: $tablet) {
+    &_name {
+      font-size: var(--body-medium);
+    }
+
+    &_img-wrap {
+      width: var(--size-4);
+      height: var(--size-4);
+      font-size: var(--body-medium);
+    }
+  }
+}

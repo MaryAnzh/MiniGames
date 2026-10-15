@@ -11,18 +11,20 @@
   border-bottom: var(--size-025) var(--on-primary) solid;
   overflow: hidden;
 
-  .header_nav,
-  .header_login_btn,
-  .header_signup_btn {
+  &_nav,
+  &_login_btn,
+  &_signup_btn,
+  &_logout_btn {
     display: none;
   }
 
-  @media (min-width: $min-tablet) {
+  @media (min-width: $tablet) {
     display: grid;
     padding: var(--size-2-1) var(--size-5);
     grid-template-columns: 1fr repeat(2, auto);
 
-    .header_signup_btn {
+    &_signup_btn,
+    &_logout_btn {
       display: flex;
     }
   }

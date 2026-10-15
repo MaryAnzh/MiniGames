@@ -65,17 +65,10 @@ export class SliderController {
     return visible;
   }
 
-  public setSlides(slides: GameCardItemType[]) {
+  public replaceSlides(slides: GameCardItemType[]) {
     this.slides = slides;
-    this.state = {
-      centerIndex: 0,
-      visibleCount: DESKTOP_SLIDE_COUNT,
-      isDragging: false,
-      dragStartX: 0,
-      dragDeltaX: 0,
-      autoplayPaused: false,
-    };
-    this.init();
+    this.state.centerIndex = 0;
+    this.updateSlides();
   }
 
   next() {

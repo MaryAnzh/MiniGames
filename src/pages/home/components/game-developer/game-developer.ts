@@ -11,7 +11,7 @@ export class GameDeveloperSection extends Component {
 
     new Image({
       parentNode: this.node,
-      src: 'img/game-developer.webp',
+      src: 'assets/img/game-developer.webp',
       alt: 'Game developer img',
       className: 'game-developer_img',
       skeletonColor: LIGHT,

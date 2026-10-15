@@ -24,6 +24,12 @@
     transition: 0.3s;
     border: none;
     outline: none;
+    &_text {
+      display: block;
+      &::first-letter {
+        text-transform: uppercase;
+      }
+    }
 
     &.is-active {
       background: var(--bg-footer-low);

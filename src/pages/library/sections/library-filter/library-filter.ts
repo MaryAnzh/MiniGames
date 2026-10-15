@@ -1,18 +1,18 @@
 import { Component } from '@components';
 import { CENTER, RATING_DESC } from '@constants';
-import type { CategoriesType, CategoryType, ComponentProps, SortTypes } from '@types';
+import type { CategoryType, ComponentProps, SortTypes } from '@types';
 import { Button, Select } from '@ui';
 import { CHIPS_COUNT, LOADING_CHIP, SORT_OPTIONS } from './constants';
 import { arrayFromNumber } from '@utils';
 
 type LibraryFiltersProps = Pick<ComponentProps, 'parentNode'> & {
-  categories: CategoriesType[];
+  categories: CategoryType[];
   onCategoryChange: (value: string) => void;
   onSortChange: (value: SortTypes) => void;
 };
 
 export class LibraryFilters extends Component {
-  categoriesData: CategoriesType[];
+  categoriesData: CategoryType[];
   categoriesNode: Component[] = [];
   currentSot: SortTypes = RATING_DESC;
   categoriesWrapNode: Component | null = null;
@@ -49,7 +49,7 @@ export class LibraryFilters extends Component {
     this.initDragScroll(this.categoriesWrapNode.node);
   }
 
-  renderChip(node: HTMLElement, category: CategoriesType, index: number) {
+  renderChip(node: HTMLElement, category: CategoryType, index: number) {
     const isSkeleton = this.categoriesData.length === 0;
 
     const li = new Component({

@@ -7,6 +7,9 @@ type PortalProps = {
 
 export class Portal extends Component {
   private timeout: number | null = null;
+  private activeComponent: Component | null = null;
+  private isLocked = false;
+  onClose: (() => void) | null = null;
 
   constructor({ className, position }: PortalProps = {}) {
     super({
@@ -20,39 +23,48 @@ export class Portal extends Component {
     document.addEventListener('keydown', this.handleEsc);
   }
 
-  handleOutsideClick = (event: Event) => {
-    const target = event.target as HTMLElement;
+  mount(content: HTMLElement, component?: Component) {
+    this.activeComponent = component ?? null;
 
-    if (target.id === 'appPortal') {
-      this.unmount();
-    }
-  };
-
-  handleEsc = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      this.unmount();
-    }
-  };
-
-  mount(content: HTMLElement) {
     if (this.timeout) {
       clearTimeout(this.timeout);
       this.timeout = null;
     }
+
     document.body.style.overflow = 'hidden';
     this.node.innerHTML = '';
 
     document.body.appendChild(this.node);
-
     this.node.appendChild(content);
 
     this.node.classList.add('app_portal_open');
   }
 
+  private closePortal = () => {
+    if (this.isLocked) return;
+    this.onClose?.();
+  };
+
+  private handleOutsideClick = (event: Event) => {
+    if (this.isLocked) return;
+    if ((event.target as HTMLElement).id === 'appPortal') {
+      this.closePortal();
+    }
+  };
+
+  private handleEsc = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      this.closePortal();
+    }
+  };
+
   unmount() {
     this.node.classList.remove('app_portal_open');
 
     this.timeout = window.setTimeout(() => {
+      this.activeComponent?.destroy();
+      this.activeComponent = null;
+
       this.node.innerHTML = '';
       if (this.node.parentNode) {
         this.node.parentNode.removeChild(this.node);
@@ -61,17 +73,11 @@ export class Portal extends Component {
     }, 300);
   }
 
-  destroy() {
-    this.node.innerHTML = '';
+  public lock() {
+    this.isLocked = true;
+  }
 
-    if (this.timeout) {
-      clearTimeout(this.timeout);
-    }
-    this.node.removeEventListener('click', this.handleOutsideClick);
-
-    this.node.removeEventListener('click', this.handleOutsideClick);
-    document.removeEventListener('keydown', this.handleEsc);
-
-    super.destroy();
+  public unlock() {
+    this.isLocked = false;
   }
 }

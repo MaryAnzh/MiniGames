@@ -1,5 +1,5 @@
 import { LOADING, NAME_ASC, NAME_DESC, RATING_ASC, RATING_DESC } from '@constants';
-import type { CategoriesType } from '@types';
+import type { CategoryType } from '@types';
 
 export const SORT_OPTIONS = [
   { label: 'Rating ↑', value: RATING_ASC, selected: false },
@@ -9,7 +9,7 @@ export const SORT_OPTIONS = [
 ];
 
 export const CHIPS_COUNT = 7;
-export const LOADING_CHIP: CategoriesType = {
+export const LOADING_CHIP: CategoryType = {
   label: LOADING,
   isDefault: false,
   slug: LOADING,

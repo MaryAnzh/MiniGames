@@ -29,7 +29,7 @@ export class SnackbarPortal extends Component {
 
     const timer = window.setTimeout(() => {
       this.remove(snack);
-    }, 6000);
+    }, 5000);
 
     this.snacks.push({ snack, timer });
     this.animateIn(snack.node);

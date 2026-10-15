@@ -18,6 +18,8 @@ export const APP_ROUTES = {
   TOURNAMENTS: '/tournaments',
   COMMUNITY: '/community',
   GAME: '/game/',
+  AUTH: '/auth',
+  AUTH_LOGIN: '/auth?tab=login',
 } as const;
 
 export const APP_COMPANY = [

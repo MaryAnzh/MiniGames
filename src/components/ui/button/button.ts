@@ -3,6 +3,7 @@ import { Component } from '../../component';
 import { ICON_PICKER } from '@constants';
 import { GoogleIcon } from '../google-icon/google-icon';
 import { Skeleton } from '../skeleton/skeleton';
+import { Spinner } from '../spinner/spinner';
 
 type ColorType = 'primary' | 'light' | 'dark' | 'ghost' | 'chips';
 
@@ -26,10 +27,20 @@ export type ButtonProps = Pick<ComponentProps, 'parentNode'> & {
   ariaLabel?: string;
   isRoboto?: boolean;
   role?: string;
+  type?: 'button' | 'submit';
 };
 
 export class Button extends Component {
   private textNode: Component | null = null;
+  private googleIconElement: GoogleIcon | null = null;
+  private googleIcon: GoogleIconsType | null = null;
+  private spinner: Spinner | null = null;
+  private text: string | null;
+  private image: string | null;
+  private leftIcon: IconPickerType | null = null;
+  private rightIcon: IconPickerType | null = null;
+  private ariaLabel: string | null = null;
+  private variant: ButtonProps['variant'] | null = null;
 
   constructor({
     parentNode,
@@ -50,12 +61,14 @@ export class Button extends Component {
     response,
     isRoboto,
     role,
+    type = 'button',
   }: ButtonProps) {
     super({
       parentNode,
       tagName: 'button',
       className: ['app_button', className ?? ''],
       attrs: [
+        { attr: 'type', value: type },
         { attr: 'data-variant', value: variant },
         { attr: 'role', value: role ?? 'button' },
         { attr: 'data-shadow', value: shadow },
@@ -70,39 +83,50 @@ export class Button extends Component {
         rightIcon === 'arrow_down' ? { attr: 'data-dropdown', value: 'true' } : null,
       ].filter((el) => el !== null),
     });
+    this.text = text ? text : null;
+    this.image = image ? image : null;
+    this.leftIcon = leftIcon ? leftIcon : null;
+    this.rightIcon = rightIcon ? rightIcon : null;
+    this.googleIcon = googleIcon ? googleIcon : null;
+    this.ariaLabel = ariaLabel ? ariaLabel : null;
+    this.variant = variant ? variant : null;
 
-    if (image) {
+    this.render();
+  }
+
+  private render() {
+    if (this.image) {
       new Component({
         parentNode: this.node,
         tagName: 'img',
         className: 'btn_img',
         attrs: [
-          { attr: 'src', value: image },
-          { attr: 'alt', value: ariaLabel ?? 'button image' },
+          { attr: 'src', value: this.image },
+          { attr: 'alt', value: this.ariaLabel ?? 'button image' },
         ],
       });
     }
 
-    if (googleIcon) {
-      new GoogleIcon({ parentNode: this.node, iconName: googleIcon });
+    if (this.googleIcon) {
+      this.googleIconElement = new GoogleIcon({ parentNode: this.node, iconName: this.googleIcon });
     }
 
-    if (leftIcon) {
-      this.node.insertAdjacentHTML('beforeend', ICON_PICKER[leftIcon]);
-      if (text) {
-        this.renderTextNode(text);
+    if (this.leftIcon) {
+      this.node.insertAdjacentHTML('beforeend', ICON_PICKER[this.leftIcon]);
+      if (this.text) {
+        this.renderTextNode(this.text);
       }
     }
 
-    if (text && !this.textNode) {
-      this.renderTextNode(text);
+    if (this.text && !this.textNode) {
+      this.renderTextNode(this.text);
     }
 
-    if (rightIcon) {
-      this.node.insertAdjacentHTML('beforeend', ICON_PICKER[rightIcon]);
+    if (this.rightIcon) {
+      this.node.insertAdjacentHTML('beforeend', ICON_PICKER[this.rightIcon]);
     }
 
-    if (variant === 'skeleton') {
+    if (this.variant === 'skeleton') {
       new Skeleton({
         parentNode: this.node,
       });
@@ -130,5 +154,35 @@ export class Button extends Component {
 
   public setDisabled(isDisabled: boolean) {
     this.setAttributes([{ attr: 'disabled', value: isDisabled ? 'true' : null }]);
+  }
+
+  public setGoogleIcon(iconName: GoogleIconsType) {
+    if (this.googleIconElement) {
+      this.googleIconElement.destroy();
+    }
+    this.googleIconElement = new GoogleIcon({ parentNode: this.node, iconName });
+  }
+
+  public setLoading(value: boolean) {
+    if (value) {
+      this.setText('Loading...');
+      this.spinner = new Spinner({
+        parentNode: this.node,
+        size: 'sm',
+        color: 'dark',
+      });
+      this.setDisabled(true);
+    } else {
+      this.spinner?.destroy();
+      this.spinner = null;
+
+      this.setText(this.text ?? '');
+      this.setDisabled(false);
+    }
+  }
+
+  destroy() {
+    this.node.onclick = null;
+    super.destroy();
   }
 }

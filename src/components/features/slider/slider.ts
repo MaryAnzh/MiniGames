@@ -1,4 +1,4 @@
-import { Component, Portal, GameDetailsDialog } from '@components';
+import { Component } from '@components';
 import type { SliderProps } from './types';
 import type { GameCardItemType, ResponseStatusType } from '@types';
 import { ErrorBanner, Icon, Image, LikeButton, Skeleton } from '@ui';
@@ -7,7 +7,6 @@ import { EMPTY, ERROR, LIGHT, LOADING, SUCCESS } from '@constants';
 import { arrayFromNumber, replaceImageToWebp } from '@utils';
 
 export class Slider extends Component {
-  private portal: Portal;
   private controller: SliderController;
   sliderBody: HTMLElement | null = null;
   slidesNode: HTMLElement[] = [];
@@ -15,14 +14,17 @@ export class Slider extends Component {
   private autoTimer: number | null = null;
   private restartTimer: number | null = null;
   private resizeTimer: number | null = null;
-  // private isTimerOn = true;
-  status: ResponseStatusType;
 
-  constructor({ parentNode, slides, status, portal }: SliderProps) {
+  status: ResponseStatusType;
+  openDetailsCallback: (slug: string) => void;
+
+  constructor({ parentNode, slides, status, openDetails }: SliderProps) {
     super({ parentNode, tagName: 'div', className: 'app_slider' });
-    this.portal = portal;
+
     this.status = status;
-    const data =
+    this.openDetailsCallback = openDetails;
+
+    const initialSlides =
       slides.length === 0 || status === ERROR
         ? arrayFromNumber(7).map(
             () =>
@@ -40,42 +42,39 @@ export class Slider extends Component {
         : slides;
 
     this.controller = new SliderController({
-      slides: data,
-      onUpdateSlides: (visibleSlides) => {
+      slides: initialSlides,
+      onUpdateSlides: (visibleSlides: GameCardItemType[]) => {
         this.render(visibleSlides);
       },
     });
+
     window.addEventListener('resize', () => this.handleResize());
-
-    // if (this.isTimerOn) {
-    //   this.startAutoTimer();
-    // }
   }
 
-  private startAutoTimer() {
-    this.autoTimer = window.setInterval(() => {
-      if (!this.isAnimating) {
-        this.animateNext();
-      }
-    }, 4000);
-  }
+  public update({ slides, status }: { slides: GameCardItemType[]; status: ResponseStatusType }) {
+    this.status = status;
 
-  private stopAutoTimer() {
-    if (this.autoTimer) {
-      clearInterval(this.autoTimer);
-      this.autoTimer = null;
-    }
-  }
+    const data =
+      slides.length === 0 || status === ERROR
+        ? arrayFromNumber(7).map(
+            () =>
+              ({
+                cardImage: '',
+                category: '',
+                likesCount: 0,
+                name: '*-----*',
+                price: '',
+                rating: 0,
+                shortDescription: '',
+                slug: '',
+              }) as GameCardItemType,
+          )
+        : slides;
 
-  private restartAutoTimerDelayed() {
-    if (this.restartTimer) {
-      clearTimeout(this.restartTimer);
-    }
+    this.controller.replaceSlides(data);
 
-    this.restartTimer = window.setTimeout(() => {
-      this.startAutoTimer();
-      this.restartTimer = null;
-    }, 10000);
+    const visible = this.controller.getVisibleSlides();
+    this.render(visible);
   }
 
   private render(visibleSlides: GameCardItemType[]) {
@@ -99,6 +98,7 @@ export class Slider extends Component {
       className: 'app_slider_body',
     });
     this.sliderBody = sliderBody.node;
+
     this.renderSlides(visibleSlides);
   }
 
@@ -115,12 +115,14 @@ export class Slider extends Component {
         tagName: 'div',
         className: `app_slider_body_item`,
       });
-      if (this.status === LOADING || this.status == ERROR) {
+
+      if (this.status === LOADING || this.status === ERROR) {
         new Skeleton({
           parentNode: slide.node,
           color: 'light',
         });
       }
+
       if (this.status === SUCCESS || this.status === EMPTY) {
         const { name, cardImage, likesCount, rating, slug } = game;
 
@@ -178,18 +180,13 @@ export class Slider extends Component {
   }
 
   private openDetails(slug: string) {
-    const dialog = new GameDetailsDialog({
-      parentNode: null,
-      onClose: () => this.portal.unmount(),
-      slug,
-    });
-
-    this.portal.mount(dialog.node);
+    this.openDetailsCallback(slug);
   }
 
   private animate(direction: 'next' | 'prev') {
     if (this.isAnimating) return;
     this.isAnimating = true;
+
     const plan = this.getAnimationPlan();
     if (!plan.length) {
       this.isAnimating = false;
@@ -209,7 +206,7 @@ export class Slider extends Component {
       const toX = neighbor.x;
       const toWidth = neighbor.width;
 
-      const deltaX = direction === 'next' ? toX - fromX : toX - fromX;
+      const deltaX = toX - fromX;
 
       const animation = node.animate(
         [
@@ -276,34 +273,27 @@ export class Slider extends Component {
     }, 150);
   }
 
-  //PUBLIC
   public animateNext() {
     if (!this.isAnimating) {
-      this.stopAutoTimer();
-      this.restartAutoTimerDelayed();
-      if (!this.isAnimating) this.animate('prev');
+      this.animate('prev');
     }
   }
 
   public animatePrev() {
     if (!this.isAnimating) {
-      this.stopAutoTimer();
-      this.restartAutoTimerDelayed();
-      if (!this.isAnimating) this.animate('next');
+      this.animate('next');
     }
   }
 
-  //toDo
   destroy() {
     if (this.autoTimer) {
       clearInterval(this.autoTimer);
     }
 
-    this.stopAutoTimer();
-
     if (this.restartTimer) {
       clearTimeout(this.restartTimer);
     }
+
     super.destroy();
   }
 }

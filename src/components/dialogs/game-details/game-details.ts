@@ -1,21 +1,24 @@
 import { Component } from '@components';
-import type { GameComment, GameDetailsType } from '@types';
-import { CommentsSection, HeroSection, InfoSection, RecordsSection } from './sections';
-import appStore from '@store';
 import { SUCCESS } from '@constants';
+import { appStore } from '@store';
+import type { GameComment, GameDetailsType } from '@types';
 
-type GameDetailsProps = {
+import { CommentsSection, HeroSection, InfoSection, RecordsSection } from './sections';
+
+export type GameDetailsProps = {
   parentNode: HTMLElement | null;
   onClose: () => void;
   slug: string;
+  navigateTo: (path: string) => void;
 };
 
 export class GameDetailsDialog extends Component {
   store: typeof appStore;
   handleClose: () => void;
   slug: string;
+  navigateTo: (path: string) => void;
 
-  constructor({ parentNode, onClose, slug }: GameDetailsProps) {
+  constructor({ parentNode, onClose, slug, navigateTo }: GameDetailsProps) {
     super({
       parentNode,
       tagName: 'div',
@@ -24,6 +27,7 @@ export class GameDetailsDialog extends Component {
     this.store = appStore;
     this.handleClose = onClose;
     this.slug = slug;
+    this.navigateTo = navigateTo;
 
     this.renderSkeleton();
     this.loadData();
@@ -41,13 +45,12 @@ export class GameDetailsDialog extends Component {
       parentNode: bodyWrap.node,
       isSkeleton: true,
       name: '',
-      category: '',
-      duration: '',
-      players: '',
-      price: '',
-      shortDescription: '',
-      rating: 0,
+      specs: { genre: '', players: '', duration: '', price: '' },
       likesCount: 0,
+      isLikedByCurrentUser: false,
+      fullDescription: '',
+      rating: 0,
+      slug: this.slug,
     });
     new RecordsSection({
       parentNode: bodyWrap.node,
@@ -58,6 +61,8 @@ export class GameDetailsDialog extends Component {
       parentNode: bodyWrap.node,
       comments: [],
       isSkeleton: true,
+      slug: this.slug,
+      navigateTo: this.navigateTo,
     });
   }
 
@@ -67,8 +72,11 @@ export class GameDetailsDialog extends Component {
       heroImage: cardImage,
       likesCount,
       rating,
-      specs: { players, duration, price, genre: category },
-      fullDescription: shortDescription,
+      specs,
+      fullDescription,
+      topRecords: records,
+      slug,
+      isLikedByCurrentUser,
     } = game;
 
     new HeroSection({ parentNode: this.node, name, cardImage, onClose: this.handleClose });
@@ -79,20 +87,24 @@ export class GameDetailsDialog extends Component {
     });
     new InfoSection({
       parentNode: bodyWrap.node,
-      category,
       likesCount,
       rating,
-      duration,
       name,
-      players,
-      price,
-      shortDescription,
+      specs,
+      fullDescription,
+      slug,
+      isLikedByCurrentUser,
     });
     new RecordsSection({
       parentNode: bodyWrap.node,
-      records: this.store.records,
+      records,
     });
-    new CommentsSection({ parentNode: this.node, comments });
+    new CommentsSection({
+      parentNode: this.node,
+      comments,
+      navigateTo: this.navigateTo,
+      slug,
+    });
   }
 
   private async loadData() {
@@ -102,20 +114,16 @@ export class GameDetailsDialog extends Component {
         appStore.getGameComments(this.slug, {
           limit: 10,
           sort: 'newest',
-          userEmail: this.store.userEmail,
         }),
       ]);
 
       if (gameRes.status !== SUCCESS) {
-        // TODO: render error state
         return;
       }
 
       const game = gameRes.data.data;
-
       const comments = commentsRes.status === SUCCESS ? commentsRes.data.data : [];
-
-      this.node.innerHTML = '';
+      this.node.replaceChildren();
 
       this.render(game, comments);
     } catch {
